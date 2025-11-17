@@ -15,7 +15,7 @@
   "plugins": [
     {
       "name": "commit-commands",
-      "source": "./plugins/commit-commands.md",
+      "source": "./plugins/commit-commands",
       "description": "Automatically creates semantic git commits by analyzing staged and unstaged changes, reviewing recent commit history, and following conventional commit message format (feat, fix, docs, refactor, etc.)",
       "version": "1.0.0",
       "category": "git",
