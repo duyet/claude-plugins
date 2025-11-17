@@ -1,0 +1,27 @@
+{
+  "name": "frontend-dev",
+  "description": "Create distinctive, production-grade frontend interfaces with high design quality. Generates creative, polished code using shadcn/ui components, avoiding generic AI aesthetics. Focuses on component isolation and testability.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Duyet",
+    "url": "https://github.com/duyet"
+  },
+  "homepage": "https://github.com/duyet/claude-plugins#-frontend-dev",
+  "repository": "https://github.com/duyet/claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "frontend",
+    "ui",
+    "design",
+    "react",
+    "shadcn",
+    "components",
+    "web-development",
+    "interface-design",
+    "production-code"
+  ],
+  "category": "frontend",
+  "agents": [
+    "./agents/senior-fe-engineer.md"
+  ]
+}
