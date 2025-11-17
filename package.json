@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "A collection of plugins for Claude Code to enhance productivity and workflow automation",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duyet/claude-plugins.git"
+  },
+  "homepage": "https://github.com/duyet/claude-plugins#readme",
+  "bugs": {
+    "url": "https://github.com/duyet/claude-plugins/issues"
+  },
   "scripts": {
     "lint": "markdownlint '**/*.md' --ignore node_modules",
     "format": "prettier --check '**/*.md' --ignore-path .gitignore",
@@ -16,8 +24,10 @@
     "claude",
     "plugins",
     "claude-code",
-    "productivity"
+    "productivity",
+    "automation",
+    "workflow"
   ],
-  "author": "",
+  "author": "duyet",
   "license": "MIT"
 }
