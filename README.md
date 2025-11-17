@@ -1,6 +1,34 @@
-# Claude Plugins Marketplace
+# Duyet's Claude Plugins Marketplace
 
 A collection of plugins for Claude Code to enhance productivity and workflow automation.
+
+## Installation
+
+To use plugins from this marketplace, you can install them in Claude Code:
+
+### Option 1: Direct Installation (Recommended)
+
+1. Copy the plugin file URL from this repository
+2. In Claude Code, use the plugin installation command:
+   ```bash
+   # Install a specific plugin
+   claude plugin install <plugin-url>
+   ```
+
+### Option 2: Manual Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/duyet/claude-plugins.git
+   ```
+
+2. Copy the desired plugin file from `plugins/` to your Claude Code plugins directory
+
+3. Reference the plugin in your Claude Code configuration
+
+## Usage
+
+Once installed, you can use plugins by referencing them in your Claude Code sessions or workflows. Each plugin provides specific functionality as described below.
 
 ## Available Plugins
 
@@ -11,9 +39,10 @@ A collection of plugins for Claude Code to enhance productivity and workflow aut
 
 This plugin helps you create well-formatted git commits by analyzing staged and unstaged changes, reviewing recent commits, and following semantic commit conventions.
 
-## Using Plugins
-
-To use a plugin from this marketplace, configure it in your Claude Code settings or reference it directly in your workflow.
+**How to use:**
+1. Stage your changes: `git add .`
+2. Invoke the plugin in Claude Code
+3. The plugin will analyze your changes and create a semantic commit message
 
 ## Plugin Structure
 
