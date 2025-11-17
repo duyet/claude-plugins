@@ -20,5 +20,8 @@
     "interface-design",
     "production-code"
   ],
-  "category": "frontend"
+  "category": "frontend",
+  "agents": [
+    "./agents/senior-fe-engineer.md"
+  ]
 }
