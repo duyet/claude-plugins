@@ -1,0 +1,41 @@
+{
+  "name": "duyets-claude-plugins",
+  "owner": {
+    "name": "Duyet",
+    "url": "https://github.com/duyet"
+  },
+  "metadata": {
+    "description": "A curated collection of plugins for Claude Code to enhance productivity and workflow automation",
+    "version": "1.0.0",
+    "homepage": "https://github.com/duyet/claude-plugins",
+    "pluginRoot": "./plugins",
+    "totalPlugins": 1,
+    "lastUpdated": "2025-11-17"
+  },
+  "plugins": [
+    {
+      "name": "commit-commands",
+      "source": "./plugins/commit-commands.md",
+      "description": "Automatically creates semantic git commits by analyzing staged and unstaged changes, reviewing recent commit history, and following conventional commit message format (feat, fix, docs, refactor, etc.)",
+      "version": "1.0.0",
+      "category": "git",
+      "keywords": [
+        "git",
+        "commit",
+        "semantic-commit",
+        "conventional-commits",
+        "workflow",
+        "automation",
+        "version-control"
+      ],
+      "author": {
+        "name": "Duyet",
+        "url": "https://github.com/duyet"
+      },
+      "repository": "https://github.com/duyet/claude-plugins",
+      "homepage": "https://github.com/duyet/claude-plugins#-commit-commands",
+      "license": "MIT",
+      "strict": false
+    }
+  ]
+}
