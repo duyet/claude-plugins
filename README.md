@@ -2,62 +2,51 @@
 
 A collection of plugins for Claude Code to enhance productivity and workflow automation.
 
-## Installation
+## How to Use
 
-To use plugins from this marketplace, you can install them in Claude Code:
+### Installation
 
-### Option 1: Direct Installation (Recommended)
+**Option 1: Direct Installation (Recommended)**
 
-1. Copy the plugin file URL from this repository
-2. In Claude Code, use the plugin installation command:
-   ```bash
-   # Install a specific plugin
-   claude plugin install <plugin-url>
-   ```
+```bash
+# Install from this repository
+claude plugin install https://github.com/duyet/claude-plugins/raw/main/plugins/commit-commands.md
+```
 
-### Option 2: Manual Installation
+**Option 2: Manual Installation**
 
 1. Clone this repository:
    ```bash
    git clone https://github.com/duyet/claude-plugins.git
    ```
 
-2. Copy the desired plugin file from `plugins/` to your Claude Code plugins directory
+2. Copy the plugin file you need from `plugins/` directory to your Claude Code plugins directory
 
 3. Reference the plugin in your Claude Code configuration
 
-## Usage
+### Using Plugins
 
-Once installed, you can use plugins by referencing them in your Claude Code sessions or workflows. Each plugin provides specific functionality as described below.
+Once installed, invoke plugins directly in your Claude Code sessions. Each plugin is context-aware and will guide you through its specific workflow.
 
 ## Available Plugins
 
-### Commit Commands Plugin
+### 🚀 Commit Commands Plugin
 
-**File:** `plugins/commit-commands.md`
-**Description:** Create a git commit with semantic commit message format
+**File:** [`plugins/commit-commands.md`](plugins/commit-commands.md)
 
-This plugin helps you create well-formatted git commits by analyzing staged and unstaged changes, reviewing recent commits, and following semantic commit conventions.
+Automatically creates semantic git commits by analyzing your staged changes.
 
-**How to use:**
-1. Stage your changes: `git add .`
-2. Invoke the plugin in Claude Code
-3. The plugin will analyze your changes and create a semantic commit message
+**Usage:**
+```bash
+# Stage your changes
+git add .
 
-## Plugin Structure
+# Invoke the plugin in Claude Code
+# The plugin will analyze changes and create a semantic commit message
+```
 
-Each plugin is a markdown file with:
-- **Frontmatter**: YAML configuration including allowed tools and description
-- **Content**: Instructions and context for Claude to follow
-
-### Marketplace Configuration
-
-The `.claude-plugin/marketplace.json` file contains metadata about this marketplace:
-- Marketplace name and description
-- List of available plugins with their metadata
-- Plugin categories and tags
-- Repository information
-
-## Contributing
-
-Feel free to add new plugins by creating markdown files in the `plugins/` directory following the established format. Don't forget to update `.claude-plugin/marketplace.json` when adding new plugins.
+**Features:**
+- Analyzes staged and unstaged changes
+- Reviews recent commit history for consistency
+- Follows semantic commit conventions (feat, fix, docs, etc.)
+- Generates concise, meaningful commit messages
