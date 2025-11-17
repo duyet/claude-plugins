@@ -1,0 +1,23 @@
+{
+  "name": "claude-plugins-marketplace",
+  "version": "1.0.0",
+  "description": "A collection of plugins for Claude Code to enhance productivity and workflow automation",
+  "private": true,
+  "scripts": {
+    "lint": "markdownlint '**/*.md' --ignore node_modules",
+    "format": "prettier --check '**/*.md' --ignore-path .gitignore",
+    "format:fix": "prettier --write '**/*.md' --ignore-path .gitignore"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.39.0",
+    "prettier": "^3.2.5"
+  },
+  "keywords": [
+    "claude",
+    "plugins",
+    "claude-code",
+    "productivity"
+  ],
+  "author": "",
+  "license": "MIT"
+}
