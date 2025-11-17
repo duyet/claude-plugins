@@ -50,6 +50,14 @@ Each plugin is a markdown file with:
 - **Frontmatter**: YAML configuration including allowed tools and description
 - **Content**: Instructions and context for Claude to follow
 
+### Marketplace Configuration
+
+The `.claude-plugin/marketplace.json` file contains metadata about this marketplace:
+- Marketplace name and description
+- List of available plugins with their metadata
+- Plugin categories and tags
+- Repository information
+
 ## Contributing
 
-Feel free to add new plugins by creating markdown files in the `plugins/` directory following the established format.
+Feel free to add new plugins by creating markdown files in the `plugins/` directory following the established format. Don't forget to update `.claude-plugin/marketplace.json` when adding new plugins.

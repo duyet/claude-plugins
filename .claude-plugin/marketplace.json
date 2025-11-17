@@ -1,0 +1,29 @@
+{
+  "name": "Duyet's Claude Plugins Marketplace",
+  "description": "A collection of plugins for Claude Code to enhance productivity and workflow automation",
+  "version": "1.0.0",
+  "author": "Duyet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duyet/claude-plugins"
+  },
+  "plugins": [
+    {
+      "id": "commit-commands",
+      "name": "Commit Commands Plugin",
+      "description": "Create a git commit with semantic commit message format",
+      "file": "plugins/commit-commands.md",
+      "version": "1.0.0",
+      "allowedTools": ["Bash"],
+      "category": "git",
+      "tags": ["git", "commit", "semantic-commit", "workflow"]
+    }
+  ],
+  "categories": [
+    {
+      "id": "git",
+      "name": "Git & Version Control",
+      "description": "Plugins for Git operations and version control workflows"
+    }
+  ]
+}
