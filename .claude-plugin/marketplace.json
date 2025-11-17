@@ -1,29 +1,30 @@
 {
-  "name": "Duyet's Claude Plugins Marketplace",
-  "description": "A collection of plugins for Claude Code to enhance productivity and workflow automation",
-  "version": "1.0.0",
-  "author": "Duyet",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/duyet/claude-plugins"
+  "name": "duyets-claude-plugins",
+  "owner": {
+    "name": "Duyet",
+    "url": "https://github.com/duyet"
+  },
+  "metadata": {
+    "description": "A collection of plugins for Claude Code to enhance productivity and workflow automation",
+    "version": "1.0.0",
+    "homepage": "https://github.com/duyet/claude-plugins",
+    "pluginRoot": "./plugins"
   },
   "plugins": [
     {
-      "id": "commit-commands",
-      "name": "Commit Commands Plugin",
-      "description": "Create a git commit with semantic commit message format",
-      "file": "plugins/commit-commands.md",
+      "name": "commit-commands",
+      "source": "./plugins/commit-commands.md",
+      "description": "Create a git commit with semantic commit message format. Automatically analyzes staged and unstaged changes, reviews recent commits, and follows semantic commit conventions.",
       "version": "1.0.0",
-      "allowedTools": ["Bash"],
+      "author": {
+        "name": "Duyet",
+        "url": "https://github.com/duyet"
+      },
+      "repository": "https://github.com/duyet/claude-plugins",
+      "license": "MIT",
+      "keywords": ["git", "commit", "semantic-commit", "workflow", "automation"],
       "category": "git",
-      "tags": ["git", "commit", "semantic-commit", "workflow"]
-    }
-  ],
-  "categories": [
-    {
-      "id": "git",
-      "name": "Git & Version Control",
-      "description": "Plugins for Git operations and version control workflows"
+      "strict": false
     }
   ]
 }

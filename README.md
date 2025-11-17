@@ -2,36 +2,41 @@
 
 A collection of plugins for Claude Code to enhance productivity and workflow automation.
 
-## How to Use
+## Installation
 
-### Installation
+### Add This Marketplace
 
-**Option 1: Direct Installation (Recommended)**
+Add this marketplace to your Claude Code to access all available plugins:
 
 ```bash
-# Install from this repository
-claude plugin install https://github.com/duyet/claude-plugins/raw/main/plugins/commit-commands.md
+/plugin marketplace add duyet/claude-plugins
 ```
 
-**Option 2: Manual Installation**
+### Install Plugins
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/duyet/claude-plugins.git
-   ```
+Once the marketplace is added, install plugins using:
 
-2. Copy the plugin file you need from `plugins/` directory to your Claude Code plugins directory
+```bash
+# Install from this marketplace
+/plugin install commit-commands@duyets-claude-plugins
 
-3. Reference the plugin in your Claude Code configuration
+# Or browse all available plugins interactively
+/plugin
+```
 
-### Using Plugins
+### Alternative: Direct Plugin Installation
 
-Once installed, invoke plugins directly in your Claude Code sessions. Each plugin is context-aware and will guide you through its specific workflow.
+You can also install individual plugins directly without adding the marketplace:
+
+```bash
+/plugin install https://github.com/duyet/claude-plugins/raw/main/plugins/commit-commands.md
+```
 
 ## Available Plugins
 
-### 🚀 Commit Commands Plugin
+### 🚀 Commit Commands
 
+**Name:** `commit-commands`
 **File:** [`plugins/commit-commands.md`](plugins/commit-commands.md)
 
 Automatically creates semantic git commits by analyzing your staged changes.
@@ -41,7 +46,7 @@ Automatically creates semantic git commits by analyzing your staged changes.
 # Stage your changes
 git add .
 
-# Invoke the plugin in Claude Code
+# Invoke the commit-commands plugin in Claude Code
 # The plugin will analyze changes and create a semantic commit message
 ```
 
@@ -50,3 +55,31 @@ git add .
 - Reviews recent commit history for consistency
 - Follows semantic commit conventions (feat, fix, docs, etc.)
 - Generates concise, meaningful commit messages
+
+## For Teams
+
+Set up automatic marketplace installation for team projects by adding to `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "duyets-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "duyet/claude-plugins"
+      }
+    }
+  }
+}
+```
+
+When team members trust the repository folder, Claude Code automatically installs this marketplace.
+
+## Documentation
+
+- **CLAUDE.md**: Repository structure and plugin format documentation
+- **Marketplace Config**: `.claude-plugin/marketplace.json` contains all marketplace metadata
+
+## License
+
+MIT
