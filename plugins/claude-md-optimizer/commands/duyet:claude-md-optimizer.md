@@ -1,26 +1,47 @@
-Invoke the `claude-md-optimizer` skill to perform a comprehensive analysis and optimization of CLAUDE.md files in this project.
+Invoke the `claude-md-optimizer` skill to analyze and optimize CLAUDE.md files in this project.
 
-## What This Skill Does
+## How It Works
 
-1. **Analyzes your codebase** - Detects project type, tech stack, directory structure
-2. **Assesses existing CLAUDE.md** - Checks line count, sections, anti-patterns
-3. **Applies best practices** - From Anthropic, HumanLayer, and community experts
-4. **Generates optimization report** - Effectiveness score, issues, recommendations
-5. **Provides actionable fixes** - Prioritized by impact with quick wins
+The skill will:
+
+1. **Load the knowledge base** from reference files:
+   - `references/best-practices.md` - Comprehensive best practices
+   - `references/anti-patterns.md` - 15+ anti-patterns to detect
+   - `references/scoring-rubric.md` - Detailed scoring criteria
+   - `references/output-format.md` - Report template
+
+2. **Analyze the codebase**:
+   - Detect project type and tech stack
+   - Map directory structure
+   - Find configuration files
+
+3. **Assess CLAUDE.md files**:
+   - Check line count (target: 100-200)
+   - Identify sections present
+   - Scan for anti-patterns
+   - Check for nested files
+
+4. **Generate comprehensive report**:
+   - Effectiveness Score (1-10)
+   - Score breakdown by category
+   - Anti-patterns with line references
+   - Priority recommendations
+   - Quick wins (<5 min fixes)
 
 ## Key Best Practices Applied
 
-- **Conciseness**: Target 100-200 lines (Claude Code already has ~50 instructions)
-- **Progressive Disclosure**: Point to files instead of embedding content
-- **Declarative Style**: Bullet points over narrative paragraphs
-- **Universal Applicability**: Only instructions that apply to every task
+| Principle | Target |
+|-----------|--------|
+| Conciseness | 100-200 lines max |
+| Progressive Disclosure | Point to files, don't embed |
+| Declarative Style | Bullet points, not paragraphs |
+| Universal Applicability | Only instructions for every task |
 
-## Output Includes
+## Sources
 
-- Effectiveness Score (1-10) with breakdown
-- Anti-patterns detected with line references
-- Priority recommendations (high/medium/low)
-- Quick wins for immediate improvement
-- Optional: Complete rewritten CLAUDE.md
+Best practices compiled from:
+- Anthropic official documentation
+- HumanLayer research
+- Community experts
 
-Start the analysis now. Explore the project structure and locate any existing CLAUDE.md files.
+Start by reading the reference files in the skill, then explore the project.

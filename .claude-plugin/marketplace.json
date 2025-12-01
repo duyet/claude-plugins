@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "A curated collection of plugins for Claude Code to enhance productivity and workflow automation",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "homepage": "https://github.com/duyet/claude-plugins",
     "pluginRoot": "./plugins",
     "totalPlugins": 3,
@@ -66,8 +66,8 @@
     {
       "name": "claude-md-optimizer",
       "source": "./plugins/claude-md-optimizer",
-      "description": "Comprehensive CLAUDE.md analyzer and optimizer. Applies industry best practices from Anthropic, HumanLayer, and community experts to maximize Claude Code effectiveness. Features: codebase analysis, anti-pattern detection, effectiveness scoring, prioritized recommendations, and optional CLAUDE.md generation.",
-      "version": "2.0.0",
+      "description": "Comprehensive CLAUDE.md analyzer and optimizer using Agent Skills architecture. Auto-discovers context for CLAUDE.md optimization, applies best practices from Anthropic and HumanLayer, detects 15+ anti-patterns, scores effectiveness (1-10), and provides prioritized recommendations with progressive disclosure.",
+      "version": "2.1.0",
       "category": "productivity",
       "keywords": [
         "claude-md",
@@ -80,7 +80,9 @@
         "analysis",
         "anthropic",
         "humanlayer",
-        "progressive-disclosure"
+        "progressive-disclosure",
+        "skill",
+        "agent-skill"
       ],
       "author": {
         "name": "Duyet",

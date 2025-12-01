@@ -1,7 +1,7 @@
 {
   "name": "claude-md-optimizer",
-  "description": "Comprehensive CLAUDE.md analyzer and optimizer. Applies industry best practices from Anthropic, HumanLayer, and community experts to maximize Claude Code effectiveness. Analyzes codebase context, detects anti-patterns, scores effectiveness, and provides prioritized recommendations.",
-  "version": "2.0.0",
+  "description": "Comprehensive CLAUDE.md analyzer and optimizer. Applies industry best practices from Anthropic, HumanLayer, and community experts to maximize Claude Code effectiveness. Features auto-discovery skill for context-aware activation, codebase analysis, anti-pattern detection, effectiveness scoring, and prioritized recommendations.",
+  "version": "2.1.0",
   "author": {
     "name": "Duyet",
     "url": "https://github.com/duyet"
@@ -20,8 +20,10 @@
     "analysis",
     "anthropic",
     "humanlayer",
-    "progressive-disclosure"
+    "progressive-disclosure",
+    "skill"
   ],
   "category": "productivity",
-  "namespace": "duyet"
+  "namespace": "duyet",
+  "skills": "./skills"
 }
