@@ -67,8 +67,9 @@
       "name": "claude-md-optimizer",
       "source": "./plugins/claude-md-optimizer",
       "description": "Analyze and optimize CLAUDE.md files based on codebase context and industry best practices. Provides actionable recommendations to improve Claude Code effectiveness, identifies anti-patterns, and suggests improvements for conciseness and progressive disclosure.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "productivity",
+      "namespace": "duyet",
       "keywords": [
         "claude-md",
         "optimization",
