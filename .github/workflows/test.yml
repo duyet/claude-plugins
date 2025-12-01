@@ -1,0 +1,94 @@
+name: Test
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  validate-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          echo "Validating marketplace.json..."
+          cat .claude-plugin/marketplace.json | python3 -m json.tool > /dev/null
+          echo "✓ marketplace.json is valid JSON"
+
+          echo "Validating plugin.json files..."
+          for file in plugins/*/.claude-plugin/plugin.json; do
+            if [ -f "$file" ]; then
+              cat "$file" | python3 -m json.tool > /dev/null
+              echo "✓ $file is valid JSON"
+            fi
+          done
+
+  validate-structure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          echo "Checking marketplace structure..."
+
+          # Check marketplace.json exists
+          if [ ! -f ".claude-plugin/marketplace.json" ]; then
+            echo "✗ Missing .claude-plugin/marketplace.json"
+            exit 1
+          fi
+          echo "✓ .claude-plugin/marketplace.json exists"
+
+          # Check plugins directory exists
+          if [ ! -d "plugins" ]; then
+            echo "✗ Missing plugins directory"
+            exit 1
+          fi
+          echo "✓ plugins directory exists"
+
+          # Check each plugin has required files
+          for plugin_dir in plugins/*/; do
+            plugin_name=$(basename "$plugin_dir")
+            echo "Checking plugin: $plugin_name"
+
+            if [ ! -f "${plugin_dir}.claude-plugin/plugin.json" ]; then
+              echo "  ✗ Missing .claude-plugin/plugin.json"
+              exit 1
+            fi
+            echo "  ✓ .claude-plugin/plugin.json exists"
+
+            if [ ! -f "${plugin_dir}command.md" ]; then
+              echo "  ✗ Missing command.md"
+              exit 1
+            fi
+            echo "  ✓ command.md exists"
+          done
+
+          echo ""
+          echo "All structure checks passed!"

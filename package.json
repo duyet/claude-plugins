@@ -1,0 +1,17 @@
+{
+  "name": "claude-plugins",
+  "version": "1.0.0",
+  "description": "Claude Code plugin marketplace with validation tests",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:verbose": "node --test --test-reporter=spec tests/*.test.js",
+    "validate": "node tests/validate.js"
+  },
+  "devDependencies": {
+    "yaml": "^2.3.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
