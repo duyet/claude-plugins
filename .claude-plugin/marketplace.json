@@ -6,11 +6,11 @@
   },
   "metadata": {
     "description": "A curated collection of plugins for Claude Code to enhance productivity and workflow automation",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "homepage": "https://github.com/duyet/claude-plugins",
     "pluginRoot": "./plugins",
-    "totalPlugins": 2,
-    "lastUpdated": "2025-11-17"
+    "totalPlugins": 3,
+    "lastUpdated": "2025-12-01"
   },
   "plugins": [
     {
@@ -60,6 +60,31 @@
       },
       "repository": "https://github.com/duyet/claude-plugins",
       "homepage": "https://github.com/duyet/claude-plugins#-frontend-dev",
+      "license": "MIT",
+      "strict": false
+    },
+    {
+      "name": "claude-md-optimizer",
+      "source": "./plugins/claude-md-optimizer",
+      "description": "Analyze and optimize CLAUDE.md files based on codebase context and industry best practices. Provides actionable recommendations to improve Claude Code effectiveness, identifies anti-patterns, and suggests improvements for conciseness and progressive disclosure.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "claude-md",
+        "optimization",
+        "best-practices",
+        "documentation",
+        "productivity",
+        "context-management",
+        "workflow",
+        "analysis"
+      ],
+      "author": {
+        "name": "Duyet",
+        "url": "https://github.com/duyet"
+      },
+      "repository": "https://github.com/duyet/claude-plugins",
+      "homepage": "https://github.com/duyet/claude-plugins#-claude-md-optimizer",
       "license": "MIT",
       "strict": false
     }
