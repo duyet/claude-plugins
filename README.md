@@ -9,9 +9,9 @@ A collection of plugins for Claude Code to enhance productivity and workflow aut
 #### Commit Commands Plugin
 
 **File:** `plugins/commit-commands.md`
-**Description:** Create a git commit with semantic commit message format
+**Description:** Create a Git commit with semantic commit message format
 
-This plugin helps you create well-formatted git commits by analyzing staged and unstaged changes, reviewing recent commits, and following semantic commit conventions.
+This plugin helps you create well-formatted Git commits by analyzing staged and unstaged changes, reviewing recent commits, and following semantic commit conventions.
 
 **Usage:** Reference in workflows or configure in Claude Code settings.
 
