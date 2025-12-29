@@ -13,9 +13,9 @@ Add this marketplace to Claude Code and install plugins:
 /plugin marketplace add duyet/claude-plugins
 
 # Install plugins
-/plugin install senior-engineer-agent@claude-plugins
-/plugin install leader-agent@claude-plugins
-/plugin install commit-commands@claude-plugins
+/plugin install senior-engineer-agent@duyet-claude-plugins
+/plugin install leader-agent@duyet-claude-plugins
+/plugin install commit-commands@duyet-claude-plugins
 ```
 
 ### Manual Installation via Settings
@@ -25,7 +25,7 @@ Add to your `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "claude-plugins": {
+    "duyet-claude-plugins": {
       "source": {
         "source": "github",
         "repo": "duyet/claude-plugins"
@@ -33,9 +33,9 @@ Add to your `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "senior-engineer-agent@claude-plugins": true,
-    "leader-agent@claude-plugins": true,
-    "commit-commands@claude-plugins": true
+    "senior-engineer-agent@duyet-claude-plugins": true,
+    "leader-agent@duyet-claude-plugins": true,
+    "commit-commands@duyet-claude-plugins": true
   }
 }
 ```
@@ -174,7 +174,7 @@ The `marketplace.json` file defines available plugins:
 
 ```json
 {
-  "name": "claude-plugins",
+  "name": "duyet-claude-plugins",
   "owner": {
     "name": "duyet"
   },
