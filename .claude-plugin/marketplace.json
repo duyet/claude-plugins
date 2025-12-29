@@ -1,0 +1,52 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "duyet-claude-plugins",
+  "version": "1.0.0",
+  "description": "A curated collection of plugins for Claude Code including agent specialists, commit workflows, and terminal UI design",
+  "owner": {
+    "name": "Duyet",
+    "url": "https://github.com/duyet"
+  },
+  "plugins": [
+    {
+      "name": "senior-engineer-agent",
+      "description": "Elite implementation engineer specializing in translating plans and specifications into high-performance, maintainable production code",
+      "version": "1.0.0",
+      "author": {
+        "name": "duyet"
+      },
+      "source": "./senior-engineer-plugin",
+      "category": "development"
+    },
+    {
+      "name": "leader-agent",
+      "description": "Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance",
+      "version": "1.0.0",
+      "author": {
+        "name": "duyet"
+      },
+      "source": "./leader-plugin",
+      "category": "development"
+    },
+    {
+      "name": "commit-commands",
+      "description": "Create a Git commit with semantic commit message format",
+      "version": "1.0.0",
+      "author": {
+        "name": "duyet"
+      },
+      "source": "./commit-commands-plugin",
+      "category": "productivity"
+    },
+    {
+      "name": "terminal-ui-design",
+      "description": "Create distinctive, production-grade terminal user interfaces with high design quality",
+      "version": "1.0.0",
+      "author": {
+        "name": "duyet"
+      },
+      "source": "./terminal-ui-design-plugin",
+      "category": "development"
+    }
+  ]
+}
