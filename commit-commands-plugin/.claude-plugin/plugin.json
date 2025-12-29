@@ -1,0 +1,9 @@
+{
+  "name": "commit-commands",
+  "description": "Create a Git commit with semantic commit message format",
+  "version": "1.0.0",
+  "author": {
+    "name": "duyet"
+  },
+  "commands": ["./commands/commit.md"]
+}

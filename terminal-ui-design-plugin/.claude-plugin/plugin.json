@@ -1,0 +1,9 @@
+{
+  "name": "terminal-ui-design",
+  "description": "Create distinctive, production-grade terminal user interfaces with high design quality",
+  "version": "1.0.0",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": ["./skills/terminal-ui-design/SKILL.md"]
+}

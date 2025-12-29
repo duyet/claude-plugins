@@ -1,0 +1,9 @@
+{
+  "name": "leader-agent",
+  "description": "Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance",
+  "version": "1.0.0",
+  "author": {
+    "name": "duyet"
+  },
+  "agents": ["./agents/leader.md"]
+}
