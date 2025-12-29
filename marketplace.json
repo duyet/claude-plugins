@@ -18,6 +18,11 @@
       "name": "commit-commands",
       "source": "./commit-commands-plugin",
       "description": "Create a Git commit with semantic commit message format"
+    },
+    {
+      "name": "terminal-ui-design",
+      "source": "./terminal-ui-design-plugin",
+      "description": "Create distinctive, production-grade terminal user interfaces with high design quality"
     }
   ]
 }

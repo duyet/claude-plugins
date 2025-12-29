@@ -16,6 +16,7 @@ Add this marketplace to Claude Code and install plugins:
 /plugin install senior-engineer-agent@duyet-claude-plugins
 /plugin install leader-agent@duyet-claude-plugins
 /plugin install commit-commands@duyet-claude-plugins
+/plugin install terminal-ui-design@duyet-claude-plugins
 ```
 
 ### Manual Installation via Settings
@@ -35,7 +36,8 @@ Add to your `.claude/settings.json`:
   "enabledPlugins": {
     "senior-engineer-agent@duyet-claude-plugins": true,
     "leader-agent@duyet-claude-plugins": true,
-    "commit-commands@duyet-claude-plugins": true
+    "commit-commands@duyet-claude-plugins": true,
+    "terminal-ui-design@duyet-claude-plugins": true
   }
 }
 ```
@@ -114,6 +116,34 @@ We need to implement [complex feature/refactoring]. Can you analyze requirements
 ```
 /commit
 ```
+
+### Skills
+
+#### Terminal UI Design
+
+**Plugin:** `terminal-ui-design`
+**Description:** Create distinctive, production-grade terminal user interfaces with high design quality
+
+**Use when:**
+- Building CLI tools with custom interfaces
+- Creating TUI (Terminal UI) applications
+- Designing terminal-based dashboards
+- Need creative, polished terminal aesthetics beyond generic output
+
+**Key Features:**
+- Bold aesthetic direction (cyberpunk, retro-computing, minimalist zen, etc.)
+- Custom box drawing & borders
+- Cohesive color palettes (ANSI 16, 256-color, true color)
+- Typography & text styling techniques
+- Layout & spatial composition patterns
+- Motion & animation patterns (spinners, progress bars, typing effects)
+- Decorative elements and anti-patterns to avoid
+
+**Supported Libraries:**
+- Python: Rich, Textual
+- Go: Bubbletea, Lipgloss
+- Rust: Ratatui
+- Node.js: Ink, Blessed
 
 ## Plugin Structure
 
