@@ -1,0 +1,23 @@
+{
+  "name": "claude-plugins",
+  "owner": {
+    "name": "duyet"
+  },
+  "plugins": [
+    {
+      "name": "senior-engineer-agent",
+      "source": "./senior-engineer-plugin",
+      "description": "Elite implementation engineer specializing in translating plans and specifications into high-performance, maintainable production code."
+    },
+    {
+      "name": "leader-agent",
+      "source": "./leader-plugin",
+      "description": "Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance."
+    },
+    {
+      "name": "commit-commands",
+      "source": "./commit-commands-plugin",
+      "description": "Create a Git commit with semantic commit message format"
+    }
+  ]
+}
