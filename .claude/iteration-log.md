@@ -1,6 +1,36 @@
 # Iteration Log
 
-## Iteration 4 (Current)
+## Iteration 5 (Current)
+
+### What Was Done
+1. **Main README Enhancement**
+   - Added frontend-design plugin documentation to marketplace README
+   - Added interview plugin documentation to marketplace README
+   - Both plugins now have complete entries with usage examples
+
+2. **Cross-Platform Verification**
+   - Verified date arithmetic in `api_limit_handler.sh` has proper fallbacks
+   - macOS uses `date -v+`, Linux uses `date -d` (already implemented)
+   - All scripts confirmed cross-platform compatible
+
+3. **Documentation Complete**
+   - All 6 plugins documented in main README
+   - All 6 plugins have individual README files
+   - Consistent structure across all documentation
+
+### What Was Found
+- All documentation is now comprehensive and accurate
+- All scripts work on macOS, Linux, and WSL
+- 21 bats tests passing
+- Zero shellcheck errors
+
+### What Needs To Be Done Next
+- Documentation is complete
+- Consider this task finished
+
+---
+
+## Iteration 4
 
 ### What Was Done
 1. **Extended Test Coverage**

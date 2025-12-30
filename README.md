@@ -145,6 +145,54 @@ The leader will:
 - Rust: Ratatui
 - Node.js: Ink, Blessed
 
+#### Frontend Design
+
+**Plugin:** `frontend-design`
+**Description:** Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.
+
+**Use when:**
+- Building UI components, pages, dashboards, or applications
+- Creating landing pages, forms, or interactive interfaces
+- Designing data visualizations or charts
+- Any frontend work where visual quality matters
+
+**Key Features:**
+- Bold aesthetic choices that avoid "AI slop"
+- shadcn/ui components with custom theming
+- Recharts for beautiful data visualizations
+- Distinctive typography and color palettes
+- High-impact animations using Framer Motion
+
+**Tech Stack:**
+- Components: shadcn/ui, Radix UI, Headless UI
+- Charts: Recharts, Tremor, Victory
+- Styling: Tailwind CSS, CSS Variables
+- Animation: Framer Motion, CSS animations, GSAP
+
+#### Interview
+
+**Plugin:** `interview`
+**Description:** Conduct in-depth requirements interviews using Socratic questioning before implementation.
+
+**Use when:**
+- Starting a new feature with unclear requirements
+- Need to uncover hidden complexity
+- Want explicit decisions on tradeoffs
+- Before writing any implementation code
+
+**What Gets Asked:**
+- Core functionality and feature boundaries
+- Technical implementation details
+- User experience considerations
+- Edge cases and failure modes
+- Constraints and integration requirements
+
+**Usage:**
+```bash
+/interview "build a user authentication system with OAuth"
+/interview ./docs/feature-spec.md
+```
+
 #### Ralph Wiggum
 
 **Plugin:** `ralph-wiggum`
