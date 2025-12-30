@@ -28,6 +28,11 @@
       "name": "ralph-wiggum",
       "source": "./ralph-wiggum",
       "description": "Continuous self-referential AI loops for iterative development - run Claude with the same prompt until task completion"
+    },
+    {
+      "name": "frontend-design",
+      "source": "./frontend-design",
+      "description": "Create distinctive, production-grade frontend interfaces with shadcn/ui and Recharts. Avoids AI slop aesthetics with bold design choices and React best practices."
     }
   ]
 }
