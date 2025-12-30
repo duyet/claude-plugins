@@ -122,6 +122,24 @@ The leader will:
 3. Spawn up to 3 senior engineers running in parallel
 4. Review completed work and ensure quality gates pass
 
+## Skills
+
+### `task-decomposition`
+
+Break down complex tasks into parallel workstreams. Provides:
+- Independence-first decomposition methodology
+- Dependency mapping and parallel lane identification
+- Task templates with acceptance criteria
+- Anti-patterns to avoid
+
+### `quality-gates`
+
+Systematic quality verification procedures. Provides:
+- Three quality levels: Standard, Strict, Critical
+- Code, security, performance, and documentation gates
+- Quality gate report templates
+- Failure handling procedures
+
 ## Architecture
 
 ```
@@ -133,5 +151,10 @@ team-agents/
 │   └── senior-engineer.md   # Senior engineer agent definition
 ├── commands/
 │   └── leader.md            # /leader command with args
+├── skills/
+│   ├── task-decomposition/  # Task breakdown methodology
+│   │   └── SKILL.md
+│   └── quality-gates/       # Quality verification procedures
+│       └── SKILL.md
 └── README.md                # This file
 ```
