@@ -63,6 +63,39 @@ Responsibilities:
 - Include comprehensive tests
 - Document changes appropriately
 
+## Commands
+
+### `/leader`
+
+Activate the leader agent to coordinate complex tasks with parallel senior engineer execution.
+
+**Arguments:**
+
+| Argument | Values | Default | Description |
+|----------|--------|---------|-------------|
+| `--team-size` | 1-5 | 3 | Max parallel senior engineers |
+| `--mode` | parallel, sequential, hybrid | parallel | Execution strategy |
+| `--quality` | standard, strict, critical | standard | Quality gate strictness |
+| `--scope` | feature, bug, refactor, perf, security, docs | feature | Type of work |
+| `--review` | enabled, disabled | enabled | Final code review |
+| `--dry-run` | flag | false | Plan only, no execution |
+
+**Examples:**
+
+```bash
+# Basic usage
+/leader implement user authentication system
+
+# Large feature with max parallelism
+/leader --team-size=5 implement shopping cart with payments
+
+# Critical bug fix with strict quality
+/leader --quality=critical --scope=bug fix payment timeout
+
+# Plan-only mode
+/leader --dry-run implement dashboard analytics
+```
+
 ## Use Cases
 
 **Good for:**
@@ -78,15 +111,15 @@ Responsibilities:
 
 ## Usage Example
 
-```
-We need to implement a user authentication system with OAuth2, JWT tokens,
-and role-based access. Can you plan and coordinate the implementation?
+```bash
+/leader --team-size=3 --quality=strict implement user authentication
+        with OAuth2, JWT tokens, and role-based access
 ```
 
 The leader will:
 1. Analyze requirements and design the architecture
 2. Break work into parallel tasks (OAuth flow, JWT middleware, RBAC)
-3. Delegate each task to senior engineers running in parallel
+3. Spawn up to 3 senior engineers running in parallel
 4. Review completed work and ensure quality gates pass
 
 ## Architecture
@@ -98,5 +131,7 @@ team-agents/
 ├── agents/
 │   ├── leader.md            # Leader agent definition
 │   └── senior-engineer.md   # Senior engineer agent definition
+├── commands/
+│   └── leader.md            # /leader command with args
 └── README.md                # This file
 ```
