@@ -3,25 +3,20 @@
 # Response Analyzer for Ralph Wiggum
 # Intelligent exit detection through semantic analysis of Claude's responses
 
-set -euo pipefail
+set -eo pipefail
 
 ANALYSIS_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-analysis.json"
 COMPLETION_CONFIDENCE_THRESHOLD=${RALPH_COMPLETION_THRESHOLD:-40}
 MAX_TEST_ONLY_LOOPS=${RALPH_MAX_TEST_ONLY:-5}
 MAX_STUCK_LOOPS=${RALPH_MAX_STUCK:-3}
 
-declare -A COMPLETION_KEYWORDS=(
-  ["done"]=10 ["complete"]=15 ["completed"]=15 ["finished"]=12
-  ["success"]=10 ["successful"]=10 ["all tests pass"]=20
-  ["tests passing"]=18 ["implementation complete"]=20
-  ["task complete"]=20 ["project complete"]=25
-  ["ready for review"]=15 ["ready to deploy"]=15
-)
+# Completion keywords and their confidence scores (keyword:score format)
+COMPLETION_KEYWORDS="done:10 complete:15 completed:15 finished:12 success:10 successful:10"
+COMPLETION_KEYWORDS="$COMPLETION_KEYWORDS all_tests_pass:20 tests_passing:18 implementation_complete:20"
+COMPLETION_KEYWORDS="$COMPLETION_KEYWORDS task_complete:20 project_complete:25 ready_for_review:15 ready_to_deploy:15"
 
-declare -A STUCK_KEYWORDS=(
-  ["stuck"]=1 ["blocked"]=1 ["cannot proceed"]=1 ["unable to"]=1
-  ["failed repeatedly"]=1 ["same error"]=1 ["infinite loop"]=1 ["going in circles"]=1
-)
+# Stuck keywords (presence indicates stuck state)
+STUCK_KEYWORDS="stuck blocked cannot_proceed unable_to failed_repeatedly same_error infinite_loop going_in_circles"
 
 init_response_analyzer() {
   [[ -f "$ANALYSIS_STATE_FILE" ]] && return
@@ -47,20 +42,25 @@ detect_completion_signals() {
   local output="$1"
   local output_lower=$(echo "$output" | tr '[:upper:]' '[:lower:]')
   local confidence=0
-  local signals_found=()
+  local signals_found=""
 
-  for keyword in "${!COMPLETION_KEYWORDS[@]}"; do
-    if echo "$output_lower" | grep -qi "$keyword"; then
-      ((confidence += ${COMPLETION_KEYWORDS[$keyword]})) || true
-      signals_found+=("$keyword")
+  # Parse keyword:score pairs
+  for pair in $COMPLETION_KEYWORDS; do
+    local keyword="${pair%:*}"
+    local score="${pair#*:}"
+    # Convert underscores to spaces for matching
+    local search_term="${keyword//_/ }"
+    if echo "$output_lower" | grep -qi "$search_term"; then
+      ((confidence += score)) || true
+      signals_found="${signals_found:+$signals_found,}$keyword"
     fi
   done
 
-  echo "$output" | grep -q "---RALPH_STATUS---" && { ((confidence += 15)) || true; signals_found+=("structured_status"); }
-  echo "$output" | grep -qE '\[DONE\]|\[COMPLETE\]|\[FINISHED\]' && { ((confidence += 20)) || true; signals_found+=("explicit_marker"); }
+  echo "$output" | grep -q "---RALPH_STATUS---" && { ((confidence += 15)) || true; signals_found="${signals_found:+$signals_found,}structured_status"; }
+  echo "$output" | grep -qE '\[DONE\]|\[COMPLETE\]|\[FINISHED\]' && { ((confidence += 20)) || true; signals_found="${signals_found:+$signals_found,}explicit_marker"; }
 
-  jq -n --argjson confidence "$confidence" --arg signals "$(IFS=,; echo "${signals_found[*]}")" \
-    '{confidence: $confidence, signals: ($signals | split(","))}'
+  jq -n --argjson confidence "$confidence" --arg signals "$signals_found" \
+    '{confidence: $confidence, signals: (if $signals == "" then [] else ($signals | split(",")) end)}'
 }
 
 detect_test_only_loop() {
@@ -85,8 +85,10 @@ detect_stuck_state() {
   local output_lower=$(echo "$output" | tr '[:upper:]' '[:lower:]')
   local stuck_count=0
 
-  for keyword in "${!STUCK_KEYWORDS[@]}"; do
-    echo "$output_lower" | grep -qi "$keyword" && ((stuck_count++)) || true
+  for keyword in $STUCK_KEYWORDS; do
+    # Convert underscores to spaces for matching
+    local search_term="${keyword//_/ }"
+    echo "$output_lower" | grep -qi "$search_term" && ((stuck_count++)) || true
   done
 
   local error_mentions=$(echo "$output_lower" | grep -c "error\|failed\|exception" || echo "0")
