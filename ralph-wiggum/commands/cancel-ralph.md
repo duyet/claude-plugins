@@ -6,20 +6,8 @@ hide-from-slash-command-tool: "true"
 
 # Cancel Ralph
 
+Check if a Ralph loop is active and cancel it:
+
 ```!
-if [[ -f .claude/ralph-loop.local.md ]]; then
-  ITERATION=$(grep '^iteration:' .claude/ralph-loop.local.md | sed 's/iteration: *//')
-  echo "FOUND_LOOP=true"
-  echo "ITERATION=$ITERATION"
-else
-  echo "FOUND_LOOP=false"
-fi
+if [[ -f .claude/ralph-loop.local.md ]]; then ITERATION=$(grep '^iteration:' .claude/ralph-loop.local.md | sed 's/iteration: *//'); rm .claude/ralph-loop.local.md; echo "Ralph loop cancelled (was at iteration $ITERATION)"; else echo "No active Ralph loop"; fi
 ```
-
-Check the output:
-
-1. **If FOUND_LOOP=false**: Say "No active Ralph loop."
-
-2. **If FOUND_LOOP=true**:
-   - Run: `rm .claude/ralph-loop.local.md`
-   - Say: "Ralph loop cancelled (was at iteration N)"
