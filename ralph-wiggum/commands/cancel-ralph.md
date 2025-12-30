@@ -8,6 +8,6 @@ hide-from-slash-command-tool: "true"
 
 Check if a Ralph loop is active and cancel it:
 
-```!
+```bash !
 bash "${CLAUDE_PLUGIN_ROOT}/scripts/cancel-ralph.sh"
 ```
