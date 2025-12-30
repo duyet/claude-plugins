@@ -33,6 +33,11 @@
       "name": "frontend-design",
       "source": "./frontend-design",
       "description": "Create distinctive, production-grade frontend interfaces with shadcn/ui and Recharts. Avoids AI slop aesthetics with bold design choices and React best practices."
+    },
+    {
+      "name": "interview",
+      "source": "./interview",
+      "description": "Conduct in-depth requirements interviews using Socratic questioning. Clarifies implementation details, edge cases, and tradeoffs before coding begins."
     }
   ]
 }
