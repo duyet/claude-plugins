@@ -85,36 +85,82 @@ Gracefully handles rate limits:
 
 ## Prompt Guidelines
 
-Write prompts with clear completion criteria:
+Write prompts with clear, verifiable completion criteria:
 
+### Structure
+
+1. **Goal**: What you want to build/fix
+2. **Requirements**: Specific, testable criteria
+3. **Completion signal**: How to know when done
+
+### Examples
+
+**Bug fix with tests:**
 ```markdown
-Build a user authentication system.
+Fix the token refresh bug in auth.ts.
 
 Requirements:
-- JWT token generation and validation
-- Password hashing with bcrypt
-- Login and register endpoints
-- Input validation
-- Unit tests with >80% coverage
+- Token refresh returns valid JWT
+- Expired tokens trigger refresh flow
+- All auth tests pass
 
-Output <promise>COMPLETE</promise> when all requirements pass.
+Output <promise>FIXED</promise> when tests pass.
 ```
+
+**Feature implementation:**
+```markdown
+Add rate limiting to the API.
+
+Requirements:
+- 100 requests per minute per IP
+- Return 429 status when exceeded
+- Include retry-after header
+- Add rate limit tests
+
+Output <promise>DONE</promise> when feature works.
+```
+
+**Refactoring task:**
+```markdown
+Refactor user service to use repository pattern.
+
+Requirements:
+- Extract database calls to UserRepository
+- Service depends on repository interface
+- Existing tests still pass
+- No TypeScript errors
+
+Output <promise>REFACTORED</promise> when complete.
+```
+
+### Tips
+
+- Use measurable criteria ("tests pass", "no errors", "build succeeds")
+- Include the `<promise>` tag in your prompt so Claude knows how to exit
+- Keep requirements focused—fewer is better for iterative tasks
 
 ## Monitoring
 
-```bash
-# Loop state
-cat .claude/ralph-loop.local.md
+Use the status command or inspect files directly:
 
-# Circuit breaker
-cat .claude/ralph-circuit.json
+```bash
+# Quick status check
+/status
+
+# Loop state file
+cat /tmp/ralph_loop.txt
+
+# Circuit breaker state
+cat /tmp/ralph_circuit.json
 
 # Response analysis
-cat .claude/ralph-analysis.json
+cat /tmp/ralph_analysis.json
 
-# API limits
-cat .claude/ralph-limits.json
+# API limit state
+cat /tmp/ralph_limits.json
 ```
+
+State files are stored in `/tmp/ralph_*` for the current session.
 
 ## Configuration
 
@@ -132,21 +178,24 @@ Environment variables:
 ```
 ralph-wiggum/
 ├── .claude-plugin/
-│   └── plugin.json
+│   └── plugin.json          # Plugin manifest
 ├── commands/
-│   ├── ralph-loop.md
-│   ├── cancel-ralph.md
-│   └── help.md
+│   ├── ralph-loop.md        # Start loop command
+│   ├── status.md            # Check loop status
+│   ├── cancel-ralph.md      # Cancel active loop
+│   └── help.md              # Plugin documentation
 ├── hooks/
-│   ├── hooks.json
-│   └── stop-hook.sh
+│   ├── hooks.json           # Hook configuration
+│   └── stop-hook.sh         # Main loop interceptor
 ├── lib/
-│   ├── circuit_breaker.sh
-│   ├── response_analyzer.sh
-│   ├── api_limit_handler.sh
-│   └── task_manager.sh
+│   ├── circuit_breaker.sh   # Stagnation detection
+│   ├── response_analyzer.sh # Completion analysis
+│   ├── api_limit_handler.sh # Rate limit handling
+│   └── task_manager.sh      # Task state management
 └── scripts/
-    └── setup-ralph-loop.sh
+    ├── setup-ralph-loop.sh  # Loop initialization
+    ├── status.sh            # Status display
+    └── cancel-ralph.sh      # Cancellation handler
 ```
 
 ## When to Use
@@ -160,6 +209,58 @@ ralph-wiggum/
 - Tasks requiring human judgment or design decisions
 - One-shot operations
 - Production debugging
+
+## Troubleshooting
+
+### Loop won't start
+
+1. Check if another loop is active: `/status`
+2. Cancel any existing loop: `/cancel-ralph`
+3. Try again with your prompt
+
+### Loop exits too early
+
+The smart exit feature may trigger on completion keywords. Options:
+- Use `--no-smart-exit` to disable completion detection
+- Add more specific requirements to your prompt
+- Check `/tmp/ralph_analysis.json` to see what triggered the exit
+
+### Loop runs forever
+
+Ensure your prompt includes:
+- Clear, testable completion criteria
+- A `<promise>` tag if using `--completion-promise`
+- Measurable success conditions (tests pass, build succeeds)
+
+### Circuit breaker keeps triggering
+
+The circuit breaker stops loops that aren't making progress:
+- Ensure each iteration changes files
+- Check `/tmp/ralph_circuit.json` for details
+- Use `--reset-circuit` to reset state if needed
+
+### Rate limits
+
+If you hit Claude's API limits:
+- The loop pauses automatically
+- Wait for the recommended duration
+- Resume with `/ralph-loop` using the same prompt
+
+### Debugging
+
+```bash
+# Check all state files
+ls -la /tmp/ralph_*
+
+# View loop configuration
+cat /tmp/ralph_loop.txt
+
+# Check circuit breaker state
+cat /tmp/ralph_circuit.json
+
+# Review completion analysis
+cat /tmp/ralph_analysis.json
+```
 
 ## References
 
