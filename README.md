@@ -166,6 +166,7 @@ Originally created by Daisy Hollman (Anthropic).
 
 **Commands:**
 - `/ralph-loop "<prompt>" [--max-iterations N] [--completion-promise "TEXT"]` - Start a loop
+- `/status` - Check loop status
 - `/cancel-ralph` - Cancel active loop
 - `/help` - Show Ralph Wiggum help
 

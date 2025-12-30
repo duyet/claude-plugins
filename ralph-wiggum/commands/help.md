@@ -105,10 +105,10 @@ The text must exactly match `--completion-promise`.
 ## Monitoring
 
 ```bash
-/status                          # Show status
-cat /tmp/ralph_loop.txt          # Loop state
-cat /tmp/ralph_circuit.json      # Circuit breaker
-cat /tmp/ralph_analysis.json     # Response analysis
+/status                              # Show status
+cat .claude/ralph-loop.local.md      # Loop state
+cat .claude/ralph-circuit.json       # Circuit breaker
+cat .claude/ralph-analysis.json      # Response analysis
 ```
 
 ## Example

@@ -148,19 +148,16 @@ Use the status command or inspect files directly:
 /status
 
 # Loop state file
-cat /tmp/ralph_loop.txt
+cat .claude/ralph-loop.local.md
 
 # Circuit breaker state
-cat /tmp/ralph_circuit.json
+cat .claude/ralph-circuit.json
 
 # Response analysis
-cat /tmp/ralph_analysis.json
-
-# API limit state
-cat /tmp/ralph_limits.json
+cat .claude/ralph-analysis.json
 ```
 
-State files are stored in `/tmp/ralph_*` for the current session.
+State files are stored in `.claude/ralph-*` in your project directory.
 
 ## Configuration
 
@@ -223,7 +220,7 @@ ralph-wiggum/
 The smart exit feature may trigger on completion keywords. Options:
 - Use `--no-smart-exit` to disable completion detection
 - Add more specific requirements to your prompt
-- Check `/tmp/ralph_analysis.json` to see what triggered the exit
+- Check `.claude/ralph-analysis.json` to see what triggered the exit
 
 ### Loop runs forever
 
@@ -236,7 +233,7 @@ Ensure your prompt includes:
 
 The circuit breaker stops loops that aren't making progress:
 - Ensure each iteration changes files
-- Check `/tmp/ralph_circuit.json` for details
+- Check `.claude/ralph-circuit.json` for details
 - Use `--reset-circuit` to reset state if needed
 
 ### Rate limits
@@ -250,16 +247,16 @@ If you hit Claude's API limits:
 
 ```bash
 # Check all state files
-ls -la /tmp/ralph_*
+ls -la .claude/ralph-*
 
 # View loop configuration
-cat /tmp/ralph_loop.txt
+cat .claude/ralph-loop.local.md
 
 # Check circuit breaker state
-cat /tmp/ralph_circuit.json
+cat .claude/ralph-circuit.json
 
 # Review completion analysis
-cat /tmp/ralph_analysis.json
+cat .claude/ralph-analysis.json
 ```
 
 ## References
