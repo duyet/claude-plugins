@@ -3,7 +3,7 @@
 # Task Manager for Ralph Wiggum
 # Hierarchical task tracking with progress monitoring
 
-set -euo pipefail
+set -eo pipefail
 
 TASK_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-tasks.json"
 TASK_PLAN_FILE="${RALPH_STATE_DIR:-.claude}/ralph-plan.md"

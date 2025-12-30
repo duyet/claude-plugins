@@ -3,13 +3,25 @@
 # Circuit Breaker for Ralph Wiggum
 # Prevents runaway loops by detecting stagnation, errors, and duplicate outputs
 
-set -euo pipefail
+set -eo pipefail
 
 CIRCUIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-circuit.json"
 MAX_NO_PROGRESS_LOOPS=${RALPH_MAX_NO_PROGRESS:-3}
 MAX_CONSECUTIVE_ERRORS=${RALPH_MAX_ERRORS:-5}
 MAX_IDENTICAL_OUTPUTS=${RALPH_MAX_IDENTICAL:-3}
 HALF_OPEN_THRESHOLD=${RALPH_HALF_OPEN_THRESHOLD:-2}
+
+# Cross-platform hash function (works on macOS, Linux, WSL)
+_hash() {
+  if command -v md5sum &>/dev/null; then
+    md5sum | cut -d' ' -f1
+  elif command -v md5 &>/dev/null; then
+    md5 -q
+  else
+    # Fallback: use cksum if neither available
+    cksum | cut -d' ' -f1
+  fi
+}
 
 init_circuit_breaker() {
   [[ -f "$CIRCUIT_STATE_FILE" ]] && return
@@ -42,16 +54,26 @@ can_execute() {
 
 calculate_file_hash() {
   local project_dir="${1:-.}"
-  find "$project_dir" -type f \
+  # Find all relevant files and hash their contents
+  local file_list
+  file_list=$(find "$project_dir" -type f \
     \( -name "*.js" -o -name "*.ts" -o -name "*.py" -o -name "*.go" \
        -o -name "*.rs" -o -name "*.java" -o -name "*.sh" -o -name "*.md" \
        -o -name "*.json" -o -name "*.yaml" -o -name "*.yml" \) \
     ! -path "*node_modules*" ! -path "*/.git/*" ! -path "*/.claude/*" \
-    -exec md5 -q {} \; 2>/dev/null | sort | md5 -q 2>/dev/null || echo "no_files"
+    2>/dev/null | sort)
+
+  if [[ -z "$file_list" ]]; then
+    echo "no_files"
+    return
+  fi
+
+  # Hash file contents (cross-platform)
+  echo "$file_list" | xargs cat 2>/dev/null | _hash || echo "no_files"
 }
 
 calculate_output_hash() {
-  echo -n "$1" | md5 -q 2>/dev/null || echo "no_output"
+  echo -n "$1" | _hash 2>/dev/null || echo "no_output"
 }
 
 record_loop_result() {
@@ -204,5 +226,6 @@ cleanup_circuit_breaker() {
   rm -f "$CIRCUIT_STATE_FILE"
 }
 
+export -f _hash calculate_file_hash calculate_output_hash
 export -f init_circuit_breaker get_circuit_state can_execute record_loop_result
 export -f get_halt_reason show_circuit_status reset_circuit_breaker cleanup_circuit_breaker

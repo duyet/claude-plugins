@@ -3,16 +3,13 @@
 # API Limit Handler for Ralph Wiggum
 # Handles Claude's 5-hour usage limits and rate limiting
 
-set -euo pipefail
+set -eo pipefail
 
 LIMIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-limits.json"
 DEFAULT_WAIT_SECONDS=${RALPH_WAIT_SECONDS:-3600}
 
-RATE_LIMIT_PATTERNS=(
-  "rate limit" "rate_limit" "too many requests" "429" "quota exceeded"
-  "usage limit" "daily limit" "hourly limit" "5-hour" "5 hour"
-  "exceeded.*limit" "limit.*exceeded" "overloaded" "capacity"
-)
+# Rate limit patterns as space-separated string (portable across bash versions)
+RATE_LIMIT_PATTERNS="rate_limit too_many_requests 429 quota_exceeded usage_limit daily_limit hourly_limit 5-hour 5_hour exceeded_limit limit_exceeded overloaded capacity"
 
 init_limit_handler() {
   [[ -f "$LIMIT_STATE_FILE" ]] && return
@@ -34,8 +31,10 @@ detect_rate_limit() {
   local output="$1"
   local output_lower=$(echo "$output" | tr '[:upper:]' '[:lower:]')
 
-  for pattern in "${RATE_LIMIT_PATTERNS[@]}"; do
-    echo "$output_lower" | grep -qiE "$pattern" && { echo "true"; return 0; }
+  for pattern in $RATE_LIMIT_PATTERNS; do
+    # Convert underscores to spaces/regex for matching
+    local search_term="${pattern//_/[_ ]}"
+    echo "$output_lower" | grep -qiE "$search_term" && { echo "true"; return 0; }
   done
   echo "false"
 }
