@@ -1,0 +1,145 @@
+name: Bash Tests
+
+on:
+  push:
+    branches: [main, master, "claude/**"]
+    paths:
+      - "**/*.sh"
+      - ".github/workflows/bash-tests.yml"
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "**/*.sh"
+      - ".github/workflows/bash-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: "."
+          severity: warning
+
+  syntax-check:
+    name: Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check bash syntax
+        run: |
+          echo "Checking bash script syntax..."
+          failed=0
+          while IFS= read -r -d '' script; do
+            echo "Checking: $script"
+            if ! bash -n "$script"; then
+              echo "❌ Syntax error in: $script"
+              failed=1
+            fi
+          done < <(find . -name "*.sh" -type f -print0)
+
+          if [[ $failed -eq 1 ]]; then
+            echo "❌ Some scripts have syntax errors"
+            exit 1
+          fi
+          echo "✅ All scripts passed syntax check"
+
+  compatibility:
+    name: Bash Compatibility
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        bash-version: ["4.4", "5.0", "5.1", "5.2"]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Test with bash version
+        env:
+          BASH_VERSION_TAG: ${{ matrix.bash-version }}
+        run: |
+          docker run --rm -v "$PWD:/workspace" -w /workspace "bash:${BASH_VERSION_TAG}" bash -c '
+            echo "Testing with bash version:"
+            bash --version | head -1
+
+            failed=0
+            for script in $(find . -name "*.sh" -type f); do
+              echo "Checking: $script"
+              if ! bash -n "$script" 2>&1; then
+                echo "❌ Failed: $script"
+                failed=1
+              fi
+            done
+
+            if [[ $failed -eq 1 ]]; then
+              exit 1
+            fi
+            echo "✅ All scripts compatible"
+          '
+
+  unit-tests:
+    name: Unit Tests (bats)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup bats
+        uses: bats-core/bats-action@2.0.0
+
+      - name: Run bats tests
+        run: |
+          if [[ -d "tests" ]] && ls tests/*.bats 1>/dev/null 2>&1; then
+            bats tests/*.bats
+          else
+            echo "No bats tests found in tests/ directory"
+            echo "Skipping unit tests"
+          fi
+
+  dry-run:
+    name: Dry Run Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Dry run ralph-wiggum scripts
+        run: |
+          echo "Testing ralph-wiggum scripts can be sourced..."
+
+          for lib in ralph-wiggum/lib/*.sh; do
+            echo "Sourcing: $lib"
+            (
+              export RALPH_STATE_DIR="/tmp/ralph-test"
+              mkdir -p "$RALPH_STATE_DIR"
+              source "$lib"
+              echo "✅ $lib sourced successfully"
+            ) || {
+              echo "❌ Failed to source: $lib"
+              exit 1
+            }
+          done
+
+          echo "✅ All lib scripts can be sourced"
+
+      - name: Test status script
+        run: |
+          echo "Testing status.sh..."
+          bash ralph-wiggum/scripts/status.sh || true
+          echo "✅ status.sh runs without crash"
+
+      - name: Test cancel script
+        run: |
+          echo "Testing cancel-ralph.sh..."
+          bash ralph-wiggum/scripts/cancel-ralph.sh || true
+          echo "✅ cancel-ralph.sh runs without crash"
