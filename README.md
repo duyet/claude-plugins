@@ -13,11 +13,12 @@ Add this marketplace to Claude Code and install plugins:
 /plugin marketplace add duyet/claude-plugins
 
 # Install plugins
-/plugin install senior-engineer-agent@duyet-claude-plugins
-/plugin install leader-agent@duyet-claude-plugins
+/plugin install team-agents@duyet-claude-plugins
 /plugin install commit-commands@duyet-claude-plugins
 /plugin install terminal-ui-design@duyet-claude-plugins
 /plugin install ralph-wiggum@duyet-claude-plugins
+/plugin install frontend-design@duyet-claude-plugins
+/plugin install interview@duyet-claude-plugins
 ```
 
 ### Manual Installation via Settings
@@ -35,11 +36,12 @@ Add to your `.claude/settings.json`:
     }
   },
   "enabledPlugins": {
-    "senior-engineer-agent@duyet-claude-plugins": true,
-    "leader-agent@duyet-claude-plugins": true,
+    "team-agents@duyet-claude-plugins": true,
     "commit-commands@duyet-claude-plugins": true,
     "terminal-ui-design@duyet-claude-plugins": true,
-    "ralph-wiggum@duyet-claude-plugins": true
+    "ralph-wiggum@duyet-claude-plugins": true,
+    "frontend-design@duyet-claude-plugins": true,
+    "interview@duyet-claude-plugins": true
   }
 }
 ```
@@ -50,56 +52,52 @@ Then restart Claude Code.
 
 ### Agent Plugins
 
-#### Senior Engineer Agent
+#### Team Agents (Leader + Senior Engineer)
 
-**Plugin:** `senior-engineer-agent`
-**Description:** Elite implementation engineer specializing in translating plans and specifications into high-performance, maintainable production code.
+**Plugin:** `team-agents`
+**Description:** Coordinated agent team for parallel task execution. Includes leader and senior-engineer agents.
+
+**How it works:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Leader Agent                          │
+│  - Analyzes complex requirements                             │
+│  - Designs architecture and solution approach                │
+│  - Breaks work into independent, parallelizable tasks        │
+│  - Delegates to multiple senior engineers                    │
+│  - Reviews completed work and ensures quality                │
+└──────────────────────┬───────────────────────────────────────┘
+                       │ delegates tasks
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│ Senior Eng 1 │ │ Senior Eng 2 │ │ Senior Eng 3 │
+│  (Task A)    │ │  (Task B)    │ │  (Task C)    │
+│  parallel    │ │  parallel    │ │  parallel    │
+└──────────────┘ └──────────────┘ └──────────────┘
+```
 
 **Use when:**
-- Implementing features from specifications
-- Building UI/frontend components with performance focus
-- Developing backend services and APIs
-- Quality-critical implementation work
-- Performance optimization is a priority
-- Adhering to strict project patterns
+- Complex features requiring multiple components
+- Large refactoring spanning many files
+- Tasks that benefit from parallel execution
+- Need both architectural planning AND implementation
 
-**Key Features:**
-- Performance-first implementation approach
-- Comprehensive testing strategies (unit, integration, E2E)
-- Clean architecture following SOLID principles
-- Consistent pattern application across codebase
-- Proactive optimization and improvement suggestions
+**Included Agents:**
+- **`leader`** (uses Opus): Coordinates complex tasks, breaks down requirements, delegates work
+- **`senior-engineer`** (uses Haiku): Implements delegated tasks with high quality
 
 **Usage Example:**
 ```
-I have a specification for [feature/component]. Can you implement this following our project patterns and best practices?
+We need to implement a user authentication system with OAuth2, JWT tokens,
+and role-based access. Can you plan and coordinate the implementation?
 ```
 
-#### Leader Agent
-
-**Plugin:** `leader-agent`
-**Description:** Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance.
-
-**Use when:**
-- Implementing multi-faceted features requiring architectural planning
-- Coordinating critical bug fixes across multiple components
-- Planning and executing large-scale refactoring
-- Designing solutions aligned with existing architecture
-- Need comprehensive code review and quality assurance
-- Breaking down work for parallel team execution
-
-**Key Features:**
-- Requirements analysis and clarification
-- Solution design and architectural alignment
-- Task planning with parallel execution optimization
-- Comprehensive code review and quality gates
-- Team coordination and delegation
-- Evidence-based delivery reporting
-
-**Usage Example:**
-```
-We need to implement [complex feature/refactoring]. Can you analyze requirements, design the solution, plan the work, and coordinate the implementation?
-```
+The leader will:
+1. Analyze requirements and design the architecture
+2. Break work into parallel tasks (e.g., OAuth flow, JWT middleware, RBAC)
+3. Delegate each task to a senior-engineer running in parallel
+4. Review completed work and ensure quality gates pass
 
 ### Slash Commands
 
@@ -194,10 +192,11 @@ Originally created by Daisy Hollman (Anthropic).
 Each plugin directory contains:
 ```
 plugin-name/
-└── .claude-plugin/
-    ├── agents/      # Agent definitions (.md files)
-    ├── commands/    # Slash commands (.md files)
-    └── skills/      # Skill definitions (.md files)
+├── .claude-plugin/
+│   └── plugin.json     # Plugin manifest (name, description, version, author)
+├── agents/             # Agent definitions (.md files with YAML frontmatter)
+├── commands/           # Slash commands (.md files)
+└── skills/             # Skill definitions (.md files)
 ```
 
 ### Agent File Format

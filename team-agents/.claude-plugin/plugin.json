@@ -1,0 +1,8 @@
+{
+  "name": "team-agents",
+  "description": "Leader and Senior Engineer agents for coordinated parallel task execution",
+  "version": "1.0.0",
+  "author": {
+    "name": "duyet"
+  }
+}

@@ -5,14 +5,9 @@
   },
   "plugins": [
     {
-      "name": "senior-engineer-agent",
-      "source": "./senior-engineer",
-      "description": "Elite implementation engineer specializing in translating plans and specifications into high-performance, maintainable production code."
-    },
-    {
-      "name": "leader-agent",
-      "source": "./leader",
-      "description": "Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance."
+      "name": "team-agents",
+      "source": "./team-agents",
+      "description": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel."
     },
     {
       "name": "commit-commands",
