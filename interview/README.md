@@ -2,6 +2,12 @@
 
 Conduct in-depth requirements interviews using Socratic questioning before implementation.
 
+## Installation
+
+```bash
+/plugin install interview@duyet-claude-plugins
+```
+
 ## What It Does
 
 The `/interview` command puts Claude into an interview mode where it systematically asks clarifying questions about a feature or plan. It uses the `AskUserQuestion` tool to gather decisions on:
@@ -87,3 +93,14 @@ Claude: Here's the complete specification based on our interview:
 - Be honest about constraints (timeline, complexity budget)
 - It's okay to say "I don't know" - that gets captured as an open question
 - The more specific you are, the better the spec
+
+## Architecture
+
+```
+interview/
+├── .claude-plugin/
+│   └── plugin.json      # Plugin manifest
+├── commands/
+│   └── interview.md     # Interview command definition
+└── README.md            # This file
+```

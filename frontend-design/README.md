@@ -2,6 +2,12 @@
 
 Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.
 
+## Installation
+
+```bash
+/plugin install frontend-design@duyet-claude-plugins
+```
+
 ## What It Does
 
 Claude automatically uses this skill for frontend work. Creates production-ready code with:
@@ -54,6 +60,18 @@ Claude will choose a clear aesthetic direction and implement production code wit
 ## Learn More
 
 See the [Frontend Aesthetics Cookbook](https://github.com/anthropics/claude-cookbooks/blob/main/coding/prompting_for_frontend_aesthetics.ipynb) for detailed guidance.
+
+## Architecture
+
+```
+frontend-design/
+├── .claude-plugin/
+│   └── plugin.json          # Plugin manifest
+├── skills/
+│   └── frontend-design/
+│       └── SKILL.md         # Skill definition with guidelines
+└── README.md                # This file
+```
 
 ## Credits
 
