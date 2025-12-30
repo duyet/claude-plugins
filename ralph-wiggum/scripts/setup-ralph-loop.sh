@@ -13,7 +13,6 @@ ENABLE_CIRCUIT_BREAKER="true"
 ENABLE_SMART_EXIT="true"
 ENABLE_RATE_LIMIT="true"
 RESET_CIRCUIT=false
-SHOW_STATUS=false
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -31,13 +30,11 @@ OPTIONS:
   --no-smart-exit               Disable completion analysis
   --no-rate-limit               Disable rate limit handling
   --reset-circuit               Reset circuit breaker state
-  --status                      Show loop status
   -h, --help                    Show this help
 
 EXAMPLES:
   /ralph-loop Build a todo API --completion-promise DONE --max-iterations 20
   /ralph-loop Fix the auth bug --max-iterations 10
-  /ralph-loop --status
 
 STOP CONDITIONS:
   - --max-iterations reached
@@ -85,48 +82,12 @@ EOF
       RESET_CIRCUIT=true
       shift
       ;;
-    --status)
-      SHOW_STATUS=true
-      shift
-      ;;
     *)
       PROMPT_PARTS+=("$1")
       shift
       ;;
   esac
 done
-
-# Handle status display
-if [[ "$SHOW_STATUS" == "true" ]]; then
-  echo ""
-  echo "Ralph Loop Status"
-  echo "============================================="
-
-  if [[ -f .claude/ralph-loop.local.md ]]; then
-    ITERATION=$(grep '^iteration:' .claude/ralph-loop.local.md | sed 's/iteration: *//')
-    MAX_ITER=$(grep '^max_iterations:' .claude/ralph-loop.local.md | sed 's/max_iterations: *//')
-    echo "Active: YES"
-    echo "Iteration: $ITERATION"
-    echo "Max: $(if [[ $MAX_ITER -gt 0 ]]; then echo $MAX_ITER; else echo 'unlimited'; fi)"
-  else
-    echo "Active: NO"
-  fi
-
-  if [[ -f .claude/ralph-circuit.json ]]; then
-    echo ""
-    echo "Circuit Breaker:"
-    jq -r '"  State: \(.state)\n  No Progress: \(.no_progress_count)\n  Errors: \(.error_count)"' .claude/ralph-circuit.json
-  fi
-
-  if [[ -f .claude/ralph-analysis.json ]]; then
-    echo ""
-    echo "Response Analysis:"
-    jq -r '"  Confidence: \(.last_confidence)\n  Trend: \(.output_trend)\n  Exit: \(.exit_recommended)"' .claude/ralph-analysis.json
-  fi
-
-  echo "============================================="
-  exit 0
-fi
 
 # Reset circuit breaker if requested
 if [[ "$RESET_CIRCUIT" == "true" ]]; then
@@ -193,7 +154,7 @@ if [[ "$ENABLE_RATE_LIMIT" == "true" ]]; then
 fi
 
 echo ""
-echo "To monitor: /ralph-loop --status"
+echo "To monitor: /status"
 
 if [[ "$COMPLETION_PROMISE" != "null" ]]; then
   echo ""

@@ -1,6 +1,6 @@
 ---
 description: "Start Ralph Wiggum loop in current session"
-argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT] [--status] [--no-circuit-breaker] [--no-smart-exit]"
+argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT] [--no-circuit-breaker] [--no-smart-exit]"
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh)"]
 hide-from-slash-command-tool: "true"
 ---

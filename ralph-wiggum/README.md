@@ -27,7 +27,7 @@ This plugin implements the loop within Claude Code using a stop-hook that interc
 /ralph-loop "Add input validation" --completion-promise "DONE"
 
 # Check status
-/ralph-loop --status
+/status
 
 # Cancel
 /cancel-ralph
@@ -82,7 +82,6 @@ Gracefully handles rate limits:
 | `--no-smart-exit` | Disable completion analysis |
 | `--no-rate-limit` | Disable rate limit handling |
 | `--reset-circuit` | Reset circuit breaker state |
-| `--status` | Show loop status |
 
 ## Prompt Guidelines
 

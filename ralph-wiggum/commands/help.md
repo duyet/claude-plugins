@@ -29,7 +29,6 @@ Start a loop in the current session.
 ```
 /ralph-loop "Build a REST API" --max-iterations 20
 /ralph-loop "Fix auth bug" --completion-promise "FIXED"
-/ralph-loop --status
 ```
 
 **Options:**
@@ -41,7 +40,14 @@ Start a loop in the current session.
 | `--no-circuit-breaker` | Disable stagnation detection |
 | `--no-smart-exit` | Disable completion analysis |
 | `--reset-circuit` | Reset circuit breaker state |
-| `--status` | Show loop status |
+
+### /status
+
+Show current loop status.
+
+```
+/status
+```
 
 ### /cancel-ralph
 
@@ -99,6 +105,7 @@ The text must exactly match `--completion-promise`.
 ## Monitoring
 
 ```bash
+/status                              # Show status
 cat .claude/ralph-loop.local.md      # Loop state
 cat .claude/ralph-circuit.json       # Circuit breaker
 cat .claude/ralph-analysis.json      # Response analysis
