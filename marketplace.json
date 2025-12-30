@@ -6,23 +6,28 @@
   "plugins": [
     {
       "name": "senior-engineer-agent",
-      "source": "./senior-engineer-plugin",
+      "source": "./senior-engineer",
       "description": "Elite implementation engineer specializing in translating plans and specifications into high-performance, maintainable production code."
     },
     {
       "name": "leader-agent",
-      "source": "./leader-plugin",
+      "source": "./leader",
       "description": "Technical Lead and Engineering Manager for coordinating complex development tasks, architectural planning, and quality assurance."
     },
     {
       "name": "commit-commands",
-      "source": "./commit-commands-plugin",
+      "source": "./commit-commands",
       "description": "Create a Git commit with semantic commit message format"
     },
     {
       "name": "terminal-ui-design",
-      "source": "./terminal-ui-design-plugin",
+      "source": "./terminal-ui-design",
       "description": "Create distinctive, production-grade terminal user interfaces with high design quality"
+    },
+    {
+      "name": "ralph-wiggum",
+      "source": "./ralph-wiggum",
+      "description": "Continuous self-referential AI loops for iterative development - run Claude with the same prompt until task completion"
     }
   ]
 }

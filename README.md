@@ -17,6 +17,7 @@ Add this marketplace to Claude Code and install plugins:
 /plugin install leader-agent@duyet-claude-plugins
 /plugin install commit-commands@duyet-claude-plugins
 /plugin install terminal-ui-design@duyet-claude-plugins
+/plugin install ralph-wiggum@duyet-claude-plugins
 ```
 
 ### Manual Installation via Settings
@@ -37,7 +38,8 @@ Add to your `.claude/settings.json`:
     "senior-engineer-agent@duyet-claude-plugins": true,
     "leader-agent@duyet-claude-plugins": true,
     "commit-commands@duyet-claude-plugins": true,
-    "terminal-ui-design@duyet-claude-plugins": true
+    "terminal-ui-design@duyet-claude-plugins": true,
+    "ralph-wiggum@duyet-claude-plugins": true
   }
 }
 ```
@@ -144,6 +146,48 @@ We need to implement [complex feature/refactoring]. Can you analyze requirements
 - Go: Bubbletea, Lipgloss
 - Rust: Ratatui
 - Node.js: Ink, Blessed
+
+#### Ralph Wiggum
+
+**Plugin:** `ralph-wiggum`
+**Description:** Continuous self-referential AI loops for iterative development - run Claude with the same prompt until task completion.
+
+Originally created by Daisy Hollman (Anthropic).
+
+**Use when:**
+- Well-defined tasks with clear success criteria
+- Tasks requiring iteration and refinement (TDD, getting tests to pass)
+- Greenfield projects where you can walk away
+- Tasks with automatic verification (tests, linters)
+
+**Not good for:**
+- Tasks requiring human judgment or design decisions
+- One-shot operations
+- Tasks with unclear success criteria
+- Production debugging
+
+**Commands:**
+- `/ralph-loop "<prompt>" [--max-iterations N] [--completion-promise "TEXT"]` - Start a loop
+- `/cancel-ralph` - Cancel active loop
+- `/help` - Show Ralph Wiggum help
+
+**How it works:**
+1. You provide a prompt and optional completion criteria
+2. Claude works on the task
+3. When Claude tries to exit, the stop hook intercepts
+4. Same prompt fed back to Claude
+5. Claude sees its previous work in files and git history
+6. Iterates until completion promise detected or max iterations reached
+
+**Usage Example:**
+```bash
+/ralph-loop "Build a REST API for todos. Requirements: CRUD operations, input validation, tests. Output <promise>COMPLETE</promise> when done." --completion-promise "COMPLETE" --max-iterations 50
+```
+
+**Philosophy:**
+- **Iteration > Perfection**: Don't aim for perfect on first try
+- **Failures Are Data**: Use predictable failures to tune prompts
+- **Persistence Wins**: Keep trying until success
 
 ## Plugin Structure
 
