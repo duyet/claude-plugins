@@ -137,8 +137,9 @@ if [[ "$ENABLE_CIRCUIT_BREAKER" == "true" ]] && type can_execute &>/dev/null; th
   echo "$LAST_OUTPUT" | grep -qiE "error|failed|exception|traceback" && ERROR_DETECTED="error_in_output"
 
   FILES_CHANGED=0
-  command -v git &>/dev/null && git rev-parse --git-dir &>/dev/null 2>/dev/null && \
+  if command -v git &>/dev/null && git rev-parse --git-dir &>/dev/null; then
     FILES_CHANGED=$(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
+  fi
 
   NEW_STATE=$(record_loop_result "$LAST_OUTPUT" "$ERROR_DETECTED" "$FILES_CHANGED")
 
