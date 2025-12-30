@@ -8,6 +8,6 @@ hide-from-slash-command-tool: "true"
 
 Check if a Ralph loop is active and cancel it:
 
-```bash
+```!
 test -f .claude/ralph-loop.local.md && grep -q . .claude/ralph-loop.local.md && { grep '^iteration:' .claude/ralph-loop.local.md; rm .claude/ralph-loop.local.md; echo "Loop cancelled"; } || echo "No active Ralph loop"
 ```
