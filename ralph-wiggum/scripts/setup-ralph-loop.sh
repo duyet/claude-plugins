@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ralph Loop Setup Script
-# Creates state file for in-session Ralph loop
+# Creates state file for in-session Ralph loop with safety controls
 
 set -euo pipefail
 
@@ -9,76 +9,53 @@ set -euo pipefail
 PROMPT_PARTS=()
 MAX_ITERATIONS=0
 COMPLETION_PROMISE="null"
+ENABLE_CIRCUIT_BREAKER="true"
+ENABLE_SMART_EXIT="true"
+ENABLE_RATE_LIMIT="true"
+RESET_CIRCUIT=false
+SHOW_STATUS=false
 
-# Parse options and positional arguments
 while [[ $# -gt 0 ]]; do
   case $1 in
     -h|--help)
-      cat << 'HELP_EOF'
-Ralph Loop - Interactive self-referential development loop
+      cat << 'EOF'
+Ralph Loop - Self-referential development loop
 
 USAGE:
-  /ralph-loop [PROMPT...] [OPTIONS]
-
-ARGUMENTS:
-  PROMPT...    Initial prompt to start the loop (can be multiple words without quotes)
+  /ralph-loop [PROMPT] [OPTIONS]
 
 OPTIONS:
-  --max-iterations <n>           Maximum iterations before auto-stop (default: unlimited)
-  --completion-promise '<text>'  Promise phrase (USE QUOTES for multi-word)
-  -h, --help                     Show this help message
-
-DESCRIPTION:
-  Starts a Ralph Wiggum loop in your CURRENT session. The stop hook prevents
-  exit and feeds your output back as input until completion or iteration limit.
-
-  To signal completion, you must output: <promise>YOUR_PHRASE</promise>
-
-  Use this for:
-  - Interactive iteration where you want to see progress
-  - Tasks requiring self-correction and refinement
-  - Learning how Ralph works
+  --max-iterations <n>          Stop after N iterations (default: unlimited)
+  --completion-promise <text>   Promise phrase to signal completion
+  --no-circuit-breaker          Disable stagnation detection
+  --no-smart-exit               Disable completion analysis
+  --no-rate-limit               Disable rate limit handling
+  --reset-circuit               Reset circuit breaker state
+  --status                      Show loop status
+  -h, --help                    Show this help
 
 EXAMPLES:
-  /ralph-loop Build a todo API --completion-promise 'DONE' --max-iterations 20
-  /ralph-loop --max-iterations 10 Fix the auth bug
-  /ralph-loop Refactor cache layer  (runs forever)
-  /ralph-loop --completion-promise 'TASK COMPLETE' Create a REST API
+  /ralph-loop Build a todo API --completion-promise DONE --max-iterations 20
+  /ralph-loop Fix the auth bug --max-iterations 10
+  /ralph-loop --status
 
-STOPPING:
-  Only by reaching --max-iterations or detecting --completion-promise
-  No manual stop - Ralph runs infinitely by default!
+STOP CONDITIONS:
+  - --max-iterations reached
+  - <promise>TEXT</promise> matches --completion-promise
+  - Circuit breaker opens (stagnation/errors)
+  - Smart exit triggers (completion detected)
+  - API rate limit reached
 
 MONITORING:
-  # View current iteration:
-  grep '^iteration:' .claude/ralph-loop.local.md
-
-  # View full state:
-  head -10 .claude/ralph-loop.local.md
-HELP_EOF
+  cat .claude/ralph-loop.local.md    # Loop state
+  cat .claude/ralph-circuit.json     # Circuit breaker
+  cat .claude/ralph-analysis.json    # Response analysis
+EOF
       exit 0
       ;;
     --max-iterations)
-      if [[ -z "${2:-}" ]]; then
-        echo "❌ Error: --max-iterations requires a number argument" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --max-iterations 10" >&2
-        echo "     --max-iterations 50" >&2
-        echo "     --max-iterations 0  (unlimited)" >&2
-        echo "" >&2
-        echo "   You provided: --max-iterations (with no number)" >&2
-        exit 1
-      fi
-      if ! [[ "$2" =~ ^[0-9]+$ ]]; then
-        echo "❌ Error: --max-iterations must be a positive integer or 0, got: $2" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --max-iterations 10" >&2
-        echo "     --max-iterations 50" >&2
-        echo "     --max-iterations 0  (unlimited)" >&2
-        echo "" >&2
-        echo "   Invalid: decimals (10.5), negative numbers (-5), text" >&2
+      if [[ -z "${2:-}" ]] || ! [[ "$2" =~ ^[0-9]+$ ]]; then
+        echo "Error: --max-iterations requires a number" >&2
         exit 1
       fi
       MAX_ITERATIONS="$2"
@@ -86,51 +63,96 @@ HELP_EOF
       ;;
     --completion-promise)
       if [[ -z "${2:-}" ]]; then
-        echo "❌ Error: --completion-promise requires a text argument" >&2
-        echo "" >&2
-        echo "   Valid examples:" >&2
-        echo "     --completion-promise 'DONE'" >&2
-        echo "     --completion-promise 'TASK COMPLETE'" >&2
-        echo "     --completion-promise 'All tests passing'" >&2
-        echo "" >&2
-        echo "   You provided: --completion-promise (with no text)" >&2
-        echo "" >&2
-        echo "   Note: Multi-word promises must be quoted!" >&2
+        echo "Error: --completion-promise requires text" >&2
         exit 1
       fi
       COMPLETION_PROMISE="$2"
       shift 2
       ;;
+    --no-circuit-breaker)
+      ENABLE_CIRCUIT_BREAKER="false"
+      shift
+      ;;
+    --no-smart-exit)
+      ENABLE_SMART_EXIT="false"
+      shift
+      ;;
+    --no-rate-limit)
+      ENABLE_RATE_LIMIT="false"
+      shift
+      ;;
+    --reset-circuit)
+      RESET_CIRCUIT=true
+      shift
+      ;;
+    --status)
+      SHOW_STATUS=true
+      shift
+      ;;
     *)
-      # Non-option argument - collect all as prompt parts
       PROMPT_PARTS+=("$1")
       shift
       ;;
   esac
 done
 
-# Join all prompt parts with spaces
+# Handle status display
+if [[ "$SHOW_STATUS" == "true" ]]; then
+  echo ""
+  echo "Ralph Loop Status"
+  echo "============================================="
+
+  if [[ -f .claude/ralph-loop.local.md ]]; then
+    ITERATION=$(grep '^iteration:' .claude/ralph-loop.local.md | sed 's/iteration: *//')
+    MAX_ITER=$(grep '^max_iterations:' .claude/ralph-loop.local.md | sed 's/max_iterations: *//')
+    echo "Active: YES"
+    echo "Iteration: $ITERATION"
+    echo "Max: $(if [[ $MAX_ITER -gt 0 ]]; then echo $MAX_ITER; else echo 'unlimited'; fi)"
+  else
+    echo "Active: NO"
+  fi
+
+  if [[ -f .claude/ralph-circuit.json ]]; then
+    echo ""
+    echo "Circuit Breaker:"
+    jq -r '"  State: \(.state)\n  No Progress: \(.no_progress_count)\n  Errors: \(.error_count)"' .claude/ralph-circuit.json
+  fi
+
+  if [[ -f .claude/ralph-analysis.json ]]; then
+    echo ""
+    echo "Response Analysis:"
+    jq -r '"  Confidence: \(.last_confidence)\n  Trend: \(.output_trend)\n  Exit: \(.exit_recommended)"' .claude/ralph-analysis.json
+  fi
+
+  echo "============================================="
+  exit 0
+fi
+
+# Reset circuit breaker if requested
+if [[ "$RESET_CIRCUIT" == "true" ]]; then
+  rm -f .claude/ralph-circuit.json .claude/ralph-analysis.json
+  echo "Circuit breaker reset"
+fi
+
+# Join prompt parts
 PROMPT="${PROMPT_PARTS[*]}"
 
-# Validate prompt is non-empty
 if [[ -z "$PROMPT" ]]; then
-  echo "❌ Error: No prompt provided" >&2
+  echo "Error: No prompt provided" >&2
   echo "" >&2
-  echo "   Ralph needs a task description to work on." >&2
+  echo "Usage: /ralph-loop \"Your task\" [OPTIONS]" >&2
   echo "" >&2
-  echo "   Examples:" >&2
-  echo "     /ralph-loop Build a REST API for todos" >&2
-  echo "     /ralph-loop Fix the auth bug --max-iterations 20" >&2
-  echo "     /ralph-loop --completion-promise 'DONE' Refactor code" >&2
+  echo "Examples:" >&2
+  echo "  /ralph-loop Build a REST API" >&2
+  echo "  /ralph-loop Fix auth --max-iterations 10" >&2
   echo "" >&2
-  echo "   For all options: /ralph-loop --help" >&2
+  echo "For options: /ralph-loop --help" >&2
   exit 1
 fi
 
-# Create state file for stop hook (markdown with YAML frontmatter)
+# Create state file
 mkdir -p .claude
 
-# Quote completion promise for YAML if it contains special chars or is not null
 if [[ -n "$COMPLETION_PROMISE" ]] && [[ "$COMPLETION_PROMISE" != "null" ]]; then
   COMPLETION_PROMISE_YAML="\"$COMPLETION_PROMISE\""
 else
@@ -143,34 +165,40 @@ active: true
 iteration: 1
 max_iterations: $MAX_ITERATIONS
 completion_promise: $COMPLETION_PROMISE_YAML
+circuit_breaker: $ENABLE_CIRCUIT_BREAKER
+smart_exit: $ENABLE_SMART_EXIT
+rate_limit_handler: $ENABLE_RATE_LIMIT
 started_at: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ---
 
 $PROMPT
 EOF
 
-# Output setup message
-cat <<EOF
-🔄 Ralph loop activated in this session!
+# Output
+echo "Ralph loop activated"
+echo ""
+echo "Iteration: 1"
+echo "Max iterations: $(if [[ $MAX_ITERATIONS -gt 0 ]]; then echo $MAX_ITERATIONS; else echo 'unlimited'; fi)"
+echo "Completion promise: $(if [[ "$COMPLETION_PROMISE" != "null" ]]; then echo "$COMPLETION_PROMISE"; else echo 'none'; fi)"
+echo ""
 
-Iteration: 1
-Max iterations: $(if [[ $MAX_ITERATIONS -gt 0 ]]; then echo $MAX_ITERATIONS; else echo "unlimited"; fi)
-Completion promise: $(if [[ "$COMPLETION_PROMISE" != "null" ]]; then echo "${COMPLETION_PROMISE//\"/} (ONLY output when TRUE - do not lie!)"; else echo "none (runs forever)"; fi)
-
-The stop hook is now active. When you try to exit, the SAME PROMPT will be
-fed back to you. You'll see your previous work in files, creating a
-self-referential loop where you iteratively improve on the same task.
-
-To monitor: head -10 .claude/ralph-loop.local.md
-
-⚠️  WARNING: This loop cannot be stopped manually! It will run infinitely
-    unless you set --max-iterations or --completion-promise.
-
-🔄
-EOF
-
-# Output the initial prompt if provided
-if [[ -n "$PROMPT" ]]; then
-  echo ""
-  echo "$PROMPT"
+if [[ "$ENABLE_CIRCUIT_BREAKER" == "true" ]]; then
+  echo "Circuit breaker: ON (stops on stagnation)"
 fi
+if [[ "$ENABLE_SMART_EXIT" == "true" ]]; then
+  echo "Smart exit: ON (detects completion)"
+fi
+if [[ "$ENABLE_RATE_LIMIT" == "true" ]]; then
+  echo "Rate limit: ON (pauses on limits)"
+fi
+
+echo ""
+echo "To monitor: /ralph-loop --status"
+
+if [[ "$COMPLETION_PROMISE" != "null" ]]; then
+  echo ""
+  echo "To complete: output <promise>$COMPLETION_PROMISE</promise>"
+fi
+
+echo ""
+echo "$PROMPT"

@@ -1,92 +1,93 @@
 #!/bin/bash
 
 # Ralph Wiggum Stop Hook
-# Prevents session exit when a ralph-loop is active
-# Feeds Claude's output back as input to continue the loop
+# Intercepts exit attempts and feeds the same prompt back for iterative development
 
 set -euo pipefail
 
-# Read hook input from stdin (advanced stop hook API)
-HOOK_INPUT=$(cat)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+LIB_DIR="$PLUGIN_ROOT/lib"
 
-# Check if ralph-loop is active
+export RALPH_STATE_DIR=".claude"
+
+load_modules() {
+  local modules_loaded=0
+  [[ -f "$LIB_DIR/circuit_breaker.sh" ]] && source "$LIB_DIR/circuit_breaker.sh" && ((modules_loaded++)) || true
+  [[ -f "$LIB_DIR/response_analyzer.sh" ]] && source "$LIB_DIR/response_analyzer.sh" && ((modules_loaded++)) || true
+  [[ -f "$LIB_DIR/api_limit_handler.sh" ]] && source "$LIB_DIR/api_limit_handler.sh" && ((modules_loaded++)) || true
+  [[ -f "$LIB_DIR/task_manager.sh" ]] && source "$LIB_DIR/task_manager.sh" && ((modules_loaded++)) || true
+  echo "$modules_loaded"
+}
+
+HOOK_INPUT=$(cat)
 RALPH_STATE_FILE=".claude/ralph-loop.local.md"
 
+# No active loop - allow exit
 if [[ ! -f "$RALPH_STATE_FILE" ]]; then
-  # No active loop - allow exit
   exit 0
 fi
 
-# Parse markdown frontmatter (YAML between ---) and extract values
+MODULES_LOADED=$(load_modules)
+
+# Parse state file frontmatter
 FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$RALPH_STATE_FILE")
 ITERATION=$(echo "$FRONTMATTER" | grep '^iteration:' | sed 's/iteration: *//')
 MAX_ITERATIONS=$(echo "$FRONTMATTER" | grep '^max_iterations:' | sed 's/max_iterations: *//')
-# Extract completion_promise and strip surrounding quotes if present
 COMPLETION_PROMISE=$(echo "$FRONTMATTER" | grep '^completion_promise:' | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/')
 
-# Validate numeric fields before arithmetic operations
+ENABLE_CIRCUIT_BREAKER=$(echo "$FRONTMATTER" | grep '^circuit_breaker:' | sed 's/circuit_breaker: *//' || echo "true")
+ENABLE_SMART_EXIT=$(echo "$FRONTMATTER" | grep '^smart_exit:' | sed 's/smart_exit: *//' || echo "true")
+ENABLE_RATE_LIMIT=$(echo "$FRONTMATTER" | grep '^rate_limit_handler:' | sed 's/rate_limit_handler: *//' || echo "true")
+
+# Validate state file
 if [[ ! "$ITERATION" =~ ^[0-9]+$ ]]; then
-  echo "⚠️  Ralph loop: State file corrupted" >&2
-  echo "   File: $RALPH_STATE_FILE" >&2
-  echo "   Problem: 'iteration' field is not a valid number (got: '$ITERATION')" >&2
-  echo "" >&2
-  echo "   This usually means the state file was manually edited or corrupted." >&2
-  echo "   Ralph loop is stopping. Run /ralph-loop again to start fresh." >&2
+  echo "Ralph loop: Invalid iteration in state file" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
 if [[ ! "$MAX_ITERATIONS" =~ ^[0-9]+$ ]]; then
-  echo "⚠️  Ralph loop: State file corrupted" >&2
-  echo "   File: $RALPH_STATE_FILE" >&2
-  echo "   Problem: 'max_iterations' field is not a valid number (got: '$MAX_ITERATIONS')" >&2
-  echo "" >&2
-  echo "   This usually means the state file was manually edited or corrupted." >&2
-  echo "   Ralph loop is stopping. Run /ralph-loop again to start fresh." >&2
+  echo "Ralph loop: Invalid max_iterations in state file" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-# Check if max iterations reached
+# Check max iterations
 if [[ $MAX_ITERATIONS -gt 0 ]] && [[ $ITERATION -ge $MAX_ITERATIONS ]]; then
-  echo "🛑 Ralph loop: Max iterations ($MAX_ITERATIONS) reached."
+  echo "Ralph loop: Max iterations ($MAX_ITERATIONS) reached"
   rm "$RALPH_STATE_FILE"
+  [[ $MODULES_LOADED -gt 0 ]] && {
+    type cleanup_circuit_breaker &>/dev/null && cleanup_circuit_breaker
+    type cleanup_response_analyzer &>/dev/null && cleanup_response_analyzer
+    type cleanup_limit_handler &>/dev/null && cleanup_limit_handler
+    type cleanup_task_manager &>/dev/null && cleanup_task_manager
+  }
   exit 0
 fi
 
-# Get transcript path from hook input
+# Get transcript
 TRANSCRIPT_PATH=$(echo "$HOOK_INPUT" | jq -r '.transcript_path')
 
 if [[ ! -f "$TRANSCRIPT_PATH" ]]; then
-  echo "⚠️  Ralph loop: Transcript file not found" >&2
-  echo "   Expected: $TRANSCRIPT_PATH" >&2
-  echo "   This is unusual and may indicate a Claude Code internal issue." >&2
-  echo "   Ralph loop is stopping." >&2
+  echo "Ralph loop: Transcript not found" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-# Read last assistant message from transcript (JSONL format - one JSON per line)
-# First check if there are any assistant messages
 if ! grep -q '"role":"assistant"' "$TRANSCRIPT_PATH"; then
-  echo "⚠️  Ralph loop: No assistant messages found in transcript" >&2
-  echo "   Transcript: $TRANSCRIPT_PATH" >&2
-  echo "   This is unusual and may indicate a transcript format issue" >&2
-  echo "   Ralph loop is stopping." >&2
+  echo "Ralph loop: No assistant messages in transcript" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-# Extract last assistant message with explicit error handling
 LAST_LINE=$(grep '"role":"assistant"' "$TRANSCRIPT_PATH" | tail -1)
 if [[ -z "$LAST_LINE" ]]; then
-  echo "⚠️  Ralph loop: Failed to extract last assistant message" >&2
-  echo "   Ralph loop is stopping." >&2
+  echo "Ralph loop: Failed to extract assistant message" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-# Parse JSON with error handling
 LAST_OUTPUT=$(echo "$LAST_LINE" | jq -r '
   .message.content |
   map(select(.type == "text")) |
@@ -94,84 +95,140 @@ LAST_OUTPUT=$(echo "$LAST_LINE" | jq -r '
   join("\n")
 ' 2>&1)
 
-# Check if jq succeeded
-if [[ $? -ne 0 ]]; then
-  echo "⚠️  Ralph loop: Failed to parse assistant message JSON" >&2
-  echo "   Error: $LAST_OUTPUT" >&2
-  echo "   This may indicate a transcript format issue" >&2
-  echo "   Ralph loop is stopping." >&2
+if [[ $? -ne 0 ]] || [[ -z "$LAST_OUTPUT" ]]; then
+  echo "Ralph loop: Failed to parse assistant message" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-if [[ -z "$LAST_OUTPUT" ]]; then
-  echo "⚠️  Ralph loop: Assistant message contained no text content" >&2
-  echo "   Ralph loop is stopping." >&2
-  rm "$RALPH_STATE_FILE"
-  exit 0
+# API Rate Limit Detection
+if [[ "$ENABLE_RATE_LIMIT" == "true" ]] && type detect_rate_limit &>/dev/null; then
+  IS_RATE_LIMITED=$(detect_rate_limit "$LAST_OUTPUT")
+  if [[ "$IS_RATE_LIMITED" == "true" ]]; then
+    handle_rate_limit "$LAST_OUTPUT" >&2
+    LIMIT_TYPE=$(determine_limit_type "$LAST_OUTPUT")
+    WAIT_TIME=$(calculate_wait_time "$LIMIT_TYPE")
+
+    echo "" >&2
+    echo "API LIMIT: $LIMIT_TYPE" >&2
+    echo "Wait: $(format_duration "$WAIT_TIME")" >&2
+    echo "Ralph loop pausing." >&2
+
+    jq -n \
+      --arg reason "API limit: $LIMIT_TYPE. Wait $(format_duration "$WAIT_TIME")." \
+      '{"decision": "block", "reason": $reason, "systemMessage": "Rate limit - loop paused"}'
+    exit 0
+  fi
 fi
 
-# Check for completion promise (only if set)
-if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
-  # Extract text from <promise> tags using Perl for multiline support
-  # -0777 slurps entire input, s flag makes . match newlines
-  # .*? is non-greedy (takes FIRST tag), whitespace normalized
-  PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
+# Circuit Breaker Check
+if [[ "$ENABLE_CIRCUIT_BREAKER" == "true" ]] && type can_execute &>/dev/null; then
+  if ! can_execute; then
+    HALT_REASON=$(get_halt_reason)
+    echo "" >&2
+    echo "CIRCUIT BREAKER OPEN" >&2
+    echo "Reason: $HALT_REASON" >&2
+    echo "To resume: /ralph-loop --reset-circuit" >&2
+    rm "$RALPH_STATE_FILE"
+    exit 0
+  fi
 
-  # Use = for literal string comparison (not pattern matching)
-  # == in [[ ]] does glob pattern matching which breaks with *, ?, [ characters
-  if [[ -n "$PROMISE_TEXT" ]] && [[ "$PROMISE_TEXT" = "$COMPLETION_PROMISE" ]]; then
-    echo "✅ Ralph loop: Detected <promise>$COMPLETION_PROMISE</promise>"
+  ERROR_DETECTED=""
+  echo "$LAST_OUTPUT" | grep -qiE "error|failed|exception|traceback" && ERROR_DETECTED="error_in_output"
+
+  FILES_CHANGED=0
+  command -v git &>/dev/null && git rev-parse --git-dir &>/dev/null 2>/dev/null && \
+    FILES_CHANGED=$(git diff --name-only 2>/dev/null | wc -l | tr -d ' ')
+
+  NEW_STATE=$(record_loop_result "$LAST_OUTPUT" "$ERROR_DETECTED" "$FILES_CHANGED")
+
+  if [[ "$NEW_STATE" == "OPEN" ]]; then
+    HALT_REASON=$(get_halt_reason)
+    echo "" >&2
+    echo "CIRCUIT BREAKER TRIPPED" >&2
+    echo "Reason: $HALT_REASON" >&2
+    show_circuit_status >&2
     rm "$RALPH_STATE_FILE"
     exit 0
   fi
 fi
 
-# Not complete - continue loop with SAME PROMPT
+# Intelligent Exit Detection
+if [[ "$ENABLE_SMART_EXIT" == "true" ]] && type analyze_response &>/dev/null; then
+  ANALYSIS_RESULT=$(analyze_response "$LAST_OUTPUT" "$ITERATION")
+  EXIT_RECOMMENDED=$(echo "$ANALYSIS_RESULT" | jq -r '.exit_recommended')
+  CONFIDENCE=$(echo "$ANALYSIS_RESULT" | jq -r '.confidence')
+
+  if [[ "$EXIT_RECOMMENDED" == "true" ]]; then
+    EXIT_REASON=$(get_exit_reason)
+    echo "" >&2
+    echo "SMART EXIT" >&2
+    echo "Confidence: $CONFIDENCE" >&2
+    echo "Reason: $EXIT_REASON" >&2
+    rm "$RALPH_STATE_FILE"
+    cleanup_response_analyzer 2>/dev/null || true
+    cleanup_circuit_breaker 2>/dev/null || true
+    exit 0
+  fi
+fi
+
+# Completion Promise Check
+if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
+  PROMISE_TEXT=$(echo "$LAST_OUTPUT" | perl -0777 -pe 's/.*?<promise>(.*?)<\/promise>.*/$1/s; s/^\s+|\s+$//g; s/\s+/ /g' 2>/dev/null || echo "")
+
+  if [[ -n "$PROMISE_TEXT" ]] && [[ "$PROMISE_TEXT" = "$COMPLETION_PROMISE" ]]; then
+    echo "Ralph loop: Promise fulfilled <promise>$COMPLETION_PROMISE</promise>"
+    rm "$RALPH_STATE_FILE"
+    [[ $MODULES_LOADED -gt 0 ]] && {
+      type cleanup_circuit_breaker &>/dev/null && cleanup_circuit_breaker
+      type cleanup_response_analyzer &>/dev/null && cleanup_response_analyzer
+      type cleanup_limit_handler &>/dev/null && cleanup_limit_handler
+      type cleanup_task_manager &>/dev/null && cleanup_task_manager
+    }
+    exit 0
+  fi
+fi
+
+# Continue loop
 NEXT_ITERATION=$((ITERATION + 1))
 
-# Extract prompt (everything after the closing ---)
-# Skip first --- line, skip until second --- line, then print everything after
-# Use i>=2 instead of i==2 to handle --- in prompt content
 PROMPT_TEXT=$(awk '/^---$/{i++; next} i>=2' "$RALPH_STATE_FILE")
 
 if [[ -z "$PROMPT_TEXT" ]]; then
-  echo "⚠️  Ralph loop: State file corrupted or incomplete" >&2
-  echo "   File: $RALPH_STATE_FILE" >&2
-  echo "   Problem: No prompt text found" >&2
-  echo "" >&2
-  echo "   This usually means:" >&2
-  echo "     • State file was manually edited" >&2
-  echo "     • File was corrupted during writing" >&2
-  echo "" >&2
-  echo "   Ralph loop is stopping. Run /ralph-loop again to start fresh." >&2
+  echo "Ralph loop: No prompt in state file" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
 fi
 
-# Update iteration in frontmatter (portable across macOS and Linux)
-# Create temp file, then atomically replace
+# Update iteration
 TEMP_FILE="${RALPH_STATE_FILE}.tmp.$$"
 sed "s/^iteration: .*/iteration: $NEXT_ITERATION/" "$RALPH_STATE_FILE" > "$TEMP_FILE"
 mv "$TEMP_FILE" "$RALPH_STATE_FILE"
 
-# Build system message with iteration count and completion promise info
-if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
-  SYSTEM_MSG="🔄 Ralph iteration $NEXT_ITERATION | To stop: output <promise>$COMPLETION_PROMISE</promise> (ONLY when statement is TRUE - do not lie to exit!)"
-else
-  SYSTEM_MSG="🔄 Ralph iteration $NEXT_ITERATION | No completion promise set - loop runs infinitely"
+# Build status message
+CIRCUIT_STATUS=""
+if [[ "$ENABLE_CIRCUIT_BREAKER" == "true" ]] && type get_circuit_state &>/dev/null; then
+  CIRCUIT_STATE=$(get_circuit_state)
+  [[ "$CIRCUIT_STATE" == "HALF_OPEN" ]] && CIRCUIT_STATUS=" | Circuit: MONITORING"
 fi
 
-# Output JSON to block the stop and feed prompt back
-# The "reason" field contains the prompt that will be sent back to Claude
+ANALYSIS_STATUS=""
+if [[ "$ENABLE_SMART_EXIT" == "true" ]] && type should_exit &>/dev/null; then
+  [[ -f "${RALPH_STATE_DIR:-.claude}/ralph-analysis.json" ]] && {
+    LAST_CONF=$(jq -r '.last_confidence // 0' "${RALPH_STATE_DIR:-.claude}/ralph-analysis.json")
+    ANALYSIS_STATUS=" | Confidence: ${LAST_CONF}/40"
+  }
+fi
+
+if [[ "$COMPLETION_PROMISE" != "null" ]] && [[ -n "$COMPLETION_PROMISE" ]]; then
+  SYSTEM_MSG="Ralph iteration $NEXT_ITERATION$CIRCUIT_STATUS$ANALYSIS_STATUS | Complete: <promise>$COMPLETION_PROMISE</promise>"
+else
+  SYSTEM_MSG="Ralph iteration $NEXT_ITERATION$CIRCUIT_STATUS$ANALYSIS_STATUS"
+fi
+
 jq -n \
   --arg prompt "$PROMPT_TEXT" \
   --arg msg "$SYSTEM_MSG" \
-  '{
-    "decision": "block",
-    "reason": $prompt,
-    "systemMessage": $msg
-  }'
+  '{"decision": "block", "reason": $prompt, "systemMessage": $msg}'
 
-# Exit 0 for successful hook execution
 exit 0

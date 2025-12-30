@@ -1,179 +1,168 @@
 # Ralph Wiggum Plugin
 
-Implementation of the Ralph Wiggum technique for iterative, self-referential AI development loops in Claude Code.
+A self-referential development loop for Claude Code. Run iterative tasks until completion with automatic progress detection and safety controls.
 
-## What is Ralph?
+## Concept
 
-Ralph is a development methodology based on continuous AI agent loops. As Geoffrey Huntley describes it: **"Ralph is a Bash loop"** - a simple `while true` that repeatedly feeds an AI agent a prompt file, allowing it to iteratively improve its work until completion.
-
-The technique is named after Ralph Wiggum from The Simpsons, embodying the philosophy of persistent iteration despite setbacks.
-
-### Core Concept
-
-This plugin implements Ralph using a **Stop hook** that intercepts Claude's exit attempts:
+The Ralph technique feeds the same prompt to Claude repeatedly in a `while true` loop. Each iteration, Claude sees its previous work in files and git history, enabling continuous refinement until the task completes.
 
 ```bash
-# You run ONCE:
-/ralph-loop "Your task description" --completion-promise "DONE"
-
-# Then Claude Code automatically:
-# 1. Works on the task
-# 2. Tries to exit
-# 3. Stop hook blocks exit
-# 4. Stop hook feeds the SAME prompt back
-# 5. Repeat until completion
+while true; do
+  cat PROMPT.md | claude --continue
+done
 ```
 
-The loop happens **inside your current session** - you don't need external bash loops. The Stop hook in `hooks/stop-hook.sh` creates the self-referential feedback loop by blocking normal session exit.
+This plugin implements the loop within Claude Code using a stop-hook that intercepts exit attempts and restarts with the same prompt.
 
-This creates a **self-referential feedback loop** where:
-- The prompt never changes between iterations
-- Claude's previous work persists in files
-- Each iteration sees modified files and git history
-- Claude autonomously improves by reading its own past work in files
-
-## Quick Start
+## Usage
 
 ```bash
-/ralph-loop "Build a REST API for todos. Requirements: CRUD operations, input validation, tests. Output <promise>COMPLETE</promise> when done." --completion-promise "COMPLETE" --max-iterations 50
-```
+# Start a loop
+/ralph-loop "Build a REST API with CRUD operations and tests"
 
-Claude will:
-- Implement the API iteratively
-- Run tests and see failures
-- Fix bugs based on test output
-- Iterate until all requirements met
-- Output the completion promise when done
+# Set iteration limit
+/ralph-loop "Refactor auth module" --max-iterations 15
 
-## Commands
+# Define completion criteria
+/ralph-loop "Add input validation" --completion-promise "DONE"
 
-### /ralph-loop
+# Check status
+/ralph-loop --status
 
-Start a Ralph loop in your current session.
-
-**Usage:**
-```bash
-/ralph-loop "<prompt>" --max-iterations <n> --completion-promise "<text>"
-```
-
-**Options:**
-- `--max-iterations <n>` - Stop after N iterations (default: unlimited)
-- `--completion-promise <text>` - Phrase that signals completion
-
-### /cancel-ralph
-
-Cancel the active Ralph loop.
-
-**Usage:**
-```bash
+# Cancel
 /cancel-ralph
 ```
 
-## Prompt Writing Best Practices
+## Completion
 
-### 1. Clear Completion Criteria
+The loop stops when any condition is met:
 
-❌ Bad: "Build a todo API and make it good."
+| Condition | Trigger |
+|-----------|---------|
+| **Promise** | Output `<promise>TEXT</promise>` matching `--completion-promise` |
+| **Iterations** | Reach `--max-iterations` limit |
+| **Circuit Breaker** | No file changes for 3 iterations |
+| **Smart Exit** | High confidence completion detected |
+| **API Limit** | Rate limit or usage limit reached |
 
-✅ Good:
+## Safety Features
+
+### Circuit Breaker
+
+Prevents runaway loops through stagnation detection:
+
+- **No Progress**: Stops after 3 iterations without file changes
+- **Errors**: Stops after 5 consecutive errors in output
+- **Duplicates**: Stops after 3 identical outputs
+- **States**: `CLOSED` → `HALF_OPEN` → `OPEN`
+
+### Intelligent Exit
+
+Analyzes responses for completion signals:
+
+- Keyword detection: "done", "complete", "finished", "all tests pass"
+- Test-only loop detection: running tests without new code
+- Confidence scoring: exits at 40+ points
+
+### API Limit Handler
+
+Gracefully handles rate limits:
+
+- 5-hour usage limit detection
+- 429 rate limit detection
+- Automatic pause with wait recommendations
+
+## Options
+
+| Flag | Description |
+|------|-------------|
+| `--max-iterations <n>` | Stop after N iterations |
+| `--completion-promise <text>` | Promise phrase to signal completion |
+| `--no-circuit-breaker` | Disable stagnation detection |
+| `--no-smart-exit` | Disable completion analysis |
+| `--no-rate-limit` | Disable rate limit handling |
+| `--reset-circuit` | Reset circuit breaker state |
+| `--status` | Show loop status |
+
+## Prompt Guidelines
+
+Write prompts with clear completion criteria:
+
 ```markdown
-Build a REST API for todos.
+Build a user authentication system.
 
-When complete:
-- All CRUD endpoints working
-- Input validation in place
-- Tests passing (coverage > 80%)
-- README with API docs
-- Output: <promise>COMPLETE</promise>
+Requirements:
+- JWT token generation and validation
+- Password hashing with bcrypt
+- Login and register endpoints
+- Input validation
+- Unit tests with >80% coverage
+
+Output <promise>COMPLETE</promise> when all requirements pass.
 ```
 
-### 2. Incremental Goals
-
-❌ Bad: "Create a complete e-commerce platform."
-
-✅ Good:
-```markdown
-Phase 1: User authentication (JWT, tests)
-Phase 2: Product catalog (list/search, tests)
-Phase 3: Shopping cart (add/remove, tests)
-
-Output <promise>COMPLETE</promise> when all phases done.
-```
-
-### 3. Self-Correction
-
-❌ Bad: "Write code for feature X."
-
-✅ Good:
-```markdown
-Implement feature X following TDD:
-1. Write failing tests
-2. Implement feature
-3. Run tests
-4. If any fail, debug and fix
-5. Refactor if needed
-6. Repeat until all green
-7. Output: <promise>COMPLETE</promise>
-```
-
-### 4. Escape Hatches
-
-Always use `--max-iterations` as a safety net to prevent infinite loops on impossible tasks:
+## Monitoring
 
 ```bash
-# Recommended: Always set a reasonable iteration limit
-/ralph-loop "Try to implement feature X" --max-iterations 20
+# Loop state
+cat .claude/ralph-loop.local.md
 
-# In your prompt, include what to do if stuck:
-# "After 15 iterations, if not complete:
-#  - Document what's blocking progress
-#  - List what was attempted
-#  - Suggest alternative approaches"
+# Circuit breaker
+cat .claude/ralph-circuit.json
+
+# Response analysis
+cat .claude/ralph-analysis.json
+
+# API limits
+cat .claude/ralph-limits.json
 ```
 
-**Note**: The `--completion-promise` uses exact string matching, so you cannot use it for multiple completion conditions (like "SUCCESS" vs "BLOCKED"). Always rely on `--max-iterations` as your primary safety mechanism.
+## Configuration
 
-## Philosophy
+Environment variables:
 
-Ralph embodies several key principles:
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `RALPH_MAX_NO_PROGRESS` | 3 | Iterations without progress before halt |
+| `RALPH_MAX_ERRORS` | 5 | Consecutive errors before halt |
+| `RALPH_MAX_IDENTICAL` | 3 | Identical outputs before halt |
+| `RALPH_COMPLETION_THRESHOLD` | 40 | Confidence score for smart exit |
 
-### 1. Iteration > Perfection
-Don't aim for perfect on first try. Let the loop refine the work.
+## Architecture
 
-### 2. Failures Are Data
-"Deterministically bad" means failures are predictable and informative. Use them to tune prompts.
+```
+ralph-wiggum/
+├── .claude-plugin/
+│   └── plugin.json
+├── commands/
+│   ├── ralph-loop.md
+│   ├── cancel-ralph.md
+│   └── help.md
+├── hooks/
+│   ├── hooks.json
+│   └── stop-hook.sh
+├── lib/
+│   ├── circuit_breaker.sh
+│   ├── response_analyzer.sh
+│   ├── api_limit_handler.sh
+│   └── task_manager.sh
+└── scripts/
+    └── setup-ralph-loop.sh
+```
 
-### 3. Operator Skill Matters
-Success depends on writing good prompts, not just having a good model.
-
-### 4. Persistence Wins
-Keep trying until success. The loop handles retry logic automatically.
-
-## When to Use Ralph
+## When to Use
 
 **Good for:**
-- Well-defined tasks with clear success criteria
-- Tasks requiring iteration and refinement (e.g., getting tests to pass)
-- Greenfield projects where you can walk away
-- Tasks with automatic verification (tests, linters)
+- Tasks with clear success criteria (tests pass, build succeeds)
+- Iterative refinement (debugging, optimization)
+- Greenfield implementation with defined requirements
 
-**Not good for:**
+**Not for:**
 - Tasks requiring human judgment or design decisions
 - One-shot operations
-- Tasks with unclear success criteria
-- Production debugging (use targeted debugging instead)
+- Production debugging
 
-## Real-World Results
+## References
 
-- Successfully generated 6 repositories overnight in Y Combinator hackathon testing
-- One $50k contract completed for $297 in API costs
-- Created entire programming language ("cursed") over 3 months using this approach
-
-## Learn More
-
-- Original technique: https://ghuntley.com/ralph/
-- Ralph Orchestrator: https://github.com/mikeyobrien/ralph-orchestrator
-
-## For Help
-
-Run `/help` in Claude Code for detailed command reference and examples.
+- [ghuntley.com/ralph](https://ghuntley.com/ralph/)
+- [frankbria/ralph-claude-code](https://github.com/frankbria/ralph-claude-code)

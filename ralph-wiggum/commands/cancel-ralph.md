@@ -16,11 +16,10 @@ else
 fi
 ```
 
-Check the output above:
+Check the output:
 
-1. **If FOUND_LOOP=false**:
-   - Say "No active Ralph loop found."
+1. **If FOUND_LOOP=false**: Say "No active Ralph loop."
 
 2. **If FOUND_LOOP=true**:
-   - Use Bash: `rm .claude/ralph-loop.local.md`
-   - Report: "Cancelled Ralph loop (was at iteration N)" where N is the ITERATION value from above.
+   - Run: `rm .claude/ralph-loop.local.md`
+   - Say: "Ralph loop cancelled (was at iteration N)"

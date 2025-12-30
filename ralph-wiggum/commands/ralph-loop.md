@@ -1,6 +1,6 @@
 ---
 description: "Start Ralph Wiggum loop in current session"
-argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT]"
+argument-hint: "PROMPT [--max-iterations N] [--completion-promise TEXT] [--status] [--no-circuit-breaker] [--no-smart-exit]"
 allowed-tools: ["Bash(${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh)"]
 hide-from-slash-command-tool: "true"
 ---
@@ -12,37 +12,35 @@ Execute the setup script to initialize the Ralph loop:
 ```!
 "${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh" $ARGUMENTS
 
-# Extract and display completion promise if set
+# Display completion promise if set
 if [ -f .claude/ralph-loop.local.md ]; then
   PROMISE=$(grep '^completion_promise:' .claude/ralph-loop.local.md | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/')
   if [ -n "$PROMISE" ] && [ "$PROMISE" != "null" ]; then
     echo ""
-    echo "═══════════════════════════════════════════════════════════"
-    echo "CRITICAL - Ralph Loop Completion Promise"
-    echo "═══════════════════════════════════════════════════════════"
+    echo "==============================================================="
+    echo "COMPLETION PROMISE: $PROMISE"
+    echo "==============================================================="
     echo ""
-    echo "To complete this loop, output this EXACT text:"
+    echo "To complete this loop, output:"
     echo "  <promise>$PROMISE</promise>"
     echo ""
-    echo "STRICT REQUIREMENTS (DO NOT VIOLATE):"
-    echo "  ✓ Use <promise> XML tags EXACTLY as shown above"
-    echo "  ✓ The statement MUST be completely and unequivocally TRUE"
-    echo "  ✓ Do NOT output false statements to exit the loop"
-    echo "  ✓ Do NOT lie even if you think you should exit"
-    echo ""
-    echo "IMPORTANT - Do not circumvent the loop:"
-    echo "  Even if you believe you're stuck, the task is impossible,"
-    echo "  or you've been running too long - you MUST NOT output a"
-    echo "  false promise statement. The loop is designed to continue"
-    echo "  until the promise is GENUINELY TRUE. Trust the process."
-    echo ""
-    echo "  If the loop should stop, the promise statement will become"
-    echo "  true naturally. Do not force it by lying."
-    echo "═══════════════════════════════════════════════════════════"
+    echo "RULES:"
+    echo "  - Use <promise> tags exactly as shown"
+    echo "  - The statement MUST be true when you output it"
+    echo "  - Do NOT output false statements to exit"
+    echo "==============================================================="
   fi
 fi
 ```
 
-Please work on the task. When you try to exit, the Ralph loop will feed the SAME PROMPT back to you for the next iteration. You'll see your previous work in files and git history, allowing you to iterate and improve.
+Work on the task. When you try to exit, the stop-hook feeds the same prompt back. You see previous work in files and git history, enabling iterative improvement.
 
-CRITICAL RULE: If a completion promise is set, you may ONLY output it when the statement is completely and unequivocally TRUE. Do not output false promises to escape the loop, even if you think you're stuck or should exit for other reasons. The loop is designed to continue until genuine completion.
+## Active Safety Features
+
+- **Circuit Breaker**: Stops after 3 iterations without file changes, or 5 consecutive errors
+- **Intelligent Exit**: Analyzes responses for completion signals, exits at high confidence
+- **API Limit Handler**: Pauses gracefully on rate limits
+
+## Rules
+
+If a completion promise is set, output `<promise>TEXT</promise>` ONLY when the statement is true. Do not lie to escape the loop.

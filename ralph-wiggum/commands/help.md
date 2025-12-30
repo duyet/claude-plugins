@@ -1,126 +1,123 @@
 ---
 description: "Explain Ralph Wiggum technique and available commands"
+allowed-tools: []
+hide-from-slash-command-tool: "true"
 ---
 
 # Ralph Wiggum Plugin Help
 
-Please explain the following to the user:
+Explain the following to the user:
 
-## What is the Ralph Wiggum Technique?
+## What is Ralph?
 
-The Ralph Wiggum technique is an iterative development methodology based on continuous AI loops, pioneered by Geoffrey Huntley.
+A self-referential development loop. The same prompt feeds to Claude repeatedly in a `while true` loop. Each iteration, Claude sees previous work in files and git history, enabling continuous refinement until completion.
 
-**Core concept:**
 ```bash
-while :; do
-  cat PROMPT.md | claude-code --continue
+while true; do
+  cat PROMPT.md | claude --continue
 done
 ```
 
-The same prompt is fed to Claude repeatedly. The "self-referential" aspect comes from Claude seeing its own previous work in the files and git history, not from feeding output back as input.
+The stop-hook intercepts exit attempts and feeds the same prompt back.
 
-**Each iteration:**
-1. Claude receives the SAME prompt
-2. Works on the task, modifying files
-3. Tries to exit
-4. Stop hook intercepts and feeds the same prompt again
-5. Claude sees its previous work in the files
-6. Iteratively improves until completion
+## Commands
 
-The technique is described as "deterministically bad in an undeterministic world" - failures are predictable, enabling systematic improvement through prompt tuning.
+### /ralph-loop
 
-## Available Commands
+Start a loop in the current session.
 
-### /ralph-loop <PROMPT> [OPTIONS]
-
-Start a Ralph loop in your current session.
-
-**Usage:**
 ```
-/ralph-loop "Refactor the cache layer" --max-iterations 20
-/ralph-loop "Add tests" --completion-promise "TESTS COMPLETE"
+/ralph-loop "Build a REST API" --max-iterations 20
+/ralph-loop "Fix auth bug" --completion-promise "FIXED"
+/ralph-loop --status
 ```
 
 **Options:**
-- `--max-iterations <n>` - Max iterations before auto-stop
-- `--completion-promise <text>` - Promise phrase to signal completion
 
-**How it works:**
-1. Creates `.claude/.ralph-loop.local.md` state file
-2. You work on the task
-3. When you try to exit, stop hook intercepts
-4. Same prompt fed back
-5. You see your previous work
-6. Continues until promise detected or max iterations
-
----
+| Flag | Description |
+|------|-------------|
+| `--max-iterations <n>` | Stop after N iterations |
+| `--completion-promise <text>` | Promise phrase to signal completion |
+| `--no-circuit-breaker` | Disable stagnation detection |
+| `--no-smart-exit` | Disable completion analysis |
+| `--reset-circuit` | Reset circuit breaker state |
+| `--status` | Show loop status |
 
 ### /cancel-ralph
 
-Cancel an active Ralph loop (removes the loop state file).
+Cancel the active loop.
 
-**Usage:**
 ```
 /cancel-ralph
 ```
 
-**How it works:**
-- Checks for active loop state file
-- Removes `.claude/.ralph-loop.local.md`
-- Reports cancellation with iteration count
+## Stop Conditions
 
----
+The loop stops when any condition is met:
 
-## Key Concepts
+1. `--max-iterations` reached
+2. `<promise>TEXT</promise>` matches `--completion-promise`
+3. Circuit breaker opens (stagnation/errors)
+4. Smart exit triggers (high completion confidence)
+5. API rate limit reached
 
-### Completion Promises
+## Safety Features
 
-To signal completion, Claude must output a `<promise>` tag:
+### Circuit Breaker
+
+Prevents runaway loops:
+- No file changes for 3+ iterations → stops
+- 5+ consecutive errors → stops
+- Identical outputs repeated 3+ times → stops
+
+States: `CLOSED` (running) → `HALF_OPEN` (monitoring) → `OPEN` (halted)
+
+### Intelligent Exit
+
+Analyzes responses for completion:
+- Keyword detection ("done", "complete", "tests passing")
+- Test-only loop detection
+- Confidence scoring (exits at 40+ points)
+
+### API Limit Handler
+
+Handles Claude's usage limits:
+- 5-hour limit detection
+- Rate limit (429) detection
+- Pause and wait recommendations
+
+## Completion Promises
+
+Signal completion by outputting:
 
 ```
 <promise>TASK COMPLETE</promise>
 ```
 
-The stop hook looks for this specific tag. Without it (or `--max-iterations`), Ralph runs infinitely.
+The text must exactly match `--completion-promise`.
 
-### Self-Reference Mechanism
+## Monitoring
 
-The "loop" doesn't mean Claude talks to itself. It means:
-- Same prompt repeated
-- Claude's work persists in files
-- Each iteration sees previous attempts
-- Builds incrementally toward goal
+```bash
+cat .claude/ralph-loop.local.md      # Loop state
+cat .claude/ralph-circuit.json       # Circuit breaker
+cat .claude/ralph-analysis.json      # Response analysis
+```
 
 ## Example
 
-### Interactive Bug Fix
-
 ```
-/ralph-loop "Fix the token refresh logic in auth.ts. Output <promise>FIXED</promise> when all tests pass." --completion-promise "FIXED" --max-iterations 10
+/ralph-loop "Fix token refresh in auth.ts. Output <promise>FIXED</promise> when tests pass." --completion-promise "FIXED" --max-iterations 10
 ```
 
-You'll see Ralph:
-- Attempt fixes
-- Run tests
-- See failures
-- Iterate on solution
-- In your current session
+Claude will:
+1. Work on the fix
+2. Run tests
+3. If tests fail, iterate and improve
+4. Output `<promise>FIXED</promise>` when all tests pass
+5. Loop stops
 
-## When to Use Ralph
+## References
 
-**Good for:**
-- Well-defined tasks with clear success criteria
-- Tasks requiring iteration and refinement
-- Iterative development with self-correction
-- Greenfield projects
-
-**Not good for:**
-- Tasks requiring human judgment or design decisions
-- One-shot operations
-- Tasks with unclear success criteria
-- Debugging production issues (use targeted debugging instead)
-
-## Learn More
-
-- Original technique: https://ghuntley.com/ralph/
-- Ralph Orchestrator: https://github.com/mikeyobrien/ralph-orchestrator
+- [ghuntley.com/ralph](https://ghuntley.com/ralph/)
+- [frankbria/ralph-claude-code](https://github.com/frankbria/ralph-claude-code)

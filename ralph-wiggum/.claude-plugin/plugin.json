@@ -1,7 +1,7 @@
 {
   "name": "ralph-wiggum",
-  "version": "1.0.0",
-  "description": "Implementation of the Ralph Wiggum technique - continuous self-referential AI loops for interactive iterative development. Run Claude in a while-true loop with the same prompt until task completion. Originally created by Daisy Hollman (Anthropic).",
+  "version": "1.0.1",
+  "description": "Self-referential development loop for Claude Code. Run iterative tasks with automatic progress detection and safety controls.",
   "author": {
     "name": "duyet",
     "contributors": ["Daisy Hollman <daisy@anthropic.com>"]
