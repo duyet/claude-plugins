@@ -5,7 +5,12 @@
 
 set -eo pipefail
 
-LIMIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-limits.json"
+# Use get_state_file_path utility if available, otherwise use RALPH_STATE_DIR
+if type get_state_file_path &>/dev/null; then
+  LIMIT_STATE_FILE=$(get_state_file_path "ralph-limits" "json")
+else
+  LIMIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-limits.json"
+fi
 DEFAULT_WAIT_SECONDS=${RALPH_WAIT_SECONDS:-3600}
 
 # Rate limit patterns as space-separated string (portable across bash versions)

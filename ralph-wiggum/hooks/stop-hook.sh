@@ -9,7 +9,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
 LIB_DIR="$PLUGIN_ROOT/lib"
 
-export RALPH_STATE_DIR=".claude"
+# Load utilities for session isolation
+[[ -f "$LIB_DIR/utils.sh" ]] && source "$LIB_DIR/utils.sh"
+
+export RALPH_STATE_DIR
+RALPH_STATE_DIR=$(get_ralph_state_dir)
 
 load_modules() {
   local modules_loaded=0
@@ -21,10 +25,24 @@ load_modules() {
 }
 
 HOOK_INPUT=$(cat)
-RALPH_STATE_FILE=".claude/ralph-loop.local.md"
+HOOK_SESSION_ID=$(echo "$HOOK_INPUT" | jq -r '.session_id')
 
-# No active loop - allow exit
+# Get current session ID from env file if not in hook input
+if [[ -z "$HOOK_SESSION_ID" ]] || [[ "$HOOK_SESSION_ID" == "null" ]]; then
+  HOOK_SESSION_ID=$(get_session_id)
+fi
+
+RALPH_STATE_FILE=$(get_state_file_path "ralph-loop" "md")
+
+# No active loop in this session - allow exit
 if [[ ! -f "$RALPH_STATE_FILE" ]]; then
+  exit 0
+fi
+
+# Verify state file belongs to this session
+STATE_SESSION_ID=$(grep '^session_id:' "$RALPH_STATE_FILE" 2>/dev/null | sed 's/session_id: *//' || echo "")
+if [[ -n "$STATE_SESSION_ID" ]] && [[ "$STATE_SESSION_ID" != "$HOOK_SESSION_ID" ]]; then
+  # State file belongs to different session - ignore it
   exit 0
 fi
 
@@ -215,8 +233,9 @@ fi
 
 ANALYSIS_STATUS=""
 if [[ "$ENABLE_SMART_EXIT" == "true" ]] && type should_exit &>/dev/null; then
-  [[ -f "${RALPH_STATE_DIR:-.claude}/ralph-analysis.json" ]] && {
-    LAST_CONF=$(jq -r '.last_confidence // 0' "${RALPH_STATE_DIR:-.claude}/ralph-analysis.json")
+  ANALYSIS_FILE=$(get_state_file_path "ralph-analysis.json")
+  [[ -f "$ANALYSIS_FILE" ]] && {
+    LAST_CONF=$(jq -r '.last_confidence // 0' "$ANALYSIS_FILE")
     ANALYSIS_STATUS=" | Confidence: ${LAST_CONF}/40"
   }
 fi

@@ -5,8 +5,14 @@
 
 set -eo pipefail
 
-TASK_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-tasks.json"
-TASK_PLAN_FILE="${RALPH_STATE_DIR:-.claude}/ralph-plan.md"
+# Use get_state_file_path utility if available, otherwise use RALPH_STATE_DIR
+if type get_state_file_path &>/dev/null; then
+  TASK_STATE_FILE=$(get_state_file_path "ralph-tasks" "json")
+  TASK_PLAN_FILE=$(get_state_file_path "ralph-plan" "md")
+else
+  TASK_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-tasks.json"
+  TASK_PLAN_FILE="${RALPH_STATE_DIR:-.claude}/ralph-plan.md"
+fi
 
 init_task_manager() {
   [[ -f "$TASK_STATE_FILE" ]] && return

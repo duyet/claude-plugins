@@ -1,7 +1,7 @@
 {
   "name": "ralph-wiggum",
-  "version": "1.0.1",
-  "description": "Self-referential development loop for Claude Code. Run iterative tasks with automatic progress detection and safety controls.",
+  "version": "1.1.0",
+  "description": "Self-referential development loop for Claude Code with session isolation. Run iterative tasks with automatic progress detection and safety controls.",
   "author": {
     "name": "duyet",
     "contributors": ["Daisy Hollman <daisy@anthropic.com>"]

@@ -5,7 +5,12 @@
 
 set -eo pipefail
 
-ANALYSIS_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-analysis.json"
+# Use get_state_file_path utility if available, otherwise use RALPH_STATE_DIR
+if type get_state_file_path &>/dev/null; then
+  ANALYSIS_STATE_FILE=$(get_state_file_path "ralph-analysis" "json")
+else
+  ANALYSIS_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-analysis.json"
+fi
 COMPLETION_CONFIDENCE_THRESHOLD=${RALPH_COMPLETION_THRESHOLD:-40}
 MAX_TEST_ONLY_LOOPS=${RALPH_MAX_TEST_ONLY:-5}
 MAX_STUCK_LOOPS=${RALPH_MAX_STUCK:-3}

@@ -5,7 +5,12 @@
 
 set -eo pipefail
 
-CIRCUIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-circuit.json"
+# Use get_state_file_path utility if available, otherwise use RALPH_STATE_DIR
+if type get_state_file_path &>/dev/null; then
+  CIRCUIT_STATE_FILE=$(get_state_file_path "ralph-circuit" "json")
+else
+  CIRCUIT_STATE_FILE="${RALPH_STATE_DIR:-.claude}/ralph-circuit.json"
+fi
 MAX_NO_PROGRESS_LOOPS=${RALPH_MAX_NO_PROGRESS:-3}
 MAX_CONSECUTIVE_ERRORS=${RALPH_MAX_ERRORS:-5}
 MAX_IDENTICAL_OUTPUTS=${RALPH_MAX_IDENTICAL:-3}

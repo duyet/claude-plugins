@@ -144,20 +144,19 @@ Output <promise>REFACTORED</promise> when complete.
 Use the status command or inspect files directly:
 
 ```bash
-# Quick status check
+# Quick status check (shows session ID)
 /status
 
-# Loop state file
-cat .claude/ralph-loop.local.md
+# List all session state files
+ls -la .claude/ralph-session.local/
 
-# Circuit breaker state
-cat .claude/ralph-circuit.json
-
-# Response analysis
-cat .claude/ralph-analysis.json
+# View specific session state (session_id shown in /status)
+cat .claude/ralph-session.local/ralph-loop.{session_id}.local.md
+cat .claude/ralph-session.local/ralph-circuit.{session_id}.json
+cat .claude/ralph-session.local/ralph-analysis.{session_id}.json
 ```
 
-State files are stored in `.claude/ralph-*` in your project directory.
+State files are stored in `.claude/ralph-session.local/` with session_id as filename suffix. Each Claude Code session has isolated state. The `.local` suffix ensures gitignore compatibility.
 
 ## Configuration
 
@@ -183,8 +182,10 @@ ralph-wiggum/
 │   └── help.md              # Plugin documentation
 ├── hooks/
 │   ├── hooks.json           # Hook configuration
+│   ├── session-start-hook.sh # Session ID capture
 │   └── stop-hook.sh         # Main loop interceptor
 ├── lib/
+│   ├── utils.sh             # Session isolation utilities
 │   ├── circuit_breaker.sh   # Stagnation detection
 │   ├── response_analyzer.sh # Completion analysis
 │   ├── api_limit_handler.sh # Rate limit handling
@@ -193,6 +194,14 @@ ralph-wiggum/
     ├── setup-ralph-loop.sh  # Loop initialization
     ├── status.sh            # Status display
     └── cancel-ralph.sh      # Cancellation handler
+
+Project directory (.claude/):
+├── ralph-session.local/
+│   ├── ralph-loop.{session_id}.local.md
+│   ├── ralph-circuit.{session_id}.json
+│   ├── ralph-analysis.{session_id}.json
+│   ├── ralph-limits.{session_id}.json
+│   └── ralph-tasks.{session_id}.json
 ```
 
 ## When to Use
@@ -220,7 +229,7 @@ ralph-wiggum/
 The smart exit feature may trigger on completion keywords. Options:
 - Use `--no-smart-exit` to disable completion detection
 - Add more specific requirements to your prompt
-- Check `.claude/ralph-analysis.json` to see what triggered the exit
+- Check `.claude/ralph-session.local/ralph-analysis.{session_id}.json` to see what triggered the exit
 
 ### Loop runs forever
 
@@ -233,7 +242,7 @@ Ensure your prompt includes:
 
 The circuit breaker stops loops that aren't making progress:
 - Ensure each iteration changes files
-- Check `.claude/ralph-circuit.json` for details
+- Check `.claude/ralph-session.local/ralph-circuit.{session_id}.json` for details
 - Use `--reset-circuit` to reset state if needed
 
 ### Rate limits
@@ -246,18 +255,40 @@ If you hit Claude's API limits:
 ### Debugging
 
 ```bash
-# Check all state files
-ls -la .claude/ralph-*
+# Check all session state files
+ls -la .claude/ralph-session.local/
 
-# View loop configuration
-cat .claude/ralph-loop.local.md
+# View loop configuration (use session_id from /status)
+cat .claude/ralph-session.local/ralph-loop.{session_id}.local.md
 
 # Check circuit breaker state
-cat .claude/ralph-circuit.json
+cat .claude/ralph-session.local/ralph-circuit.{session_id}.json
 
 # Review completion analysis
-cat .claude/ralph-analysis.json
+cat .claude/ralph-session.local/ralph-analysis.{session_id}.json
 ```
+
+## Changelog
+
+### [1.1.0] - Session Isolation
+
+**Added**
+- Session isolation: State files now stored as `.claude/ralph-session.local/{name}.{session_id}.{ext}`
+- SessionStart hook: Captures session_id at session start
+- Session ID display: `/status` shows current session ID
+- lib/utils.sh: New utility module for session isolation
+
+**Fixed**
+- Cross-session interference: Stop hook now only processes state belonging to its session, preventing multiple Claude Code sessions from hijacking each other's loops
+
+**Changed**
+- State file location moved from `.claude/ralph-*.local.*` to `.claude/ralph-session.local/{name}.{session_id}.{ext}`
+- All library modules use dynamic path resolution
+- `.local` suffix on directory ensures gitignore compatibility
+
+### [1.0.1] - Initial Release
+
+Self-referential development loop with circuit breaker, smart exit, and API limit handling.
 
 ## References
 

@@ -5,6 +5,13 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+LIB_DIR="$PLUGIN_ROOT/lib"
+
+# Load utilities for session isolation
+[[ -f "$LIB_DIR/utils.sh" ]] && source "$LIB_DIR/utils.sh"
+
 # Parse arguments
 PROMPT_PARTS=()
 MAX_ITERATIONS=0
@@ -44,9 +51,9 @@ STOP CONDITIONS:
   - API rate limit reached
 
 MONITORING:
-  cat .claude/ralph-loop.local.md    # Loop state
-  cat .claude/ralph-circuit.json     # Circuit breaker
-  cat .claude/ralph-analysis.json    # Response analysis
+  cat .claude/ralph-session.local/ralph-loop.\${SESSION_ID}.local.md    # Loop state
+  cat .claude/ralph-session.local/ralph-circuit.\${SESSION_ID}.json     # Circuit breaker
+  cat .claude/ralph-session.local/ralph-analysis.\${SESSION_ID}.json    # Response analysis
 EOF
       exit 0
       ;;
@@ -90,8 +97,13 @@ EOF
 done
 
 # Reset circuit breaker if requested
+ensure_state_dir
+RALPH_STATE_DIR=$(get_ralph_state_dir)
+SESSION_ID=$(get_session_id)
+
 if [[ "$RESET_CIRCUIT" == "true" ]]; then
-  rm -f .claude/ralph-circuit.json .claude/ralph-analysis.json
+  rm -f "$(get_state_file_path "ralph-circuit" "json")"
+  rm -f "$(get_state_file_path "ralph-analysis" "json")"
   echo "Circuit breaker reset"
 fi
 
@@ -112,15 +124,15 @@ if [[ -z "$PROMPT" ]]; then
 fi
 
 # Create state file
-mkdir -p .claude
-
 if [[ -n "$COMPLETION_PROMISE" ]] && [[ "$COMPLETION_PROMISE" != "null" ]]; then
   COMPLETION_PROMISE_YAML="\"$COMPLETION_PROMISE\""
 else
   COMPLETION_PROMISE_YAML="null"
 fi
 
-cat > .claude/ralph-loop.local.md <<EOF
+RALPH_LOOP_FILE=$(get_state_file_path "ralph-loop" "md")
+
+cat > "$RALPH_LOOP_FILE" <<EOF
 ---
 active: true
 iteration: 1
@@ -129,6 +141,7 @@ completion_promise: $COMPLETION_PROMISE_YAML
 circuit_breaker: $ENABLE_CIRCUIT_BREAKER
 smart_exit: $ENABLE_SMART_EXIT
 rate_limit_handler: $ENABLE_RATE_LIMIT
+session_id: ${SESSION_ID:-unknown}
 started_at: "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 ---
 

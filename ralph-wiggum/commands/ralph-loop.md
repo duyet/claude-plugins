@@ -13,8 +13,8 @@ Execute the setup script to initialize the Ralph loop:
 "${CLAUDE_PLUGIN_ROOT}/scripts/setup-ralph-loop.sh" $ARGUMENTS
 
 # Display completion promise if set
-if [ -f .claude/ralph-loop.local.md ]; then
-  PROMISE=$(grep '^completion_promise:' .claude/ralph-loop.local.md | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/')
+if [ -f "${RALPH_STATE_DIR:-.claude}/ralph-loop.md" ]; then
+  PROMISE=$(grep '^completion_promise:' "${RALPH_STATE_DIR:-.claude}/ralph-loop.md" | sed 's/completion_promise: *//' | sed 's/^"\(.*\)"$/\1/')
   if [ -n "$PROMISE" ] && [ "$PROMISE" != "null" ]; then
     echo ""
     echo "==============================================================="
