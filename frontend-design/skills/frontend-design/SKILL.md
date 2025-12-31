@@ -326,30 +326,75 @@ components/
 - Consistent styling approach
 - Strict TypeScript types
 
-## shadcn/ui Best Practices
+## shadcn/ui Quick Reference
 
-When using shadcn/ui:
+**Core Philosophy**: shadcn/ui is NOT a component library—it's how you build your component library. You get actual component code that you own and can modify.
+
+### Quick Start
+
+```bash
+# Initialize shadcn/ui
+npx shadcn@latest init
+
+# Add components
+npx shadcn@latest add button card dialog
+
+# Search registry
+npx shadcn@latest search @shadcn -q "button"
+```
+
+### Key Principles
+
+1. **Open Code**: Full transparency, easy customization, AI-readable
+2. **Composition**: Common, composable interface across all components
+3. **Distribution**: Flat-file schema + CLI for easy installation
+4. **Beautiful Defaults**: Great design out-of-the-box, easily customizable
+5. **AI-Ready**: Open code structure for LLMs to understand and improve
+
+### Component Categories
+
+| Category | Components |
+|----------|------------|
+| **Form & Input** | Form, Field, Button, Input, Textarea, Checkbox, Radio, Select, Switch, Slider, Calendar, Date Picker, Combobox |
+| **Layout & Navigation** | Accordion, Breadcrumb, Navigation Menu, Sidebar, Tabs, Separator, Scroll Area, Resizable |
+| **Overlays & Dialogs** | Dialog, Alert Dialog, Sheet, Drawer, Popover, Tooltip, Hover Card, Context Menu, Dropdown Menu, Command |
+| **Feedback & Status** | Alert, Toast, Progress, Spinner, Skeleton, Badge, Empty |
+| **Display & Media** | Avatar, Card, Table, Data Table, Chart, Carousel, Aspect Ratio, Typography |
+
+### Theming Basics
+
+```tsx
+// Color convention: background + foreground
+<div className="bg-background text-foreground">Hello</div>
+<div className="bg-primary text-primary-foreground">Primary</div>
+<div className="bg-muted text-muted-foreground">Muted</div>
+```
+
+### Customization Tips
 
 1. **Customize the theme** - Don't use defaults
    ```css
-   /* Customize in globals.css */
    :root {
      --radius: 0.5rem; /* or 0 for sharp corners */
      --primary: 220 13% 10%; /* custom primary */
    }
    ```
 
-2. **Extend components** - Don't just copy-paste
-   - Add custom variants
-   - Modify animations
-   - Adjust spacing to match your aesthetic
+2. **Extend components** - Add custom variants, modify animations, adjust spacing
 
-3. **Combine primitives creatively**
-   - Layer components for unique effects
-   - Use Command for more than command palettes
-   - Use Sheet for custom navigation patterns
+3. **Combine primitives** - Layer components for unique effects
 
-## Recharts Best Practices
+### For Complete Documentation
+
+See [references/shadcn.md](references/shadcn.md) for:
+- Complete components.json configuration
+- Full theming system with CSS variables
+- Dark mode setup guide
+- CLI commands reference
+- MCP server integration
+- Registry schema for publishing components
+
+## Recharts Quick Reference
 
 When creating charts:
 
