@@ -73,3 +73,9 @@ commit-commands/
 - The scope should match the main area of change
 - Keep the description under 72 characters
 - Use imperative mood ("add" not "added")
+
+## Changelog
+
+### [1.0.0] - Initial Release
+
+Semantic commit command using Conventional Commits specification with intelligent change analysis.

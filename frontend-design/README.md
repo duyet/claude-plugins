@@ -73,6 +73,33 @@ frontend-design/
 └── README.md                # This file
 ```
 
+## Changelog
+
+### [1.2.0] - Progressive Disclosure & MCP Documentation
+
+**Added**
+- Progressive disclosure structure for skill content
+- shadcn/ui MCP server documentation and patterns
+- Enhanced component library integration guidance
+
+**Changed**
+- Restructured skill with clear information hierarchy
+- Improved MCP integration examples
+
+### [1.1.0] - Skill Refinement
+
+**Added**
+- Tech stack preferences table (shadcn/ui, Recharts, Tailwind, Framer Motion)
+- Anti-slop guidelines section
+- Link to Frontend Aesthetics Cookbook
+
+**Changed**
+- Enhanced from original Anthropic plugin by Prithvi Rajasekaran and Alexander Bricken
+
+### [1.0.0] - Initial Release
+
+Frontend design skill with anti-slop guidelines and distinctive aesthetic choices.
+
 ## Credits
 
 Enhanced from Anthropic's original frontend-design plugin by Prithvi Rajasekaran and Alexander Bricken.

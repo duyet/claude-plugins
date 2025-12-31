@@ -104,3 +104,9 @@ interview/
 │   └── interview.md     # Interview command definition
 └── README.md            # This file
 ```
+
+## Changelog
+
+### [1.0.0] - Initial Release
+
+Requirements interview plugin using Socratic questioning and AskUserQuestion tool for systematic requirements discovery before implementation.

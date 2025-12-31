@@ -64,3 +64,9 @@ terminal-ui-design/
 │       └── SKILL.md             # Skill definition with guidelines
 └── README.md                    # This file
 ```
+
+## Changelog
+
+### [1.0.0] - Initial Release
+
+Terminal UI design skill with bold aesthetic choices (cyberpunk, retro, minimalist, etc.) and support for Rich, Textual, Bubbletea, Ratatui, Ink, and Blessed libraries.

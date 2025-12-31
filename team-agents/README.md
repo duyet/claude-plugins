@@ -158,3 +158,52 @@ team-agents/
 │       └── SKILL.md
 └── README.md                # This file
 ```
+
+## Changelog
+
+### [1.5.0] - Junior Engineer
+
+**Added**
+- `junior-engineer` agent: Fast execution specialist for straightforward implementation tasks
+- Model selection: Haiku for junior-engineer (speed), Opus for leader (reasoning), Haiku for senior-engineer (execution)
+
+**Changed**
+- Senior engineer now language-agnostic (previously TypeScript-focused)
+- Task routing: Simple tasks → junior, complex tasks → senior
+
+**Fixed**
+- Updated agent descriptions to reflect new team structure
+
+### [1.4.0] - Language-Agentic Senior Engineer
+
+**Changed**
+- Senior engineer refactored to be language-agnostic
+- Removed TypeScript-specific patterns and examples
+- Enhanced general implementation guidance
+
+### [1.3.0] - Quality Gates & Task Decomposition
+
+**Added**
+- `task-decomposition` skill: Break down complex tasks into parallel workstreams
+- `quality-gates` skill: Systematic quality verification procedures
+- Quality levels: Standard, Strict, Critical
+- Task templates with acceptance criteria
+
+### [1.2.0] - Leader Command
+
+**Added**
+- `/leader` command for coordinated parallel task execution
+- Command arguments: --team-size, --mode, --quality, --scope, --review, --dry-run
+- Leader agent for technical lead and engineering management
+- Multi-senior-engineer delegation pattern
+
+### [1.1.0] - Initial Team Structure
+
+**Added**
+- `leader` and `senior-engineer` agents for coordinated development
+- Parallel execution model
+- Basic task delegation patterns
+
+### [1.0.0] - Initial Release
+
+Basic leader and senior engineer agents for plugin marketplace.
