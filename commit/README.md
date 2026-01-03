@@ -5,18 +5,21 @@ Create Git commits with semantic commit message format using intelligent change 
 ## Installation
 
 ```bash
-/plugin install commit-commands@duyet-claude-plugins
+/plugin install commit@duyet-claude-plugins
 ```
 
 ## What It Does
 
-The `/commit` command analyzes your staged and unstaged changes, then creates a properly formatted semantic commit.
+The `commit` plugin provides commands for creating Git commits with semantic commit message format.
 
-## Usage
+## Commands
+
+### `/commit:commit`
+
+Create a semantic commit without pushing.
 
 ```bash
-# After making changes to your code
-/commit
+/commit:commit
 ```
 
 Claude will:
@@ -25,6 +28,16 @@ Claude will:
 3. Look at recent commits for context and style
 4. Create an appropriate semantic commit message
 5. Stage changes and commit
+
+### `/commit:commit-and-push`
+
+Create a semantic commit and push to remote.
+
+```bash
+/commit:commit-and-push
+```
+
+Same as `/commit:commit`, but also pushes the commit to the remote repository.
 
 ## Commit Format
 
@@ -59,12 +72,13 @@ test(user): add unit tests for profile validation
 ## Architecture
 
 ```
-commit-commands/
+commit/
 ├── .claude-plugin/
-│   └── plugin.json      # Plugin manifest
+│   └── plugin.json           # Plugin manifest
 ├── commands/
-│   └── commit.md        # Commit command definition
-└── README.md            # This file
+│   ├── commit.md             # Commit command definition
+│   └── commit-and-push.md    # Commit and push command definition
+└── README.md                 # This file
 ```
 
 ## Tips
@@ -75,6 +89,11 @@ commit-commands/
 - Use imperative mood ("add" not "added")
 
 ## Changelog
+
+### [1.1.0] - 2025-01-03
+
+- **Added**: `/commit:commit-and-push` command for committing and pushing in one operation
+- **Changed**: Plugin renamed from `commit-commands` to `commit` for shorter invocation
 
 ### [1.0.0] - Initial Release
 

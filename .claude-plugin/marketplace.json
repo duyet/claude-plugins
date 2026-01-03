@@ -10,8 +10,8 @@
       "description": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel."
     },
     {
-      "name": "commit-commands",
-      "source": "./commit-commands",
+      "name": "commit",
+      "source": "./commit",
       "description": "Create a Git commit with semantic commit message format"
     },
     {
