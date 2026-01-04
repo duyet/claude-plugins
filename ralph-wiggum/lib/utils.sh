@@ -4,7 +4,10 @@
 # Provides session-specific state management to prevent cross-session interference
 
 # Set CLAUDE_PLUGIN_ROOT with fallback to script location
-CLAUDE_PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+# Use ${VAR-default} (without colon) to avoid unbound variable error with set -u
+if [[ -z "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+  CLAUDE_PLUGIN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+fi
 
 CLAUDE_ENV_FILE="${CLAUDE_ENV_FILE:-${CLAUDE_PLUGIN_ROOT}/.env}"
 RALPH_SESSION_DIR=".claude/ralph-session.local"
@@ -17,9 +20,14 @@ get_session_id() {
   fi
 
   if [[ -f "$CLAUDE_ENV_FILE" ]]; then
-    grep -q "^CLAUDE_SESSION_ID=" "$CLAUDE_ENV_FILE" && \
-      source "$CLAUDE_ENV_FILE" && echo "$CLAUDE_SESSION_ID"
+    if grep -q "^CLAUDE_SESSION_ID=" "$CLAUDE_ENV_FILE"; then
+      source "$CLAUDE_ENV_FILE"
+      echo "${CLAUDE_SESSION_ID:-}"
+    fi
   fi
+
+  # Always return 0 even when no session found (caller handles empty string)
+  return 0
 }
 
 # Get state directory (always .claude/ralph-session in project directory)
