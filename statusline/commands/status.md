@@ -21,25 +21,19 @@ This command displays a live overview of your session:
 
 ## Output Example
 
+Compact single-line format showing only relevant metrics:
+
 ```
-Statusline — Claude Code Session Status
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Model         Opus 4.5
-Context       ████░░░░░░ 45% (90,000 / 200,000 tokens)
-Duration      12m 34s
-Config Files  2 loaded
-
-Active Tools  3 running
-               • Read (2 instances)
-               • Bash (1 instance)
-
-Completed     ✓ Glob ×4 | ✓ Bash ×8 | ✓ Read ×12
-
-Running Tasks ⏳ 2 pending | 🔄 1 in progress | ✓ 5 completed
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 🟡 45% | Model: Opus 4.5 | 12m 34s | Tools: Glob×4 Bash×8 Read×12 | Agents: Explore(8s) | Tasks: 🔄 1 ⏳ 2 ✓ 5 | Context: 5 prompts
 ```
+
+**Hidden values:**
+- ✓ Model omitted if not available
+- ✓ Tools hidden if none active
+- ✓ Agents hidden if none running
+- ✓ Tasks hidden if none exist
+- ✓ Context details show included system prompts + matching tools
+- ✓ Claude Code version hidden (just shows model name)
 
 ## Related Commands
 

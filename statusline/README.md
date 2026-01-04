@@ -76,40 +76,17 @@ Example:
 Context: ████░░░░░░ 45% (90,000 / 200,000 tokens)
 ```
 
-### Active Tools
-Lists tools currently in use with operation counts:
+### Compact One-Line Format
+All metrics displayed in a single line with empty values hidden:
 ```
-Active Tools:
-  • Read (2 instances)
-  • Bash (1 instance)
-  • Glob (1 instance)
+📊 🟡 45% | Model: Opus 4.5 | 12m 34s | Tools: Glob×4 Bash×8 Read×12 | Agents: Explore(12s) | Tasks: 🔄 1 ⏳ 2 ✓ 5 | Context: 3 prompts
 ```
 
-### Completed Tools
-Aggregated summary of completed tool operations:
-```
-Completed: ✓ Glob ×4 | ✓ Bash ×8 | ✓ Read ×12 | ✓ Edit ×3
-```
-
-### Running Agents
-Shows active agents with elapsed time:
-```
-Agents Running:
-  • Explore: Analyzing codebase structure (12s)
-  • code-reviewer: Reviewing authentication module (5s)
-```
-
-### Task Progress
-Real-time todo tracking:
-```
-Tasks: ⏳ 2 pending | 🔄 1 in progress | ✓ 5 completed (5/8 total)
-```
-
-### Session Duration
-Tracks how long your current session has been active:
-```
-Duration: 12m 34s
-```
+**Smart hiding:**
+- ✓ No "None" values displayed
+- ✓ Empty collections omitted (no agents/tools if zero)
+- ✓ Claude Code version hidden
+- ✓ Context shows matching system prompts and tools
 
 ## Features
 

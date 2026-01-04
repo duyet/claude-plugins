@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "session-monitor": {
+      "description": "Real-time session status monitoring with compact one-line format",
+      "events": ["on-session-ready", "on-tool-complete", "on-agent-complete", "on-todo-update"],
+      "script": "${CLAUDE_PLUGIN_ROOT}/scripts/format-status.ts"
+    }
+  },
+  "config": {
+    "auto-start": true,
+    "interval": 5000,
+    "display-mode": "compact"
+  }
+}

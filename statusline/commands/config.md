@@ -28,8 +28,8 @@ The interactive setup includes:
    - Slow (15-60 seconds) for minimal updates
 
 2. **Display Mode** — How should metrics be displayed?
-   - **Compact** — Single line summary
-   - **Standard** — Multi-line detailed view (default)
+   - **Compact** — Single line summary (default)
+   - **Standard** — Multi-line detailed view
    - **Detailed** — Full breakdown with charts
 
 3. **Show Metrics** — Which information matters most?
@@ -63,8 +63,8 @@ Q1: Update Interval?
   ○ Slow (15-60 seconds)
 
 Q2: Display Mode?
-  ○ Compact (single line)
-  ▶ Standard (multi-line)
+  ▶ Compact (single line)
+  ○ Standard (multi-line)
   ○ Detailed (with charts)
 
 Q3: Show metrics (select multiple)?
@@ -85,9 +85,10 @@ Q5: Auto-start monitoring?
   ○ Disabled
 
 ✓ Configuration saved!
-→ Statusline will update every 5 seconds in standard mode
+→ Statusline will update every 5 seconds in compact mode
 → Monitoring enabled on session start
 → Use /statusline:status to view metrics anytime
+→ Empty values automatically hidden (no "None", no empty lists)
 ```
 
 ## Configuration File
