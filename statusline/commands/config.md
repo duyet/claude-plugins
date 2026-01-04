@@ -1,102 +1,67 @@
 # /statusline:config
 
-Configure the statusline plugin with your preferences through interactive questions.
+Configure the statusline display format.
 
-## Usage
+## Action Required
 
-```
-/statusline:config
-```
+When this command is invoked, you MUST use the AskUserQuestion tool to ask:
 
-## What It Does
+### Question: Line Format
 
-This command walks you through a series of questions to configure how statusline displays information in your Claude Code session:
+Ask the user which display format they prefer:
 
-- **Display Frequency** — How often to update metrics (1-60 seconds)
-- **Display Format** — Compact, standard, or detailed output
-- **Metrics to Show** — Choose which metrics are important to you
-- **Color Theme** — Terminal-aware theme selection
-- **Auto-Start** — Enable monitoring automatically on session start
+**Header**: "Lines"
+**Question**: "How many lines should the statusline display?"
 
-## Configuration Questions
+**Options**:
+1. **1 line (Compact)** — `dir (branch) │ Model │ Ctx% │ 5h/7d │ Tasks`
+2. **2 lines** — Line 1: location/model, Line 2: all metrics
+3. **3 lines (Default)** — Full layout with separate lines for location, metrics, and activity
 
-The interactive setup includes:
+### Save Configuration
 
-1. **Update Interval** — How frequently should statusline refresh?
-   - Fast (1-3 seconds) for active monitoring
-   - Standard (5-10 seconds) for balanced view
-   - Slow (15-60 seconds) for minimal updates
+After the user answers, save their choice to `~/.claude/statusline.config.json`:
 
-2. **Display Mode** — How should metrics be displayed?
-   - **Compact** — Single line summary (default)
-   - **Standard** — Multi-line detailed view
-   - **Detailed** — Full breakdown with charts
-
-3. **Show Metrics** — Which information matters most?
-   - Context health
-   - Active tools
-   - Running agents
-   - Task progress
-   - Session duration
-
-4. **Color Theme** — Terminal color preference?
-   - Auto (detects terminal)
-   - Dark background
-   - Light background
-   - No colors (plain text)
-
-5. **Auto-Start** — Enable monitoring on session start?
-   - Enabled (recommended)
-   - Disabled
-
-## Example Session
-
-```
-$ /statusline:config
-
-⚙️  Statusline Configuration Wizard
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Q1: Update Interval?
-  ▶ Standard (5-10 seconds)
-  ○ Fast (1-3 seconds)
-  ○ Slow (15-60 seconds)
-
-Q2: Display Mode?
-  ▶ Compact (single line)
-  ○ Standard (multi-line)
-  ○ Detailed (with charts)
-
-Q3: Show metrics (select multiple)?
-  ☑ Context health
-  ☑ Active tools
-  ☑ Running agents
-  ☑ Task progress
-  ☑ Duration
-
-Q4: Color theme?
-  ▶ Auto (auto-detect)
-  ○ Dark
-  ○ Light
-  ○ None
-
-Q5: Auto-start monitoring?
-  ▶ Enabled
-  ○ Disabled
-
-✓ Configuration saved!
-→ Statusline will update every 5 seconds in compact mode
-→ Monitoring enabled on session start
-→ Use /statusline:status to view metrics anytime
-→ Empty values automatically hidden (no "None", no empty lists)
+```json
+{
+  "line_format": "1"
+}
 ```
 
-## Configuration File
+Use values: `"1"`, `"2"`, or `"3"`
 
-Your settings are saved to `.statusline.config.json` in your project root. You can also manually edit this file if needed.
+### Confirm
+
+Output:
+```
+✓ Statusline configured: [N]-line format
+  Config saved to ~/.claude/statusline.config.json
+```
+
+## Example Outputs
+
+**1-line format**:
+```
+claude-plugins (master) │ Opus 4 5 │ Ctx: 21% │ 5h: 14% 7d: 46%
+```
+
+**2-line format**:
+```
+claude-plugins (master) │ Opus 4 5 │ v2.0.76
+Ctx: 21% │ 5h: 14% 7d: 46% │ Tasks: 2/5
+```
+
+**3-line format** (default):
+```
+claude-plugins (master) │ Opus 4 5 │ v2.0.76
+Context: 21% (43,000 tokens) │ 5h: 14% 7d: 46%
+Tools: Sequential │ Tasks: 2/5
+```
+
+**Note**: Empty values are automatically hidden (no "None", no "0%", no "No tasks").
 
 ## Related Commands
 
-- `/statusline:status` — View current metrics immediately
-- `/statusline:enable [interval]` — Enable with custom interval
-- `/statusline:disable` — Pause monitoring
+- `/statusline:status` — View current metrics
+- `/statusline:enable` — Enable monitoring
+- `/statusline:disable` — Disable monitoring

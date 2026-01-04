@@ -2,40 +2,57 @@
 
 Display real-time metrics about your current Claude Code session.
 
-## Usage
+## Action Required
 
-```
-/statusline:status
-```
+When this command is invoked, you MUST:
 
-## What It Shows
+### 1. Fetch Rate Limits
 
-This command displays a live overview of your session:
-
-- **Context Window** — Visual health meter showing token usage (green → yellow → red)
-- **Model Info** — Current model and available context window size
-- **Tool Activity** — Count of active and completed tools during this session
-- **Agent Status** — Running agents with their execution time
-- **Task Progress** — Completed vs total todos tracking
-- **Session Duration** — How long the current session has been active
-
-## Output Example
-
-Compact single-line format showing only relevant metrics:
-
-```
-📊 🟡 45% | Model: Opus 4.5 | 12m 34s | Tools: Glob×4 Bash×8 Read×12 | Agents: Explore(8s) | Tasks: 🔄 1 ⏳ 2 ✓ 5 | Context: 5 prompts
+Run:
+```bash
+bash /Users/duet/project/claude-plugins/statusline/scripts/fetch-rate-limits.sh
 ```
 
-**Hidden values:**
-- ✓ Model omitted if not available
-- ✓ Tools hidden if none active
-- ✓ Agents hidden if none running
-- ✓ Tasks hidden if none exist
-- ✓ Context details show included system prompts + matching tools
-- ✓ Claude Code version hidden (just shows model name)
+Parse the JSON response for `five_hour` and `seven_day` percentages.
+
+### 2. Display Status Line
+
+Output in compact format with only non-empty values:
+
+```
+📊 [health] | 5h: [5h%] | 7d: [7d%] | Model: [model] | [duration] | Tools: [tool×count] | Agents: [name(time)] | Tasks: [status counts]
+```
+
+**Health indicators:**
+- 🟢 Context 0-60%
+- 🟡 Context 60-85%
+- 🔴 Context 85%+
+
+**Task status:**
+- 🔄 in_progress count
+- ⏳ pending count
+- ✓ completed count
+
+### 3. Hide Empty Values
+
+Do NOT show:
+- Tools section if no tools used
+- Agents section if no agents running
+- Tasks section if no todos exist
+- Any section with zero or null values
+
+## Example Output
+
+```
+📊 🟡 67% | 5h: 42% | 7d: 28% | Model: Opus 4.5 | 15m 42s | Tools: Read×8 Glob×4 Bash×3 | Tasks: 🔄 1 ⏳ 3 ✓ 7
+```
+
+Minimal output when few metrics available:
+```
+📊 🟢 12% | 5h: 5% | 7d: 2%
+```
 
 ## Related Commands
 
-- `/statusline:enable` — Enable real-time status updates
-- `/statusline:disable` — Disable status monitoring
+- `/statusline:enable` — Enable real-time monitoring
+- `/statusline:disable` — Disable monitoring

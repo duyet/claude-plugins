@@ -1,7 +1,7 @@
 {
   "name": "statusline",
-  "version": "1.2.0",
-  "description": "Real-time visibility into Claude Code sessions showing context usage, active tools, and task progress in compact one-line format",
+  "version": "1.4.0",
+  "description": "Configurable status bar showing context usage, API rate limits (5h/7d), git branch, and active tools. Supports 1/2/3 line layouts with smart hiding of empty values.",
   "author": {
     "name": "duyet"
   }
