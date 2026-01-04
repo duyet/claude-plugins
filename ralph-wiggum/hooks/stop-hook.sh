@@ -25,7 +25,9 @@ load_modules() {
 }
 
 HOOK_INPUT=$(cat)
-HOOK_SESSION_ID=$(echo "$HOOK_INPUT" | jq -r '.session_id')
+
+# Parse session_id from input (gracefully handle invalid JSON)
+HOOK_SESSION_ID=$(echo "$HOOK_INPUT" | jq -r '.session_id // empty' 2>/dev/null || echo "")
 
 # Get current session ID from env file if not in hook input
 if [[ -z "$HOOK_SESSION_ID" ]] || [[ "$HOOK_SESSION_ID" == "null" ]]; then
@@ -85,7 +87,7 @@ if [[ $MAX_ITERATIONS -gt 0 ]] && [[ $ITERATION -ge $MAX_ITERATIONS ]]; then
 fi
 
 # Get transcript
-TRANSCRIPT_PATH=$(echo "$HOOK_INPUT" | jq -r '.transcript_path')
+TRANSCRIPT_PATH=$(echo "$HOOK_INPUT" | jq -r '.transcript_path // empty' 2>/dev/null || echo "")
 
 if [[ ! -f "$TRANSCRIPT_PATH" ]]; then
   echo "Ralph loop: Transcript not found" >&2
@@ -111,9 +113,9 @@ LAST_OUTPUT=$(echo "$LAST_LINE" | jq -r '
   map(select(.type == "text")) |
   map(.text) |
   join("\n")
-' 2>&1)
+' 2>/dev/null || echo "")
 
-if [[ $? -ne 0 ]] || [[ -z "$LAST_OUTPUT" ]]; then
+if [[ -z "$LAST_OUTPUT" ]]; then
   echo "Ralph loop: Failed to parse assistant message" >&2
   rm "$RALPH_STATE_FILE"
   exit 0
