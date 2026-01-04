@@ -1,7 +1,7 @@
 {
   "name": "team-agents",
   "description": "Leader, Senior Engineer, and Junior Engineer agents for coordinated parallel task execution",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": {
     "name": "duyet"
   }

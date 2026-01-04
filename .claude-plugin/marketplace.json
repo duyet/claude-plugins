@@ -33,6 +33,11 @@
       "name": "interview",
       "source": "./interview",
       "description": "Conduct in-depth requirements interviews using Socratic questioning. Clarifies implementation details, edge cases, and tradeoffs before coding begins."
+    },
+    {
+      "name": "statusline",
+      "source": "./statusline",
+      "description": "Real-time visibility into Claude Code sessions showing context usage, active tools, and task progress. Inspired by claude-hud."
     }
   ]
 }

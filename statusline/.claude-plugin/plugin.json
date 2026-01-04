@@ -1,0 +1,8 @@
+{
+  "name": "statusline",
+  "version": "1.0.0",
+  "description": "Real-time visibility into Claude Code sessions showing context usage, active tools, and task progress",
+  "author": {
+    "name": "duyet"
+  }
+}
