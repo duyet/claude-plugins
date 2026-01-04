@@ -1,7 +1,19 @@
 /**
  * Compact one-line status formatter for Claude Code sessions
  * Hides empty values, shows only relevant metrics
+ * Includes rate limit tracking (5h/7d)
  */
+
+import { execFileSync } from "child_process";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+
+interface RateLimits {
+  five_hour: number;
+  seven_day: number;
+  resets_at?: string;
+  error?: string;
+}
 
 interface SessionMetrics {
   context?: {
@@ -20,6 +32,7 @@ interface SessionMetrics {
   };
   duration?: string;
   systemPrompts?: string[];
+  rateLimits?: RateLimits;
 }
 
 interface FormattedStatus {
@@ -89,12 +102,51 @@ function formatDuration(duration?: string): string | null {
   return `${duration}`;
 }
 
+function formatRateLimits(rateLimits?: RateLimits): string | null {
+  if (!rateLimits) return null;
+
+  if (rateLimits.error === "scope_required") {
+    return "5h: re-login | 7d: needed";
+  }
+  if (rateLimits.error) {
+    return null; // Hide on other errors
+  }
+
+  const u5h = Math.round(rateLimits.five_hour);
+  const u7d = Math.round(rateLimits.seven_day);
+
+  return `5h: ${u5h}% | 7d: ${u7d}%`;
+}
+
+function fetchRateLimits(): RateLimits | null {
+  try {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const scriptPath = join(__dirname, "fetch-rate-limits.sh");
+
+    // Use execFileSync for safety (no shell injection)
+    const result = execFileSync("bash", [scriptPath], {
+      encoding: "utf-8",
+      timeout: 5000,
+    });
+
+    return JSON.parse(result.trim()) as RateLimits;
+  } catch {
+    return null;
+  }
+}
+
 export function formatStatus(metrics: SessionMetrics): FormattedStatus {
   const parts: string[] = [];
 
   // Add context health first (most important)
   const contextStr = formatContext(metrics);
   if (contextStr) parts.push(contextStr);
+
+  // Add rate limits (5h/7d usage)
+  const rateLimits = metrics.rateLimits ?? fetchRateLimits();
+  const rateLimitsStr = formatRateLimits(rateLimits);
+  if (rateLimitsStr) parts.push(rateLimitsStr);
 
   // Add model (optional)
   const modelStr = formatModel(metrics.model);
