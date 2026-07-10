@@ -2,7 +2,7 @@
 
 [![GitHub Release](https://img.shields.io/github/v/duyet/codex-claude-plugins?style=flat-square)](https://github.com/duyet/codex-claude-plugins/releases)
 [![License](https://img.shields.io/github/license/duyet/codex-claude-plugins?style=flat-square)](LICENSE)
-[![Plugins](https://img.shields.io/badge/plugins-14-blue?style=flat-square)](#plugins-at-a-glance)
+[![Plugins](https://img.shields.io/badge/plugins-24-blue?style=flat-square)](#plugins-at-a-glance)
 
 > Extend Claude Code and Codex with specialized agents, commands, and skills from one shared plugin collection.
 
@@ -123,6 +123,7 @@ This repository also ships Codex plugin metadata in place:
 | [🐙 github](#🐙-github) | Skill | GitHub operations using gh CLI - PRs, is... |
 | [🔧 fix](#🔧-fix) | Command | Fix issues, tests, and CI failures with ... |
 | [📈 clickhouse-monitoring](#📈-clickhouse-monitoring) | Skill | Specialized knowledge for the ClickHouse Mo... |
+| [Xquik](#xquik) | Skill | Research public X conversations with source provenance and coverage notes. |
 
 
 ---
@@ -288,6 +289,20 @@ Covers 45 dashboard pages including query monitoring, table management, merge op
 
 Skills:
   - **clickhouse-monitoring**
+
+---
+
+### Xquik
+
+**Research public X conversations through a remote MCP server with source provenance, pagination, and safe action boundaries.**
+
+**Components:**
+
+Skills:
+  - **xquik-x-research**
+
+MCP servers:
+  - **xquik**
 
 ---
 

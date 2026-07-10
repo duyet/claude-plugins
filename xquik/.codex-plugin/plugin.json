@@ -1,0 +1,22 @@
+{
+  "name": "xquik",
+  "version": "1.0.0",
+  "description": "Research public X conversations with Xquik through a remote MCP server, with source provenance, pagination, and safe action boundaries.",
+  "author": {
+    "name": "Xquik"
+  },
+  "skills": "./skills/",
+  "mcp": "./.mcp.json",
+  "interface": {
+    "displayName": "Xquik",
+    "shortDescription": "Research public X conversations with traceable sources.",
+    "developerName": "Xquik",
+    "category": "AI",
+    "capabilities": ["Skill", "MCP"],
+    "links": {
+      "homepage": "https://xquik.com",
+      "docs": "https://docs.xquik.com",
+      "mcp": "https://xquik.com/mcp"
+    }
+  }
+}

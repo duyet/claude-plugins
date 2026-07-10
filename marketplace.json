@@ -148,6 +148,14 @@
       "category": "ai"
     },
     {
+      "name": "xquik",
+      "id": "xquik@duyet-claude-plugins",
+      "description": "Research public X conversations through Xquik with source provenance, pagination, coverage notes, and safe action boundaries.",
+      "version": "1.0.0",
+      "type": "skill",
+      "category": "ai"
+    },
+    {
       "name": "sag-notify",
       "id": "sag-notify@duyet-claude-plugins",
       "description": "Spoken voice notifications via sag (ElevenLabs TTS): skill-driven, Claude calls sag directly to speak a short alert just before it asks you something and a one-line summary when work finishes, naming the project. Configurable voice and language.",
