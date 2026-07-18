@@ -184,6 +184,7 @@ validate_marketplaces() {
   python3 - "$REPO_ROOT" <<'PYEOF'
 import json
 import os
+import re
 import sys
 
 repo_root = sys.argv[1]
@@ -219,6 +220,25 @@ for plugin in root_marketplace.get("plugins", []):
         value = plugin.get(field)
         require(isinstance(value, str) and value.strip(), f"marketplace.json {name}: missing {field}")
     require(plugin.get("id") == f"{name}@{root_marketplace.get('name')}", f"marketplace.json {name}: id does not match marketplace name")
+    manifest = load_json(os.path.join(name, ".claude-plugin", "plugin.json"))
+    if manifest is not None:
+        require(plugin.get("version") == manifest.get("version"), f"marketplace.json {name}: version does not match Claude manifest")
+
+metadata = root_marketplace.get("metadata")
+require(isinstance(metadata, dict), "marketplace.json missing metadata")
+if isinstance(metadata, dict):
+    require(metadata.get("totalPlugins") == len(plugin_set), "marketplace.json metadata.totalPlugins must match plugin directories")
+
+try:
+    with open(os.path.join(repo_root, "README.md")) as f:
+        readme = f.read()
+except (FileNotFoundError, OSError) as exc:
+    errors.append(f"README.md: {exc}")
+else:
+    badge = re.search(r"img\.shields\.io/badge/plugins-(\d+)-", readme)
+    require(badge is not None, "README.md missing plugin count badge")
+    if badge is not None:
+        require(int(badge.group(1)) == len(plugin_set), "README.md plugin count badge must match plugin directories")
 
 claude_marketplace = load_json(".claude-plugin/marketplace.json")
 if claude_marketplace is None:

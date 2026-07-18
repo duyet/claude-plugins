@@ -8,7 +8,7 @@
 
 A collection of production-quality plugins for Claude Code and Codex, including autonomous agents, workflow automation, statusline utilities, prompt engineering guidance, and developer tools.
 
-**Latest Release:** [v1.0.0](https://github.com/duyet/codex-claude-plugins/releases/tag/v1.0.0) | [CHANGELOG](CHANGELOG.md) | [Issues](https://github.com/duyet/codex-claude-plugins/issues)
+[CHANGELOG](CHANGELOG.md) | [Issues](https://github.com/duyet/codex-claude-plugins/issues)
 
 Available on **[skills.sh](https://skills.sh)** — the open agent skills ecosystem.
 
@@ -303,6 +303,9 @@ Skills:
 
 MCP servers:
   - **xquik**
+
+Xquik is an independent third-party service. Not affiliated with X Corp.
+"Twitter" and "X" are trademarks of X Corp.
 
 ---
 

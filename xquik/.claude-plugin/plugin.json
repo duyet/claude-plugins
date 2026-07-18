@@ -1,7 +1,7 @@
 {
   "name": "xquik",
   "version": "1.0.0",
-  "description": "Research public X conversations with Xquik through a remote MCP server, with source provenance, pagination, and safe action boundaries.",
+  "description": "Research public X conversations with Xquik through a remote MCP server, with source provenance, pagination, and safe action boundaries. Not affiliated with X Corp.",
   "author": {
     "name": "Xquik",
     "url": "https://xquik.com"

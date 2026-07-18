@@ -55,3 +55,6 @@ This plugin follows semantic versioning. The initial release is `1.0.0`.
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+Xquik is an independent third-party service. Not affiliated with X Corp.
+"Twitter" and "X" are trademarks of X Corp.
