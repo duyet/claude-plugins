@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "Research public X conversations with Xquik through a remote MCP server, with source provenance, pagination, and safe action boundaries. Not affiliated with X Corp.",
   "author": {
-    "name": "Xquik"
+    "name": "Xquik",
+    "url": "https://xquik.com"
   },
+  "homepage": "https://xquik.com",
+  "repository": "https://github.com/duyet/codex-claude-plugins",
+  "license": "MIT",
   "skills": "./skills/",
   "mcp": "./.mcp.json",
   "interface": {
