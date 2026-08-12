@@ -50,7 +50,7 @@ URLs, timestamps, and query provenance in the final source index.
 
 ## Versioning
 
-This plugin follows semantic versioning. The initial release is `1.0.0`.
+This plugin follows semantic versioning. The current release is `1.0.1`.
 
 ## License
 
