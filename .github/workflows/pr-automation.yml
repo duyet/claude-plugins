@@ -33,9 +33,6 @@ jobs:
 
       - name: Auto-label based on files
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          FILES="${{ steps.changed-files.outputs.files }}"
-
           if echo "$FILES" | grep -q "^src/api/\|^api/"; then
             gh pr edit "$PR_NUMBER" --add-label "area:api" || true
           fi
@@ -56,7 +53,7 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-label "area:tests" || true
           fi
 
-          COMMITS=$(gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits --jq '.[].commit.message' | grep -i "BREAKING CHANGE" || true)
+          COMMITS=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits" --jq '.[].commit.message' | grep -i "BREAKING CHANGE" || true)
           if [ -n "$COMMITS" ]; then
             gh pr edit "$PR_NUMBER" --add-label "type:breaking" || true
           fi
@@ -67,13 +64,12 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-label "documentation" || true
           fi
         env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FILES: ${{ steps.changed-files.outputs.files }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto-assign reviewers based on files
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          FILES="${{ steps.changed-files.outputs.files }}"
-
           if echo "$FILES" | grep -q "^src/frontend/\|^components/\|^ui/"; then
             gh pr edit "$PR_NUMBER" --add-reviewer "frontend-team" || true
           fi
@@ -90,6 +86,8 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-reviewer "devops-team" || true
           fi
         env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FILES: ${{ steps.changed-files.outputs.files }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Welcome first-time contributors
