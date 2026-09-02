@@ -13,26 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Get changed files
         id: changed-files
         run: |
-          # Get list of changed files
           FILES=$(gh pr diff "$PR_NUMBER" --name-only)
-          echo "files<<EOF" >> $GITHUB_OUTPUT
-          echo "$FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto-label based on files
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          FILES="${{ steps.changed-files.outputs.files }}"
-
-          # Area labels based on file paths
           if echo "$FILES" | grep -q "^src/api/\|^api/"; then
             gh pr edit "$PR_NUMBER" --add-label "area:api" || true
           fi
@@ -53,27 +53,23 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-label "area:tests" || true
           fi
 
-          # Check for breaking changes in commits
-          COMMITS=$(gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits --jq '.[].commit.message' | grep -i "BREAKING CHANGE" || true)
+          COMMITS=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits" --jq '.[].commit.message' | grep -i "BREAKING CHANGE" || true)
           if [ -n "$COMMITS" ]; then
             gh pr edit "$PR_NUMBER" --add-label "type:breaking" || true
           fi
 
-          # Documentation only
           if echo "$FILES" | grep -v "^docs/\|\.md$" | grep -q .; then
             :
           else
             gh pr edit "$PR_NUMBER" --add-label "documentation" || true
           fi
         env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FILES: ${{ steps.changed-files.outputs.files }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Auto-assign reviewers based on files
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          FILES="${{ steps.changed-files.outputs.files }}"
-
-          # Assign reviewers based on code areas
           if echo "$FILES" | grep -q "^src/frontend/\|^components/\|^ui/"; then
             gh pr edit "$PR_NUMBER" --add-reviewer "frontend-team" || true
           fi
@@ -90,14 +86,12 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-reviewer "devops-team" || true
           fi
         env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FILES: ${{ steps.changed-files.outputs.files }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Welcome first-time contributors
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          AUTHOR=${{ github.event.pull_request.user.login }}
-
-          # Check if this is the author's first PR
           PR_COUNT=$(gh pr list --author "$AUTHOR" --state all --limit 1 --json number --jq 'length')
 
           if [ "$PR_COUNT" -eq 1 ]; then
@@ -120,4 +114,6 @@ jobs:
             Thanks again for contributing! 🎉'
           fi
         env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -23,10 +23,15 @@ jobs:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@2.0.0
+        # ludeeus/action-shellcheck 2.0.0
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38
         with:
           scandir: "."
           severity: warning
@@ -35,7 +40,11 @@ jobs:
     name: Syntax Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Check bash syntax
         run: |
@@ -62,7 +71,11 @@ jobs:
       matrix:
         bash-version: ["4.4", "5.0", "5.1", "5.2"]
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Test with bash version
         env:
@@ -91,10 +104,15 @@ jobs:
     name: Unit Tests (bats)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Setup bats
-        uses: bats-core/bats-action@4.0.0
+        # bats-core/bats-action 4.0.0
+        uses: bats-core/bats-action@77d6fb60505b4d0d1d73e48bd035b55074bbfb43
 
       - name: Run bats tests
         run: |
@@ -104,4 +122,3 @@ jobs:
             echo "No bats tests found in tests/ directory"
             echo "Skipping unit tests"
           fi
-
