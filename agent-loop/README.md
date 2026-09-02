@@ -160,11 +160,17 @@ When you run `/agent-loop:start`:
 ```text
 agent-loop/
 ├── .antigravity-plugin/
-│   └── plugin.json          # Antigravity manifest (version 0.3.0)
+│   └── plugin.json          # Antigravity manifest
 ├── .claude-plugin/
-│   └── plugin.json          # Manifest (version 0.3.0)
+│   └── plugin.json          # Claude manifest
 ├── .codex-plugin/
-│   └── plugin.json          # Codex manifest (version 0.3.0)
+│   └── plugin.json          # Codex manifest
+├── .grok-plugin/
+│   └── plugin.json          # Grok Bot / Grok Build manifest
+├── .grok-build-plugin/
+│   └── plugin.json          # Grok Build interface metadata
+├── assets/
+│   └── logo.svg
 ├── commands/                # Slash commands
 │   ├── start.md
 │   ├── stop.md

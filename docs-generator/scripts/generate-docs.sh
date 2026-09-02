@@ -50,11 +50,13 @@ generate_root_readme() {
 
     # Start building README
     cat > "$output" << 'EOF'
-# Claude Plugins Marketplace
+# Claude/Codex/Grok Plugins Marketplace
 
-> Extend Claude Code with specialized agents, commands, and skills.
+> Extend Claude Code, Codex, Grok Build, and Grok Bot with specialized agents, commands, and skills.
 
 ## Quick Install
+
+### Claude Code
 
 ```bash
 # Add marketplace
@@ -70,6 +72,15 @@ EOF
 
     cat >> "$output" << 'EOF'
 ```
+
+### Grok Build / Grok Bot
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install <plugin-name> --trust
+```
+
+Codex uses `.agents/plugins/marketplace.json`. Plugin logos live at `assets/logo.svg` in each plugin.
 
 ---
 
@@ -189,14 +200,18 @@ Add to `~/.claude/settings.json`:
 
 ```
 your-plugin/
-├── .claude-plugin/plugin.json   # name, version, description
-├── agents/                      # .md with YAML frontmatter
-├── commands/                    # slash commands
-├── skills/                      # reusable knowledge
-└── hooks/hooks.json             # lifecycle hooks
+├── .claude-plugin/plugin.json      # name, version, description, logo
+├── .codex-plugin/plugin.json       # Codex manifest and interface metadata
+├── .grok-plugin/plugin.json        # Grok Bot / Grok Build manifest
+├── .grok-build-plugin/plugin.json  # Grok Build interface metadata
+├── assets/logo.svg                 # rendered by every listed harness
+├── agents/                         # .md with YAML frontmatter
+├── commands/                       # slash commands
+├── skills/                         # reusable knowledge
+└── hooks/hooks.json                # lifecycle hooks
 ```
 
-Update `marketplace.json` → PR → Done
+Update `marketplace.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `.grok-plugin/marketplace.json`, and the harness manifests. Run `bash scripts/validate-plugins.sh`.
 
 ---
 

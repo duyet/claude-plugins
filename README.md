@@ -1,12 +1,12 @@
-# Claude/Codex Plugins
+# Claude/Codex/Grok Plugins
 
 [![GitHub Release](https://img.shields.io/github/v/duyet/codex-claude-plugins?style=flat-square)](https://github.com/duyet/codex-claude-plugins/releases)
 [![License](https://img.shields.io/github/license/duyet/codex-claude-plugins?style=flat-square)](LICENSE)
 [![Plugins](https://img.shields.io/badge/plugins-14-blue?style=flat-square)](#plugins-at-a-glance)
 
-> Extend Claude Code and Codex with specialized agents, commands, and skills from one shared plugin collection.
+> Extend Claude Code, Codex, Grok Build, and Grok Bot with specialized agents, commands, and skills from one shared plugin collection.
 
-A collection of production-quality plugins for Claude Code and Codex, including autonomous agents, workflow automation, statusline utilities, prompt engineering guidance, and developer tools.
+A collection of production-quality plugins for Claude Code, Codex, Grok Build, and Grok Bot, including autonomous agents, workflow automation, statusline utilities, prompt engineering guidance, and developer tools.
 
 **Latest Release:** [v1.0.0](https://github.com/duyet/codex-claude-plugins/releases/tag/v1.0.0) | [CHANGELOG](CHANGELOG.md) | [Issues](https://github.com/duyet/codex-claude-plugins/issues)
 
@@ -42,7 +42,7 @@ Codex support is provided through the repo-local Codex marketplace file:
 
 ```bash
 git clone https://github.com/duyet/codex-claude-plugins.git
-cd claude-plugins
+cd codex-claude-plugins
 ```
 
 Then add or import the local Codex marketplace from:
@@ -63,7 +63,31 @@ That marketplace points each plugin at the matching local folder, for example:
 }
 ```
 
-After the marketplace is added in Codex, install the plugins you want from the `Duyet Claude and Codex Plugins` marketplace. Codex-facing workflow skills are available under each plugin's `skills/` folder, including wrappers for Claude command-heavy plugins such as `commit`, `github`, `fix`, `statusline`, `team-agents`, and `duyetbot`.
+After the marketplace is added in Codex, install the plugins you want from the `Duyet Claude, Codex, and Grok Plugins` marketplace. Codex-facing workflow skills are available under each plugin's `skills/` folder, including wrappers for Claude command-heavy plugins such as `commit`, `github`, `fix`, `statusline`, `team-agents`, and `duyetbot`.
+
+### Grok Build
+
+Grok Build reads the same pack through the Grok marketplace index:
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install team-agents --trust
+grok plugin install commit --trust
+grok plugin install github --trust
+```
+
+Browse the catalog in the TUI with `/marketplace` or `/plugin`, then press `i` to install. Every plugin folder ships `.grok-plugin/plugin.json` (Grok Bot + Grok Build) and `.grok-build-plugin/plugin.json` (Grok Build interface metadata) beside the Claude and Codex manifests.
+
+### Grok Bot
+
+Grok Bot uses the same `.grok-plugin/` marketplace as Grok Build. Add the pack once, then install plugins from the `duyet-claude-plugins` catalog:
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install <plugin-name> --trust
+```
+
+In the Grok Bot app, open **Plugins** and add `duyet/codex-claude-plugins` as a marketplace source if the CLI is not available. Plugin logos render from each plugin's `assets/logo.svg`.
 
 ### Alternative: Skills CLI
 
@@ -73,12 +97,16 @@ Install via the open [Skills](https://skills.sh) ecosystem, works with Claude Co
 npx skills add duyet/codex-claude-plugins
 ```
 
-### Codex Metadata
+### Harness Metadata
 
-This repository also ships Codex plugin metadata in place:
+This repository ships per-harness plugin metadata in place:
 
-- Each plugin has a `.codex-plugin/plugin.json` beside its Claude `.claude-plugin/plugin.json`.
-- Codex marketplace entries live in `.agents/plugins/marketplace.json`.
+- Claude Code: `.claude-plugin/plugin.json` plus `marketplace.json` and `.claude-plugin/marketplace.json`.
+- Codex: `.codex-plugin/plugin.json` plus `.agents/plugins/marketplace.json`.
+- Grok Bot: `.grok-plugin/plugin.json`.
+- Grok Build: `.grok-build-plugin/plugin.json` plus the shared Grok index at `.grok-plugin/marketplace.json`.
+- Antigravity (where present): `.antigravity-plugin/plugin.json`.
+- Logos: each plugin's `assets/logo.svg`, referenced from every harness manifest and marketplace so listings render the same mark.
 - Claude slash commands and agents stay in their original folders; Codex-facing wrapper skills live under `skills/*-workflow/SKILL.md` where a plugin needs a Codex entry point.
 
 ## Usage Examples
@@ -321,15 +349,18 @@ Add to `~/.claude/settings.json`:
 
 ```
 your-plugin/
-├── .claude-plugin/plugin.json   # name, version, description
-├── .codex-plugin/plugin.json    # Codex manifest and interface metadata
-├── agents/                      # .md with YAML frontmatter
-├── commands/                    # slash commands
-├── skills/                      # reusable knowledge
-└── hooks/hooks.json             # lifecycle hooks
+├── .claude-plugin/plugin.json      # name, version, description, logo
+├── .codex-plugin/plugin.json       # Codex manifest, interface, logo
+├── .grok-plugin/plugin.json        # Grok Bot / Grok Build manifest + logo
+├── .grok-build-plugin/plugin.json  # Grok Build interface metadata + logo
+├── assets/logo.svg                 # rendered by every listed harness
+├── agents/                         # .md with YAML frontmatter
+├── commands/                       # slash commands
+├── skills/                         # reusable knowledge
+└── hooks/hooks.json                # lifecycle hooks
 ```
 
-Update `marketplace.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, and both manifest files. Run `bash scripts/validate-plugins.sh` before opening a PR.
+Update `marketplace.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `.grok-plugin/marketplace.json`, and the harness manifests. Run `bash scripts/validate-plugins.sh` before opening a PR.
 
 ---
 

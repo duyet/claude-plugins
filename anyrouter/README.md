@@ -2,7 +2,7 @@
 
 Wire [AnyRouter](https://anyrouter.dev) — a universal, OpenAI-compatible LLM gateway for 150+ models across 28+ providers — into Claude Code, Codex, Cursor, and any other coding agent that accepts a custom base URL.
 
-This plugin ships as both a **Claude Code plugin** (`.claude-plugin/`) and a **Codex plugin** (`.codex-plugin/`), and bundles a remote **MCP server** for key and credit management.
+This plugin ships as a **Claude Code plugin** (`.claude-plugin/`), a **Codex plugin** (`.codex-plugin/`), and **Grok Build / Grok Bot** manifests (`.grok-plugin/` + `.grok-build-plugin/`), and bundles a remote **MCP server** for key and credit management.
 
 ## What you get
 
@@ -33,6 +33,13 @@ export ANYROUTER_API_KEY="sk-ar-..."
 ### Codex
 
 The plugin's `.codex-plugin/plugin.json` declares Skill, Command, Agent, and MCP capabilities. Install via your Codex plugin loader the same way you install other plugins from `duyet/codex-claude-plugins`.
+
+### Grok Build / Grok Bot
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install anyrouter --trust
+```
 
 ### MCP only
 

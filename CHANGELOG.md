@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- First-class Grok Build and Grok Bot support: `.grok-plugin/plugin.json` and `.grok-build-plugin/plugin.json` on every plugin, plus `.grok-plugin/marketplace.json`
+- Plugin logos for Claude Code, Codex, Grok Build, Grok Bot, and Antigravity (`assets/logo.svg` per plugin, wired in manifests and marketplaces)
 - Marketplace.json for centralized plugin registry
 - GitHub issue templates (bug report, feature request)
 - GitHub batch commands: bulk-close-issues, bulk-merge-prs, bulk-label
