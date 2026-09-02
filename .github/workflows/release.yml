@@ -39,11 +39,16 @@ jobs:
 
           cat release_notes.md
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release # zizmor: ignore[superfluous-actions]
+        # softprops/action-gh-release v3.0.3
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
+        with:
+          tag_ref: ${{ github.ref }}
+          name: Release ${{ steps.get_version.outputs.version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.get_version.outputs.version }}
-        run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --title "Release ${VERSION}" \
-            --notes-file release_notes.md
