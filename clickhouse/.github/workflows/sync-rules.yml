@@ -1,7 +1,7 @@
 name: Sync Rules from ClickHouse/agent-skills
 
 on:
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch:
   schedule:
     - cron: "0 0 * * 0" # Run weekly on Sunday at midnight UTC
 
@@ -31,25 +31,20 @@ jobs:
 
       - name: Copy rule files
         run: |
-          # Copy all rule files from agent-skills to our skill directory
           cp -r agent-skills/skills/clickhouse-best-practices/rules/* skills/clickhouse/rules/
 
       - name: Update version
         run: |
-          # Increment patch version in SKILL.md
           current_version=$(grep 'Version.*' skills/clickhouse/SKILL.md | head -1 | sed 's/.*Version.*: \([0-9.]*\).*/\1/')
           echo "Current version: $current_version"
 
-          # Increment patch version
           IFS='.' read -r major minor patch <<< "$current_version"
           new_patch=$((patch + 1))
           new_version="$major.$minor.$new_patch"
           echo "New version: $new_version"
 
-          # Update SKILL.md
           sed -i "s/\*\*Version\*\*: $current_version/\*\*Version\*\*: $new_version/" skills/clickhouse/SKILL.md
 
-          # Update plugin.json
           sed -i "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" .claude-plugin/plugin.json
 
       - name: Check for changes

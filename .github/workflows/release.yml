@@ -27,7 +27,6 @@ jobs:
       - name: Generate release notes
         id: release_notes
         run: |
-          # Extract changes for this version from CHANGELOG
           VERSION="${{ steps.get_version.outputs.version }}"
           printf '%s\n\n' "## What's Changed" > release_notes.md
 

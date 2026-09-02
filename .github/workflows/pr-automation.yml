@@ -21,7 +21,6 @@ jobs:
       - name: Get changed files
         id: changed-files
         run: |
-          # Get list of changed files
           FILES=$(gh pr diff "$PR_NUMBER" --name-only)
           {
             echo "files<<EOF"
@@ -37,7 +36,6 @@ jobs:
           PR_NUMBER=${{ github.event.pull_request.number }}
           FILES="${{ steps.changed-files.outputs.files }}"
 
-          # Area labels based on file paths
           if echo "$FILES" | grep -q "^src/api/\|^api/"; then
             gh pr edit "$PR_NUMBER" --add-label "area:api" || true
           fi
@@ -58,13 +56,11 @@ jobs:
             gh pr edit "$PR_NUMBER" --add-label "area:tests" || true
           fi
 
-          # Check for breaking changes in commits
           COMMITS=$(gh api repos/${{ github.repository }}/pulls/$PR_NUMBER/commits --jq '.[].commit.message' | grep -i "BREAKING CHANGE" || true)
           if [ -n "$COMMITS" ]; then
             gh pr edit "$PR_NUMBER" --add-label "type:breaking" || true
           fi
 
-          # Documentation only
           if echo "$FILES" | grep -v "^docs/\|\.md$" | grep -q .; then
             :
           else
@@ -78,7 +74,6 @@ jobs:
           PR_NUMBER=${{ github.event.pull_request.number }}
           FILES="${{ steps.changed-files.outputs.files }}"
 
-          # Assign reviewers based on code areas
           if echo "$FILES" | grep -q "^src/frontend/\|^components/\|^ui/"; then
             gh pr edit "$PR_NUMBER" --add-reviewer "frontend-team" || true
           fi
@@ -99,7 +94,6 @@ jobs:
 
       - name: Welcome first-time contributors
         run: |
-          # Check if this is the author's first PR
           PR_COUNT=$(gh pr list --author "$AUTHOR" --state all --limit 1 --json number --jq 'length')
 
           if [ "$PR_COUNT" -eq 1 ]; then
