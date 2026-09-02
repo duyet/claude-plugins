@@ -1,10 +1,4 @@
 #!/usr/bin/env node
-/**
- * Drive the duyet/codex-claude-plugins marketplace pack.
- * There is no hosted web UI; the user-facing product is plugin catalogs,
- * manifests, and documented install paths for Claude Code, Codex,
- * Grok Build, and Grok Bot.
- */
 
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
