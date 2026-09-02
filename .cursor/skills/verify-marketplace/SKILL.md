@@ -2,16 +2,16 @@
 name: verify-marketplace
 description: >-
   Drive the duyet/codex-claude-plugins marketplace pack via control-marketplace:
-  marketplace JSON, Claude/Codex/Antigravity manifests, and documented install
-  paths. Use when verifying plugin catalog changes, install docs, or
-  scripts/validate-plugins.sh. There is no hosted web UI.
+  marketplace JSON, Claude/Codex/Antigravity/Grok manifests, local plugin logos,
+  and documented install paths. Use when verifying plugin catalog changes,
+  install docs, or scripts/validate-plugins.sh. There is no hosted web UI.
 ---
 
 # Verify marketplace
 
 Drive this checkout as a **plugin marketplace pack**, not a web app. Users add a
-marketplace and install plugins in Claude Code or Codex. The lever is
-`control-marketplace.mjs`. `--help` is canonical.
+marketplace and install plugins in Claude Code, Codex, Grok Build, or Grok Bot.
+The lever is `control-marketplace.mjs`. `--help` is canonical.
 
 ```bash
 node .cursor/skills/verify-marketplace/control-marketplace.mjs --help
@@ -21,16 +21,19 @@ node .cursor/skills/verify-marketplace/control-marketplace.mjs --help
 
 - **Primary:** catalogs and manifests on disk
   (`marketplace.json`, `.claude-plugin/marketplace.json`,
-  `.agents/plugins/marketplace.json`, per-plugin `.claude-plugin/plugin.json`
-  and `.codex-plugin/plugin.json`).
+  `.agents/plugins/marketplace.json`, `.grok-plugin/marketplace.json`,
+  per-plugin `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`,
+  `.grok-plugin/plugin.json`, and `.grok-build-plugin/plugin.json`).
 - **Install docs:** root `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`.
+- **Logos:** each plugin's `assets/logo.svg`, plus marketplace `logo` paths
+  relative to the plugin source directory.
 - **Existing harness:** `bash scripts/validate-plugins.sh` (same script CI
   runs).
 - **Also present:** `scripts/install-antigravity.sh` for the one plugin that
   ships `.antigravity-plugin/plugin.json`.
-- **Not present:** hosted UI, Grok Build catalog, Grok Bot pack. Do not open a
-  browser against this repo. Do not invent a Grok driver; use
-  `check-install --surface grok` which is an expected skip.
+- **Not present:** hosted UI. Do not open a browser against this repo. Drive
+  Grok Build and Grok Bot with `check-install --surface grok`. Skip is a
+  failure.
 
 ## Launch
 
@@ -53,11 +56,12 @@ node .cursor/skills/verify-marketplace/control-marketplace.mjs doctor
 node .cursor/skills/verify-marketplace/control-marketplace.mjs doctor --json
 ```
 
-Doctor answers "is this instance worth driving?": marketplace JSON parses,
-`scripts/validate-plugins.sh` exists, plugin directories are visible, python3
-works. Catalog drift (for example a plugin missing from the Codex marketplace)
-is **not** a doctor failure; `validate` and `check-install --surface codex`
-report that.
+Doctor answers "is this instance worth driving?": marketplace JSON parses
+(including `.grok-plugin/marketplace.json`), `scripts/validate-plugins.sh`
+exists, plugin directories are visible, python3 works. Catalog drift (for
+example a plugin missing from the Codex or Grok marketplace) is **not** a
+doctor failure; `validate` and `check-install --surface codex|grok` report
+that.
 
 ## Drive
 
@@ -79,6 +83,9 @@ node .cursor/skills/verify-marketplace/control-marketplace.mjs check-docs --json
 node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface claude --json
 node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface codex --json
 node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface grok --json
+
+# Grok Bot + Grok Build proven drive (skip is a failure)
+node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature grok-build-and-bot --json
 
 # destructive Antigravity symlink plan only
 node .cursor/skills/verify-marketplace/control-marketplace.mjs install-antigravity --dry-run --json
@@ -109,6 +116,7 @@ Record a drive:
 
 ```bash
 node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature marketplace-catalog --json
+node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature grok-build-and-bot --json
 ```
 
 ## Cleanup

@@ -10,16 +10,22 @@ README.md files are the user-visible docs surface.
   settings.json, and skills CLI.
 - `docs-codex-install` README and CONTRIBUTING include
   `.agents/plugins/marketplace.json`.
+- `docs-grok-install` README includes
+  `grok plugin marketplace add duyet/codex-claude-plugins` and
+  `.grok-plugin/marketplace.json`. CONTRIBUTING includes the Grok marketplace
+  path.
 - `docs-validate` CLAUDE.md and CONTRIBUTING tell contributors to run
   `scripts/validate-plugins.sh`.
-- `docs-structure` CLAUDE.md names `.claude-plugin/plugin.json` and
-  `.codex-plugin/plugin.json`.
+- `docs-structure` CLAUDE.md names `.claude-plugin/plugin.json`,
+  `.codex-plugin/plugin.json`, `.grok-plugin/plugin.json`, and
+  `.grok-build-plugin/plugin.json`.
 - `docs-plugin-readme` each plugin directory has `README.md` (warning unless
   `--strict`).
 
 ## How to get to it (user POV)
 
-- Open `README.md` (Quick Install, Codex, Manual Installation).
+- Open `README.md` (Quick Install, Codex, Grok Build, Grok Bot, Manual
+  Installation).
 - Open `CLAUDE.md` (plugin metadata and validate command).
 - Open `CONTRIBUTING.md` (new plugin checklist).
 - Open `<plugin>/README.md` for plugin-specific usage.

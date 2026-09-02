@@ -1,9 +1,10 @@
 # Validation harness
 
 `scripts/validate-plugins.sh` is the production check for manifests, Claude /
-Codex / Antigravity parity, and marketplace files. GitHub Actions runs the same
-script. Agents must use this script (via `control-marketplace validate`), not a
-private reimplementation, as the source of pass/fail.
+Codex / Antigravity / Grok Bot / Grok Build parity, and marketplace files.
+GitHub Actions runs the same script. Agents must use this script (via
+`control-marketplace validate`), not a private reimplementation, as the source
+of pass/fail.
 
 ## Sub-features
 
@@ -13,9 +14,12 @@ private reimplementation, as the source of pass/fail.
 - `harness-codex-manifests` validates every `.codex-plugin/plugin.json`.
 - `harness-antigravity-manifests` validates every
   `.antigravity-plugin/plugin.json`.
+- `harness-grok-manifests` validates every `.grok-plugin/plugin.json`.
+- `harness-grok-build-manifests` validates every
+  `.grok-build-plugin/plugin.json`.
 - `harness-parity` shared fields match across hosts.
 - `harness-marketplaces` marketplace files match plugin directories and
-  source paths.
+  source paths, including Grok logos under each plugin source.
 - `harness-ci` `.github/workflows/validate-plugins.yml` invokes the script.
 
 ## How to get to it (user POV)

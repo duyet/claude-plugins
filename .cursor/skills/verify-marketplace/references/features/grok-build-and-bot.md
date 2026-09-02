@@ -1,46 +1,80 @@
 # Grok Build and Grok Bot
 
-Room for future Grok surfaces. This pack does not yet ship a Grok Build
-marketplace or a Grok Bot plugin catalog. Verification must report an
-**expected skip**, not invent manifests, install commands, or a browser flow.
+A Grok user adds this GitHub repo as a marketplace, then installs plugins with
+`grok plugin install <name> --trust`. Grok Bot and Grok Build share
+`.grok-plugin/marketplace.json`. Each plugin ships `.grok-plugin/plugin.json`
+and `.grok-build-plugin/plugin.json`, and listings render `assets/logo.svg`.
 
 ## Sub-features
 
-- `grok-build-absent` no Grok Build marketplace file in the repo root layout.
-- `grok-bot-absent` no Grok Bot pack metadata in-tree.
-- `grok-check` `check-install --surface grok` returns `available: false` with
-  `severity: skip`.
+- `grok-marketplace-parse` loads `.grok-plugin/marketplace.json` as JSON.
+- `grok-marketplace-names` Grok marketplace names equal plugin directories.
+- `grok-sources` every plugin `source.path` exists and `source.type` is
+  `local`.
+- `grok-logos` every marketplace `logo` exists under the plugin source
+  (usually `assets/logo.svg`).
+- `grok-bot-manifests` every plugin directory has `.grok-plugin/plugin.json`.
+- `grok-build-manifests` every plugin directory has
+  `.grok-build-plugin/plugin.json`.
+- `grok-docs` README and CONTRIBUTING document
+  `grok plugin marketplace add duyet/codex-claude-plugins` and
+  `.grok-plugin/marketplace.json`.
+- `grok-check` `check-install --surface grok` returns `ok: true` with no
+  `severity: skip`. Skip is a failed drive.
 
 ## How to get to it (user POV)
 
-- There is no user install path yet. Do not tell a user to run a Grok
-  marketplace add command.
-- When a Grok surface lands, it should get its own marketplace file, install
-  docs in README, and new `control-marketplace` checks in the same shape as
-  Claude and Codex.
+- Run `grok plugin marketplace add duyet/codex-claude-plugins`, then
+  `grok plugin install team-agents --trust` (or another name).
+- In the Grok TUI, open `/marketplace` or `/plugin` and press `i` to install.
+- In the Grok Bot app, open **Plugins** and add `duyet/codex-claude-plugins`
+  as a marketplace source if the CLI is not available.
+- Open `<plugin>/.grok-plugin/plugin.json` and
+  `<plugin>/.grok-build-plugin/plugin.json`.
+- Open `<plugin>/assets/logo.svg`.
 
 ## Driving it with control-marketplace
 
 Preconditions:
 
 - `control-marketplace doctor` reports `ok`.
+- Grok CLI may be absent. Do not fail the drive for a missing `grok` binary;
+  prove the files the commands would resolve.
 
-- **Skip, do not fake.** Run
-  `node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface grok --json`.
-  Checks `grok-build` and `grok-bot` have `ok: true`, `severity: skip`, and
-  `available: false` (or a newly documented path if files appeared).
-- **Surface flags.** Run
+- **Surfaces.** Run
   `node .cursor/skills/verify-marketplace/control-marketplace.mjs info --json`.
-  `surfaces.grokBuild` and `surfaces.grokBot` are `false` until a catalog
-  exists.
-- **Proof of absence.** The JSON above is the proof. Do not open Grok, X, or
-  a bot dashboard as a substitute.
+  `surfaces.grokBuild` and `surfaces.grokBot` are `true`.
+  `counts.grokMarketplace` equals `counts.pluginDirs`.
+- **Inventory.** Run
+  `node .cursor/skills/verify-marketplace/control-marketplace.mjs list --json`.
+  Every plugin has `grok` and `grokBuild` true. `list --missing-grok --json`
+  returns `count: 0`.
+- **Install resolvability.** Run
+  `node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface grok --json`.
+  `grok-marketplace-parses`, `grok-bot`, `grok-build`, and
+  `grok-marketplace-names` pass. Every `grok-source-*` and `grok-logo-*`
+  check passes. `readme-grok-marketplace-add` and
+  `readme-grok-marketplace-file` pass. No check has `severity: skip`.
+- **Inspect one plugin.** Run
+  `node .cursor/skills/verify-marketplace/control-marketplace.mjs inspect anyrouter --json`.
+  `manifests.grok` and `manifests.grokBuild` are relative paths that exist.
+  `marketplaceRows.grok.source.path` is `./anyrouter` and `logo` is
+  `assets/logo.svg`.
+- **Proof.** Run
+  `node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature grok-build-and-bot --json`.
+  `proof/drive.json` has `ok: true`, no `skipFailure`, and step ids `doctor`,
+  `info`, `list`, `check-install-grok`. A screenshot of grok.x.ai is not this
+  feature.
 
 ## Gotchas
 
-- Prompt-engineering docs mention Grok the model. That is not Grok Build / Grok
-  Bot install infrastructure.
-- If someone adds `.grok-plugin/` or similar, this file is stale: extend
-  `check-install` and replace the skip with real source-path checks.
-- `/maintain-verification-skill` should keep this entry until those hosts are
-  real.
+- Prompt-engineering docs mention Grok the model. That is not Grok Build /
+  Grok Bot install infrastructure.
+- Grok Bot and Grok Build share one marketplace file. Do not look for a
+  second catalog at `.grok-build-plugin/marketplace.json`.
+- Marketplace `logo` is relative to the plugin source directory, not the repo
+  root. Root `assets/logo.svg` is not a substitute for
+  `<plugin>/assets/logo.svg`.
+- `info` can be `ok` while Grok still lags plugin directories. Use
+  `gaps.missingFromGrok`.
+- Do not treat a passing Claude or Codex catalog as Grok coverage.
