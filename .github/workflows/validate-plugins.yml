@@ -1,3 +1,4 @@
+---
 name: Validate Plugins
 
 on:
@@ -7,8 +8,13 @@ on:
     paths:
       - "**/.claude-plugin/plugin.json"
       - "**/.codex-plugin/plugin.json"
+      - "**/.grok-plugin/plugin.json"
+      - "**/.grok-build-plugin/plugin.json"
+      - "**/.antigravity-plugin/plugin.json"
+      - "**/assets/logo.svg"
       - ".agents/plugins/marketplace.json"
       - ".claude-plugin/marketplace.json"
+      - ".grok-plugin/marketplace.json"
       - "marketplace.json"
       - "scripts/validate-plugins.sh"
       - ".github/workflows/validate-plugins.yml"
@@ -17,8 +23,13 @@ on:
     paths:
       - "**/.claude-plugin/plugin.json"
       - "**/.codex-plugin/plugin.json"
+      - "**/.grok-plugin/plugin.json"
+      - "**/.grok-build-plugin/plugin.json"
+      - "**/.antigravity-plugin/plugin.json"
+      - "**/assets/logo.svg"
       - ".agents/plugins/marketplace.json"
       - ".claude-plugin/marketplace.json"
+      - ".grok-plugin/marketplace.json"
       - "marketplace.json"
       - "scripts/validate-plugins.sh"
       - ".github/workflows/validate-plugins.yml"
@@ -31,7 +42,11 @@ jobs:
     name: Validate plugin.json manifests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout code
+        # actions/checkout v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
 
       - name: Validate all plugin manifests
         run: bash scripts/validate-plugins.sh

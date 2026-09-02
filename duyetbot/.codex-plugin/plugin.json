@@ -12,10 +12,8 @@
     "shortDescription": "Pragmatic software development companion with engineering discipline and transparent execution.",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "name": "commit",
+  "version": "1.3.2",
+  "description": "Create a Git commit with semantic commit message format and PR workflow with templates",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Commit",
+    "shortDescription": "Create a Git commit with semantic commit message format and PR workflow with templates",
+    "developerName": "duyet",
+    "category": "Git",
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

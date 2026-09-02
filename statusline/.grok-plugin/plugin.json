@@ -1,0 +1,13 @@
+{
+  "name": "statusline",
+  "version": "1.9.0",
+  "description": "Configurable multi-line status bar with context health, cache hit rate, session duration, API rate limits (Anthropic 5h/7d + z.ai GLM), git branch, and active tools. Supports 1/2/3 line layouts, icon themes, and template presets.",
+  "author": {
+    "name": "duyet"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": ["statusline", "grok", "grok-build", "grok-bot"],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "hooks": "./hooks/hooks.json"
+}

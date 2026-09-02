@@ -1,0 +1,23 @@
+{
+  "name": "kb",
+  "version": "1.1.0",
+  "description": "Knowledge base maintenance skills. Initialize a shared-brain kb, then consolidate, dedupe, prune, refresh, and forget notes in a markdown KB.",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "interface": {
+    "displayName": "Knowledge Base",
+    "shortDescription": "Initialize and maintain a markdown knowledge base: consolidate, dedupe, prune, and forget notes.",
+    "developerName": "duyet",
+    "category": "productivity",
+    "capabilities": ["Skill", "Command"],
+    "links": {
+      "homepage": "https://github.com/duyet/codex-claude-plugins"
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

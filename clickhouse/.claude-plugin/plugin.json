@@ -2,5 +2,8 @@
   "name": "clickhouse",
   "version": "1.4.1",
   "description": "ClickHouse expertise with 28 atomic review rules + 15 deep reference files. Rules synced with official ClickHouse/agent-skills repository. Schema design, query optimization, insert strategy, cluster management, backups, monitoring, and security best practices.",
-  "author": { "name": "duyetbot" }
+  "author": {
+    "name": "duyetbot"
+  },
+  "logo": "./assets/logo.svg"
 }

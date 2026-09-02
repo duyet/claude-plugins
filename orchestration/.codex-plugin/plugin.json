@@ -11,9 +11,8 @@
     "shortDescription": "Orchestrator skill for managing parallel agent workstreams. Transform complex requests into coordinated multi-agent execution with elegant result synthesis.",
     "developerName": "duyet",
     "category": "Agents",
-    "capabilities": [
-      "Skill"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

@@ -11,9 +11,8 @@
     "shortDescription": "ClickHouse expertise with 28 atomic review rules + 15 deep reference files. Rules synced with official ClickHouse/agent-skills repository. Schema design, query optimization, insert strategy, cluster management, backups, monitoring, and security best practices.",
     "developerName": "duyetbot",
     "category": "Database",
-    "capabilities": [
-      "Skill"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

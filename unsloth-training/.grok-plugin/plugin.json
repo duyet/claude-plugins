@@ -1,0 +1,12 @@
+{
+  "name": "unsloth-training",
+  "version": "1.0.2",
+  "description": "Fine-tune LLMs with Unsloth using GRPO or SFT. Includes dataset preparation, synthetic data generation, environment flags, MLX (Apple Silicon), FP8, vision models, mobile export, GGUF.",
+  "author": {
+    "name": "duyet"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": ["unsloth-training", "grok", "grok-build", "grok-bot"],
+  "skills": "./skills/"
+}

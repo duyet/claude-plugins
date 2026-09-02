@@ -13,11 +13,8 @@
     "shortDescription": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)",
     "developerName": "duyet",
     "category": "Docs",
-    "capabilities": [
-      "Skill",
-      "Command",
-      "Hook"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill", "Command", "Hook"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

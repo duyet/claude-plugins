@@ -15,6 +15,8 @@
     "capabilities": ["Skill", "Agent"],
     "links": {
       "homepage": "https://github.com/duyet/codex-claude-plugins"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

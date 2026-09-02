@@ -16,6 +16,8 @@
     "capabilities": ["Skill", "Command", "Agent"],
     "links": {
       "homepage": "https://github.com/duyet/claude-plugins"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

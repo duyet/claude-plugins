@@ -19,6 +19,8 @@
       "homepage": "https://anyrouter.dev",
       "docs": "https://anyrouter.dev/docs",
       "mcp": "https://anyrouter.dev/docs/mcp"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

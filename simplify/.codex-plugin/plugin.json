@@ -12,10 +12,8 @@
     "shortDescription": "Review changed code for reuse, quality, and efficiency, then simplify issues found",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

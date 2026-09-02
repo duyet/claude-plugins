@@ -1,0 +1,19 @@
+{
+  "name": "team-agents",
+  "version": "1.9.1",
+  "description": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel.",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Team Agents",
+    "shortDescription": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel.",
+    "developerName": "duyet",
+    "category": "Agents",
+    "capabilities": ["Skill", "Command", "Agent"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

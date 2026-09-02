@@ -13,10 +13,8 @@
     "shortDescription": "Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

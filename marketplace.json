@@ -1,7 +1,7 @@
 {
   "name": "duyet-claude-plugins",
-  "description": "A collection of production-quality plugins for Claude Code including autonomous agents, workflow automation, and developer tools.",
-  "version": "1.0.0",
+  "description": "A collection of production-quality plugins for Claude Code, Codex, Grok Build, and Grok Bot including autonomous agents, workflow automation, and developer tools.",
+  "version": "1.1.0",
   "author": {
     "name": "duyet",
     "url": "https://github.com/duyet"
@@ -17,7 +17,8 @@
       "description": "Leader, Senior Engineer, and Junior Engineer agents for coordinated parallel task execution",
       "version": "1.9.1",
       "type": "skill",
-      "category": "agents"
+      "category": "agents",
+      "logo": "./team-agents/assets/logo.svg"
     },
     {
       "name": "commit",
@@ -25,7 +26,8 @@
       "description": "Create a Git commit with semantic commit message format and PR workflow with templates",
       "version": "1.3.2",
       "type": "command",
-      "category": "git"
+      "category": "git",
+      "logo": "./commit/assets/logo.svg"
     },
     {
       "name": "frontend-design",
@@ -33,7 +35,8 @@
       "description": "Create distinctive, production-grade frontend interfaces avoiding AI slop aesthetics",
       "version": "1.4.0",
       "type": "skill",
-      "category": "design"
+      "category": "design",
+      "logo": "./frontend-design/assets/logo.svg"
     },
     {
       "name": "interview",
@@ -41,7 +44,8 @@
       "description": "Conduct in-depth requirements interviews using Socratic questioning",
       "version": "1.0.1",
       "type": "command",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./interview/assets/logo.svg"
     },
     {
       "name": "statusline",
@@ -49,7 +53,8 @@
       "description": "Configurable status bar showing context usage, API rate limits, git branch, and active tools",
       "version": "1.9.0",
       "type": "hook",
-      "category": "ui"
+      "category": "ui",
+      "logo": "./statusline/assets/logo.svg"
     },
     {
       "name": "orchestration",
@@ -57,7 +62,8 @@
       "description": "Orchestrator skill for managing parallel agent workstreams",
       "version": "1.1.0",
       "type": "skill",
-      "category": "agents"
+      "category": "agents",
+      "logo": "./orchestration/assets/logo.svg"
     },
     {
       "name": "duyetbot",
@@ -65,7 +71,8 @@
       "description": "Pragmatic software development companion with engineering discipline",
       "version": "1.8.1",
       "type": "skill",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./duyetbot/assets/logo.svg"
     },
     {
       "name": "docs-generator",
@@ -73,7 +80,8 @@
       "description": "Automatically generate and maintain plugin documentation",
       "version": "1.0.1",
       "type": "hook",
-      "category": "docs"
+      "category": "docs",
+      "logo": "./docs-generator/assets/logo.svg"
     },
     {
       "name": "github",
@@ -81,7 +89,8 @@
       "description": "GitHub operations using gh CLI - PRs, issues, workflows, batch operations, PR babysitting with AI review bot integration, and smart branch detection",
       "version": "1.4.2",
       "type": "skill",
-      "category": "git"
+      "category": "git",
+      "logo": "./github/assets/logo.svg"
     },
     {
       "name": "fix",
@@ -89,7 +98,8 @@
       "description": "Fix issues, tests, and CI failures with intelligent problem detection",
       "version": "1.0.1",
       "type": "command",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./fix/assets/logo.svg"
     },
     {
       "name": "simplify",
@@ -97,7 +107,8 @@
       "description": "Review changed code for reuse, quality, and efficiency, then simplify issues found",
       "version": "1.0.1",
       "type": "command",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./simplify/assets/logo.svg"
     },
     {
       "name": "clickhouse",
@@ -105,7 +116,8 @@
       "description": "Comprehensive ClickHouse knowledge base from Altinity KB + official docs",
       "version": "1.4.1",
       "type": "skill",
-      "category": "database"
+      "category": "database",
+      "logo": "./clickhouse/assets/logo.svg"
     },
     {
       "name": "prompt-engineering",
@@ -113,7 +125,8 @@
       "description": "Prompt engineering techniques for Grok, Claude, and Gemini LLMs",
       "version": "1.1.1",
       "type": "skill",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./prompt-engineering/assets/logo.svg"
     },
     {
       "name": "clickhouse-monitoring",
@@ -121,7 +134,8 @@
       "description": "Agent Skill for the ClickHouse Monitor dashboard - a real-time monitoring and observability tool for ClickHouse clusters",
       "version": "1.1.1",
       "type": "skill",
-      "category": "monitoring"
+      "category": "monitoring",
+      "logo": "./clickhouse-monitoring/assets/logo.svg"
     },
     {
       "name": "unsloth-training",
@@ -129,7 +143,8 @@
       "description": "Fine-tune LLMs with Unsloth using GRPO or SFT. Dataset prep, synthetic data, environment flags, MLX (Apple Silicon), FP8, vision, mobile export, GGUF.",
       "version": "1.0.2",
       "type": "skill",
-      "category": "ml"
+      "category": "ml",
+      "logo": "./unsloth-training/assets/logo.svg"
     },
     {
       "name": "good-html",
@@ -137,7 +152,8 @@
       "description": "Generate or review high-density, interactive, self-contained HTML artifacts based on Thariq Shihipar's patterns.",
       "version": "1.0.0",
       "type": "skill",
-      "category": "design"
+      "category": "design",
+      "logo": "./good-html/assets/logo.svg"
     },
     {
       "name": "anyrouter",
@@ -145,7 +161,8 @@
       "description": "Wire AnyRouter into coding agents. Universal OpenAI-compatible LLM gateway for 150+ models, migration recipes from Anthropic/OpenAI/OpenRouter, and a remote MCP server for keys and credits.",
       "version": "1.0.1",
       "type": "skill",
-      "category": "ai"
+      "category": "ai",
+      "logo": "./anyrouter/assets/logo.svg"
     },
     {
       "name": "sag-notify",
@@ -153,7 +170,8 @@
       "description": "Spoken voice notifications via sag (ElevenLabs TTS): skill-driven, Claude calls sag directly to speak a short alert just before it asks you something and a one-line summary when work finishes, naming the project. Configurable voice and language.",
       "version": "2.1.2",
       "type": "skill",
-      "category": "ui"
+      "category": "ui",
+      "logo": "./sag-notify/assets/logo.svg"
     },
     {
       "name": "build-macos-apps",
@@ -161,7 +179,8 @@
       "description": "Build, debug, instrument, and implement macOS apps with SwiftUI and AppKit guidance, codesigning, packaging, and telemetry workflows.",
       "version": "1.0.1",
       "type": "skill",
-      "category": "development"
+      "category": "development",
+      "logo": "./build-macos-apps/assets/logo.svg"
     },
     {
       "name": "build-ios-apps",
@@ -169,7 +188,8 @@
       "description": "Build, profile, debug, and refine iOS apps with SwiftUI and Xcode workflows — App Intents, Simulator debugging, performance profiling, memory leak detection, and on-device AI with Apple Intelligence, Foundation Models, and Core AI.",
       "version": "1.0.1",
       "type": "skill",
-      "category": "development"
+      "category": "development",
+      "logo": "./build-ios-apps/assets/logo.svg"
     },
     {
       "name": "agent-loop",
@@ -177,7 +197,8 @@
       "description": "Continuous agent loop for overnight/day repository maintenance. Orchestrates triage, autoreview, browser automation, and parallel agent work across threads. Wake every 5 min, direct work, land autonomously.",
       "version": "0.4.0",
       "type": "skill",
-      "category": "automation"
+      "category": "automation",
+      "logo": "./agent-loop/assets/logo.svg"
     },
     {
       "name": "kb",
@@ -185,7 +206,8 @@
       "description": "Knowledge base maintenance skills. Initialize a shared-brain kb, then consolidate, dedupe, prune, refresh, and forget notes in a markdown KB.",
       "version": "1.1.0",
       "type": "skill",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./kb/assets/logo.svg"
     },
     {
       "name": "okf",
@@ -193,7 +215,8 @@
       "description": "Open Knowledge Format (OKF) tooling. Author, initialize, validate, render, and refactor knowledge into vendor-neutral OKF v0.1 bundles: markdown files with YAML frontmatter.",
       "version": "1.1.0",
       "type": "skill",
-      "category": "productivity"
+      "category": "productivity",
+      "logo": "./okf/assets/logo.svg"
     },
     {
       "name": "command-code",
@@ -201,11 +224,12 @@
       "description": "Drive the Command Code CLI (`cmd`) and orchestrate it as a headless sub-agent — fan out `cmd -p --yolo --max-turns 100000` workers across isolated git worktrees to implement issues and tasks in parallel.",
       "version": "1.0.0",
       "type": "skill",
-      "category": "development"
+      "category": "development",
+      "logo": "./command-code/assets/logo.svg"
     }
   ],
   "metadata": {
-    "lastUpdated": "2026-07-05",
+    "lastUpdated": "2026-09-02",
     "totalPlugins": 24,
     "categories": [
       "agents",
@@ -220,6 +244,7 @@
       "ai",
       "development",
       "automation"
-    ]
+    ],
+    "logo": "./assets/logo.svg"
   }
 }

@@ -11,10 +11,8 @@
     "shortDescription": "Fix issues, tests, and CI failures with intelligent problem detection and resolution",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
-    "logo": "https://raw.githubusercontent.com/duyet/monorepo/refs/heads/master/packages/components/logo.svg"
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

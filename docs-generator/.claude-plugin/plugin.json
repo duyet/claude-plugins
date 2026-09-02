@@ -4,5 +4,6 @@
   "description": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)",
   "author": {
     "name": "duyet"
-  }
+  },
+  "logo": "./assets/logo.svg"
 }

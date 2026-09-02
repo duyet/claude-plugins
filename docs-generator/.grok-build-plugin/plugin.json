@@ -1,0 +1,21 @@
+{
+  "name": "docs-generator",
+  "version": "1.0.1",
+  "description": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Docs Generator",
+    "shortDescription": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)",
+    "developerName": "duyet",
+    "category": "Docs",
+    "capabilities": ["Skill", "Command", "Hook"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

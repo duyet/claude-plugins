@@ -2,13 +2,16 @@
   "name": "good-html",
   "version": "1.0.0",
   "description": "Generate high-density, interactive, self-contained HTML artifacts based on Thariq Shihipar's patterns. Optimized for engineering tasks, PR reviews, and research reports.",
-  "author": { "name": "Gemini CLI" },
+  "author": {
+    "name": "Gemini CLI"
+  },
   "interface": {
     "displayName": "Good HTML",
     "shortDescription": "High-density interactive HTML artifacts.",
     "developerName": "Gemini CLI",
     "category": "Development",
     "capabilities": ["Skill"],
-    "logo": "https://raw.githubusercontent.com/thariqs/html-effectiveness/main/assets/logo.svg"
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

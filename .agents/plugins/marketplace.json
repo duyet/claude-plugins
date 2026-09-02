@@ -1,7 +1,9 @@
 {
   "name": "duyet-claude-plugins",
   "interface": {
-    "displayName": "Duyet Claude and Codex Plugins"
+    "displayName": "Duyet Claude, Codex, and Grok Plugins",
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   },
   "plugins": [
     {
@@ -14,7 +16,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Agents"
+      "category": "Agents",
+      "interface": {
+        "logo": "./team-agents/assets/logo.svg",
+        "composerIcon": "./team-agents/assets/logo.svg"
+      }
     },
     {
       "name": "commit",
@@ -26,7 +32,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Git"
+      "category": "Git",
+      "interface": {
+        "logo": "./commit/assets/logo.svg",
+        "composerIcon": "./commit/assets/logo.svg"
+      }
     },
     {
       "name": "frontend-design",
@@ -38,7 +48,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Design"
+      "category": "Design",
+      "interface": {
+        "logo": "./frontend-design/assets/logo.svg",
+        "composerIcon": "./frontend-design/assets/logo.svg"
+      }
     },
     {
       "name": "interview",
@@ -50,7 +64,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./interview/assets/logo.svg",
+        "composerIcon": "./interview/assets/logo.svg"
+      }
     },
     {
       "name": "statusline",
@@ -62,7 +80,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "UI"
+      "category": "UI",
+      "interface": {
+        "logo": "./statusline/assets/logo.svg",
+        "composerIcon": "./statusline/assets/logo.svg"
+      }
     },
     {
       "name": "orchestration",
@@ -74,7 +96,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Agents"
+      "category": "Agents",
+      "interface": {
+        "logo": "./orchestration/assets/logo.svg",
+        "composerIcon": "./orchestration/assets/logo.svg"
+      }
     },
     {
       "name": "duyetbot",
@@ -86,7 +112,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./duyetbot/assets/logo.svg",
+        "composerIcon": "./duyetbot/assets/logo.svg"
+      }
     },
     {
       "name": "docs-generator",
@@ -98,7 +128,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Docs"
+      "category": "Docs",
+      "interface": {
+        "logo": "./docs-generator/assets/logo.svg",
+        "composerIcon": "./docs-generator/assets/logo.svg"
+      }
     },
     {
       "name": "github",
@@ -110,7 +144,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Git"
+      "category": "Git",
+      "interface": {
+        "logo": "./github/assets/logo.svg",
+        "composerIcon": "./github/assets/logo.svg"
+      }
     },
     {
       "name": "fix",
@@ -122,7 +160,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./fix/assets/logo.svg",
+        "composerIcon": "./fix/assets/logo.svg"
+      }
     },
     {
       "name": "simplify",
@@ -134,7 +176,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./simplify/assets/logo.svg",
+        "composerIcon": "./simplify/assets/logo.svg"
+      }
     },
     {
       "name": "clickhouse",
@@ -146,7 +192,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Database"
+      "category": "Database",
+      "interface": {
+        "logo": "./clickhouse/assets/logo.svg",
+        "composerIcon": "./clickhouse/assets/logo.svg"
+      }
     },
     {
       "name": "prompt-engineering",
@@ -158,7 +208,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./prompt-engineering/assets/logo.svg",
+        "composerIcon": "./prompt-engineering/assets/logo.svg"
+      }
     },
     {
       "name": "clickhouse-monitoring",
@@ -170,7 +224,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Monitoring"
+      "category": "Monitoring",
+      "interface": {
+        "logo": "./clickhouse-monitoring/assets/logo.svg",
+        "composerIcon": "./clickhouse-monitoring/assets/logo.svg"
+      }
     },
     {
       "name": "unsloth-training",
@@ -182,7 +240,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "ML"
+      "category": "ML",
+      "interface": {
+        "logo": "./unsloth-training/assets/logo.svg",
+        "composerIcon": "./unsloth-training/assets/logo.svg"
+      }
     },
     {
       "name": "good-html",
@@ -194,7 +256,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Design"
+      "category": "Design",
+      "interface": {
+        "logo": "./good-html/assets/logo.svg",
+        "composerIcon": "./good-html/assets/logo.svg"
+      }
     },
     {
       "name": "sag-notify",
@@ -206,7 +272,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "UI"
+      "category": "UI",
+      "interface": {
+        "logo": "./sag-notify/assets/logo.svg",
+        "composerIcon": "./sag-notify/assets/logo.svg"
+      }
     },
     {
       "name": "anyrouter",
@@ -218,7 +288,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "AI"
+      "category": "AI",
+      "interface": {
+        "logo": "./anyrouter/assets/logo.svg",
+        "composerIcon": "./anyrouter/assets/logo.svg"
+      }
     },
     {
       "name": "build-macos-apps",
@@ -230,7 +304,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Development"
+      "category": "Development",
+      "interface": {
+        "logo": "./build-macos-apps/assets/logo.svg",
+        "composerIcon": "./build-macos-apps/assets/logo.svg"
+      }
     },
     {
       "name": "build-ios-apps",
@@ -242,7 +320,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Development"
+      "category": "Development",
+      "interface": {
+        "logo": "./build-ios-apps/assets/logo.svg",
+        "composerIcon": "./build-ios-apps/assets/logo.svg"
+      }
     },
     {
       "name": "agent-loop",
@@ -254,7 +336,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Automation"
+      "category": "Automation",
+      "interface": {
+        "logo": "./agent-loop/assets/logo.svg",
+        "composerIcon": "./agent-loop/assets/logo.svg"
+      }
     },
     {
       "name": "kb",
@@ -266,7 +352,11 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./kb/assets/logo.svg",
+        "composerIcon": "./kb/assets/logo.svg"
+      }
     },
     {
       "name": "okf",
@@ -278,7 +368,27 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Productivity"
+      "category": "Productivity",
+      "interface": {
+        "logo": "./okf/assets/logo.svg",
+        "composerIcon": "./okf/assets/logo.svg"
+      }
+    },
+    {
+      "name": "command-code",
+      "source": {
+        "source": "local",
+        "path": "./command-code"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development",
+      "interface": {
+        "logo": "./command-code/assets/logo.svg",
+        "composerIcon": "./command-code/assets/logo.svg"
+      }
     }
   ]
 }

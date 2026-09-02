@@ -36,27 +36,27 @@ That makes it easy to parallelize + steer work as needed.
 
 #### Loop Control
 
-| Command                  | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `/agent-loop:start`      | Start or resume the continuous maintenance loop          |
-| `/agent-loop:stop`       | Gracefully stop the loop and persist state               |
-| `/agent-loop:resume`     | Resume from persisted state (explicit resume)            |
+| Command              | Description                                     |
+| -------------------- | ----------------------------------------------- |
+| `/agent-loop:start`  | Start or resume the continuous maintenance loop |
+| `/agent-loop:stop`   | Gracefully stop the loop and persist state      |
+| `/agent-loop:resume` | Resume from persisted state (explicit resume)   |
 
 #### State Management
 
-| Command                  | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `/agent-loop:status`     | Quick status check (running, cycles, metrics)            |
-| `/agent-loop:inspect`    | Deep inspection of state file (history, errors, details) |
-| `/agent-loop:reset`      | Clear state and start fresh (backs up old state)         |
-| `/agent-loop:restore`    | Recover state from a backup                              |
+| Command               | Description                                              |
+| --------------------- | -------------------------------------------------------- |
+| `/agent-loop:status`  | Quick status check (running, cycles, metrics)            |
+| `/agent-loop:inspect` | Deep inspection of state file (history, errors, details) |
+| `/agent-loop:reset`   | Clear state and start fresh (backs up old state)         |
+| `/agent-loop:restore` | Recover state from a backup                              |
 
 #### One-Shot Operations
 
-| Command                  | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `/agent-loop:triage`     | One-shot repo queue triage (doesn't start loop)          |
-| `/agent-loop:autoreview` | One-shot PR review and fix (doesn't start loop)          |
+| Command                  | Description                                     |
+| ------------------------ | ----------------------------------------------- |
+| `/agent-loop:triage`     | One-shot repo queue triage (doesn't start loop) |
+| `/agent-loop:autoreview` | One-shot PR review and fix (doesn't start loop) |
 
 ## Skill Sources
 
@@ -105,24 +105,26 @@ The agent-loop automatically saves state to `.agent-loop/state.json` and support
 ### Startup Behavior
 
 When you run `/agent-loop:start`:
+
 1. **Checks for existing state** — detects `.agent-loop/state.json`
 2. **Prompts if found** — asks to resume or start fresh
 3. **Backs up on reset** — saves old state to `.agent-loop/backups/` if starting fresh
 
 ### State Operations
 
-| Operation | Command | Purpose |
-|-----------|---------|---------|
-| **Check status** | `/agent-loop:status` | Quick summary (running, cycles, metrics) |
-| **Deep inspect** | `/agent-loop:inspect` | View thread history, errors, state details |
-| **Validate state** | `/agent-loop:inspect --validate` | Check state file integrity |
-| **Reset state** | `/agent-loop:reset` | Clear state, backs up old state |
-| **Restore state** | `/agent-loop:restore --list` | Recover from backup |
-| **Resume loop** | `/agent-loop:resume` | Continue from saved state |
+| Operation          | Command                          | Purpose                                    |
+| ------------------ | -------------------------------- | ------------------------------------------ |
+| **Check status**   | `/agent-loop:status`             | Quick summary (running, cycles, metrics)   |
+| **Deep inspect**   | `/agent-loop:inspect`            | View thread history, errors, state details |
+| **Validate state** | `/agent-loop:inspect --validate` | Check state file integrity                 |
+| **Reset state**    | `/agent-loop:reset`              | Clear state, backs up old state            |
+| **Restore state**  | `/agent-loop:restore --list`     | Recover from backup                        |
+| **Resume loop**    | `/agent-loop:resume`             | Continue from saved state                  |
 
 ### Recovery Scenarios
 
 **If state is corrupted:**
+
 ```bash
 /agent-loop:inspect --validate        # Identify the problem
 /agent-loop:restore --list            # List available backups
@@ -131,12 +133,14 @@ When you run `/agent-loop:start`:
 ```
 
 **If you want to start fresh:**
+
 ```bash
 /agent-loop:reset                     # Backs up old state automatically
 /agent-loop:start --fresh             # Starts with clean state
 ```
 
 **If you accidentally reset:**
+
 ```bash
 /agent-loop:restore --list            # List backups
 /agent-loop:restore --select          # Interactive menu
@@ -160,11 +164,17 @@ When you run `/agent-loop:start`:
 ```text
 agent-loop/
 ├── .antigravity-plugin/
-│   └── plugin.json          # Antigravity manifest (version 0.3.0)
+│   └── plugin.json          # Antigravity manifest
 ├── .claude-plugin/
-│   └── plugin.json          # Manifest (version 0.3.0)
+│   └── plugin.json          # Claude manifest
 ├── .codex-plugin/
-│   └── plugin.json          # Codex manifest (version 0.3.0)
+│   └── plugin.json          # Codex manifest
+├── .grok-plugin/
+│   └── plugin.json          # Grok Bot / Grok Build manifest
+├── .grok-build-plugin/
+│   └── plugin.json          # Grok Build interface metadata
+├── assets/
+│   └── logo.svg
 ├── commands/                # Slash commands
 │   ├── start.md
 │   ├── stop.md

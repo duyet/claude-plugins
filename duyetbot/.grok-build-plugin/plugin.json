@@ -1,0 +1,20 @@
+{
+  "name": "duyetbot",
+  "version": "1.8.1",
+  "description": "Pragmatic software development companion with engineering discipline and transparent execution.",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "interface": {
+    "displayName": "duyetbot",
+    "shortDescription": "Pragmatic software development companion with engineering discipline and transparent execution.",
+    "developerName": "duyet",
+    "category": "Productivity",
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

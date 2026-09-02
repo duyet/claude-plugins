@@ -1,0 +1,12 @@
+{
+  "name": "commit",
+  "version": "1.3.2",
+  "description": "Create a Git commit with semantic commit message format and PR workflow with templates",
+  "author": {
+    "name": "duyet"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": ["commit", "grok", "grok-build", "grok-bot"],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

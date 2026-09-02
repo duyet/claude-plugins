@@ -9,6 +9,13 @@
 
 Alternative: `npx skills add duyet/codex-claude-plugins` ([skills.sh](https://skills.sh))
 
+### Grok Build / Grok Bot
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install <plugin-name> --trust
+```
+
 ### Antigravity Installation
 
 For Antigravity CLI, install/symlink a plugin locally for development:
@@ -23,9 +30,13 @@ Codex plugin metadata is maintained beside Claude metadata in each plugin:
 
 - Claude manifest: `.claude-plugin/plugin.json`
 - Codex manifest: `.codex-plugin/plugin.json`
+- Grok Bot / Grok Build manifest: `.grok-plugin/plugin.json`
+- Grok Build interface manifest: `.grok-build-plugin/plugin.json`
 - Antigravity manifest: `.antigravity-plugin/plugin.json`
 - Claude marketplace: `marketplace.json` and `.claude-plugin/marketplace.json`
 - Codex marketplace: `.agents/plugins/marketplace.json`
+- Grok marketplace: `.grok-plugin/marketplace.json`
+- Plugin logo: `assets/logo.svg` (referenced from every harness manifest)
 
 ## Versioning
 
@@ -48,12 +59,18 @@ Always update `plugin.json` version when making changes.
 
 ## Plugin Structure
 
-```
+```text
 plugin-name/
 ├── .claude-plugin/
-│   └── plugin.json          # Manifest (name, version, description)
+│   └── plugin.json          # Manifest (name, version, description, logo)
 ├── .codex-plugin/
 │   └── plugin.json          # Codex manifest and interface metadata
+├── .grok-plugin/
+│   └── plugin.json          # Grok Bot / Grok Build manifest
+├── .grok-build-plugin/
+│   └── plugin.json          # Grok Build interface metadata
+├── assets/
+│   └── logo.svg             # Rendered by every listed harness
 ├── agents/                  # Sub-agent definitions
 ├── commands/                # Slash commands
 ├── skills/                  # Reusable knowledge/procedures
@@ -61,7 +78,7 @@ plugin-name/
 └── README.md                # Documentation
 ```
 
-When changing plugin metadata, keep Claude and Codex manifests in sync and run `bash scripts/validate-plugins.sh`.
+When changing plugin metadata, keep Claude, Codex, and Grok manifests in sync and run `bash scripts/validate-plugins.sh`.
 
 ## No Personal / Environment-Specific Information
 
@@ -92,7 +109,7 @@ Before committing a plugin, scan for leaks:
 
 Use semantic commits with plugin scope:
 
-```
+```text
 feat(plugin-name): add new feature
 fix(plugin-name): fix bug
 docs(plugin-name): update documentation

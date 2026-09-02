@@ -1,0 +1,20 @@
+{
+  "name": "github",
+  "version": "1.4.2",
+  "description": "GitHub operations using gh CLI - PRs, workflows, issues, repositories, batch operations, PR babysitting with AI review bot integration, and smart branch detection",
+  "author": {
+    "name": "duyetbot"
+  },
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "GitHub",
+    "shortDescription": "GitHub operations using gh CLI - PRs, workflows, issues, repositories, batch operations, PR babysitting with AI review bot integration, and smart branch detection",
+    "developerName": "duyetbot",
+    "category": "Git",
+    "capabilities": ["Skill", "Command"],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

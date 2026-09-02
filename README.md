@@ -1,12 +1,12 @@
-# Claude/Codex Plugins
+# Claude/Codex/Grok Plugins
 
 [![GitHub Release](https://img.shields.io/github/v/duyet/codex-claude-plugins?style=flat-square)](https://github.com/duyet/codex-claude-plugins/releases)
 [![License](https://img.shields.io/github/license/duyet/codex-claude-plugins?style=flat-square)](LICENSE)
 [![Plugins](https://img.shields.io/badge/plugins-14-blue?style=flat-square)](#plugins-at-a-glance)
 
-> Extend Claude Code and Codex with specialized agents, commands, and skills from one shared plugin collection.
+> Extend Claude Code, Codex, Grok Build, and Grok Bot with specialized agents, commands, and skills from one shared plugin collection.
 
-A collection of production-quality plugins for Claude Code and Codex, including autonomous agents, workflow automation, statusline utilities, prompt engineering guidance, and developer tools.
+A collection of production-quality plugins for Claude Code, Codex, Grok Build, and Grok Bot, including autonomous agents, workflow automation, statusline utilities, prompt engineering guidance, and developer tools.
 
 **Latest Release:** [v1.0.0](https://github.com/duyet/codex-claude-plugins/releases/tag/v1.0.0) | [CHANGELOG](CHANGELOG.md) | [Issues](https://github.com/duyet/codex-claude-plugins/issues)
 
@@ -42,7 +42,7 @@ Codex support is provided through the repo-local Codex marketplace file:
 
 ```bash
 git clone https://github.com/duyet/codex-claude-plugins.git
-cd claude-plugins
+cd codex-claude-plugins
 ```
 
 Then add or import the local Codex marketplace from:
@@ -63,7 +63,31 @@ That marketplace points each plugin at the matching local folder, for example:
 }
 ```
 
-After the marketplace is added in Codex, install the plugins you want from the `Duyet Claude and Codex Plugins` marketplace. Codex-facing workflow skills are available under each plugin's `skills/` folder, including wrappers for Claude command-heavy plugins such as `commit`, `github`, `fix`, `statusline`, `team-agents`, and `duyetbot`.
+After the marketplace is added in Codex, install the plugins you want from the `Duyet Claude, Codex, and Grok Plugins` marketplace. Codex-facing workflow skills are available under each plugin's `skills/` folder, including wrappers for Claude command-heavy plugins such as `commit`, `github`, `fix`, `statusline`, `team-agents`, and `duyetbot`.
+
+### Grok Build
+
+Grok Build reads the same pack through the Grok marketplace index:
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install team-agents --trust
+grok plugin install commit --trust
+grok plugin install github --trust
+```
+
+Browse the catalog in the TUI with `/marketplace` or `/plugin`, then press `i` to install. Every plugin folder ships `.grok-plugin/plugin.json` (Grok Bot + Grok Build) and `.grok-build-plugin/plugin.json` (Grok Build interface metadata) beside the Claude and Codex manifests.
+
+### Grok Bot
+
+Grok Bot uses the same `.grok-plugin/` marketplace as Grok Build. Add the pack once, then install plugins from the `duyet-claude-plugins` catalog:
+
+```bash
+grok plugin marketplace add duyet/codex-claude-plugins
+grok plugin install <plugin-name> --trust
+```
+
+In the Grok Bot app, open **Plugins** and add `duyet/codex-claude-plugins` as a marketplace source if the CLI is not available. Plugin logos render from each plugin's `assets/logo.svg`.
 
 ### Alternative: Skills CLI
 
@@ -73,17 +97,22 @@ Install via the open [Skills](https://skills.sh) ecosystem, works with Claude Co
 npx skills add duyet/codex-claude-plugins
 ```
 
-### Codex Metadata
+### Harness Metadata
 
-This repository also ships Codex plugin metadata in place:
+This repository ships per-harness plugin metadata in place:
 
-- Each plugin has a `.codex-plugin/plugin.json` beside its Claude `.claude-plugin/plugin.json`.
-- Codex marketplace entries live in `.agents/plugins/marketplace.json`.
+- Claude Code: `.claude-plugin/plugin.json` plus `marketplace.json` and `.claude-plugin/marketplace.json`.
+- Codex: `.codex-plugin/plugin.json` plus `.agents/plugins/marketplace.json`.
+- Grok Bot: `.grok-plugin/plugin.json`.
+- Grok Build: `.grok-build-plugin/plugin.json` plus the shared Grok index at `.grok-plugin/marketplace.json`.
+- Antigravity (where present): `.antigravity-plugin/plugin.json`.
+- Logos: each plugin's `assets/logo.svg`, referenced from every harness manifest and marketplace so listings render the same mark.
 - Claude slash commands and agents stay in their original folders; Codex-facing wrapper skills live under `skills/*-workflow/SKILL.md` where a plugin needs a Codex entry point.
 
 ## Usage Examples
 
 ### Parallel Team Execution
+
 ```bash
 # Delegate to team agents for parallel work
 /duyetbot:spawn Implement the frontend dashboard
@@ -91,6 +120,7 @@ This repository also ships Codex plugin metadata in place:
 ```
 
 ### Smart GitHub Workflow
+
 ```bash
 # Automatically creates feature branch from main
 /gh-pr create "Add user settings page"
@@ -98,6 +128,7 @@ This repository also ships Codex plugin metadata in place:
 ```
 
 ### PR Babysitting with /goal
+
 ```bash
 # Set a persistent goal to babysit a PR — auto-fix CI, address reviews, wait for green
 /goal /github:babysit-pr https://github.com/duyet/clickhouse-monitoring/pull/1355
@@ -110,20 +141,19 @@ This repository also ships Codex plugin metadata in place:
 
 ## Plugins at a Glance
 
-| Plugin | Type | What it does |
-|--------|------|--------------|
-| [👥 team-agents](#👥-team-agents) | Skill | Leader, Senior Engineer, and Junior Engi... |
-| [📝 commit](#📝-commit) | Command | Create a Git commit with semantic commit... |
-| [🎨 frontend-design](#🎨-frontend-design) | Skill | Create distinctive, production-grade fro... |
-| [💬 interview](#💬-interview) | Command | Conduct in-depth requirements interviews... |
-| [📊 statusline](#📊-statusline) | Hook | Configurable status bar showing context ... |
-| [🎼 orchestration](#🎼-orchestration) | Skill | Orchestrator skill for managing parallel... |
-| [🤖 duyetbot](#🤖-duyetbot) | Skill | Pragmatic software development companion... |
-| [🎯 docs-generator](#🎯-docs-generator) | Hook | Automatically generate and maintain plug... |
-| [🐙 github](#🐙-github) | Skill | GitHub operations using gh CLI - PRs, is... |
-| [🔧 fix](#🔧-fix) | Command | Fix issues, tests, and CI failures with ... |
-| [📈 clickhouse-monitoring](#📈-clickhouse-monitoring) | Skill | Specialized knowledge for the ClickHouse Mo... |
-
+| Plugin                                               | Type    | What it does                                   |
+| ---------------------------------------------------- | ------- | ---------------------------------------------- |
+| [👥 team-agents](./team-agents/)                     | Skill   | Leader, Senior Engineer, and Junior Engi...    |
+| [📝 commit](./commit/)                               | Command | Create a Git commit with semantic commit...    |
+| [🎨 frontend-design](./frontend-design/)             | Skill   | Create distinctive, production-grade fro...    |
+| [💬 interview](./interview/)                         | Command | Conduct in-depth requirements interviews...    |
+| [📊 statusline](./statusline/)                       | Hook    | Configurable status bar showing context ...    |
+| [🎼 orchestration](./orchestration/)                 | Skill   | Orchestrator skill for managing parallel...    |
+| [🤖 duyetbot](./duyetbot/)                           | Skill   | Pragmatic software development companion...    |
+| [🎯 docs-generator](./docs-generator/)               | Hook    | Automatically generate and maintain plug...    |
+| [🐙 github](./github/)                               | Skill   | GitHub operations using gh CLI - PRs, is...    |
+| [🔧 fix](./fix/)                                     | Command | Fix issues, tests, and CI failures with ...    |
+| [📈 clickhouse-monitoring](./clickhouse-monitoring/) | Skill   | Specialized knowledge for the ClickHouse Mo... |
 
 ---
 
@@ -136,16 +166,18 @@ This repository also ships Codex plugin metadata in place:
 **Components:**
 
 Agents:
-  - **junior-engineer**
-  - **leader**
-  - **senior-engineer**
+
+- **junior-engineer**
+- **leader**
+- **senior-engineer**
 
 Skills:
-  - **backend-api-patterns**
-  - **quality-gates**
-  - **react-nextjs-patterns**
-  - **task-decomposition**
-  - **typescript-patterns**
+
+- **backend-api-patterns**
+- **quality-gates**
+- **react-nextjs-patterns**
+- **task-decomposition**
+- **typescript-patterns**
 
 ---
 
@@ -154,9 +186,9 @@ Skills:
 **Create a Git commit with semantic commit message format**
 
 ```bash
-  - `/commit:commit`: Create a git commit with semantic commit message format
-  - `/commit:and-push`: Commit and push to remote
-  - `/commit:and-create-pr`: Commit, push, and create a pull request
+- `/commit:commit`: Create a git commit with semantic commit message format
+- `/commit:and-push`: Commit and push to remote
+- `/commit:and-create-pr`: Commit, push, and create a pull request
 ```
 
 ---
@@ -168,7 +200,8 @@ Skills:
 **Components:**
 
 Skills:
-  - **frontend-design**
+
+- **frontend-design**
 
 ---
 
@@ -177,7 +210,7 @@ Skills:
 **Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding**
 
 ```bash
-  - `/interview`: Conduct in-depth requirements interview using Socratic questioning to clarify implementation details
+- `/interview`: Conduct in-depth requirements interview using Socratic questioning to clarify implementation details
 ```
 
 ---
@@ -187,9 +220,9 @@ Skills:
 **Configurable status bar showing context usage, API rate limits (5h/7d), git branch, and active tools. Supports 1/2/3 line layouts with smart hiding of empty values.**
 
 ```bash
-  - `/config`
-  - `/disable`
-  - `/setup`
+- `/config`
+- `/disable`
+- `/setup`
 ```
 
 ---
@@ -201,7 +234,8 @@ Skills:
 **Components:**
 
 Skills:
-  - **orchestration**
+
+- **orchestration**
 
 ---
 
@@ -210,23 +244,25 @@ Skills:
 **Pragmatic software development companion with engineering discipline and transparent execution.**
 
 ```bash
-  - `/duyetbot`: Summon duyetbot - pragmatic software development companion with transparent execution
-  - `/learn`: Learn about @duyet and update knowledge base
-  - `/orchestrate`: Duyetbot orchestrate - coordinate parallel agent workstreams for complex tasks
-  - `/spawn`: Duyetbot spawn - delegate tasks to team agents for parallel execution
-  - `/think`: Duyetbot deep thinking - structured problem analysis with visible reasoning
+- `/duyetbot`: Summon duyetbot - pragmatic software development companion with transparent execution
+- `/learn`: Learn about @duyet and update knowledge base
+- `/orchestrate`: Duyetbot orchestrate - coordinate parallel agent workstreams for complex tasks
+- `/spawn`: Duyetbot spawn - delegate tasks to team agents for parallel execution
+- `/think`: Duyetbot deep thinking - structured problem analysis with visible reasoning
 ```
 
 **Components:**
 
 Agents:
-  - **duyetbot**
+
+- **duyetbot**
 
 Skills:
-  - **duyet-knowledge**
-  - **engineering-discipline**
-  - **team-coordination**
-  - **transparency**
+
+- **duyet-knowledge**
+- **engineering-discipline**
+- **team-coordination**
+- **transparency**
 
 ---
 
@@ -235,7 +271,7 @@ Skills:
 **Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)**
 
 ```bash
-  - `/generate-docs`: Manually trigger documentation generation for all plugins
+- `/generate-docs`: Manually trigger documentation generation for all plugins
 ```
 
 ---
@@ -249,7 +285,8 @@ Automatically detects when you're on main/master and creates feature branches be
 **Components:**
 
 Skills:
-  - **github**
+
+- **github**
 
 ---
 
@@ -260,12 +297,13 @@ Skills:
 Auto-detects project type and runs appropriate checks. Spawns parallel agents for complex multi-file fixes.
 
 ```bash
-  - `/fix:and-push`: Fix issues, commit, and push to remote
-  - `/fix:and-update-pr`: Fix issues and update existing PR
-  - `/fix:and-create-pr`: Fix issues and create new PR
+- `/fix:and-push`: Fix issues, commit, and push to remote
+- `/fix:and-update-pr`: Fix issues and update existing PR
+- `/fix:and-create-pr`: Fix issues and create new PR
 ```
 
 **Supported Projects:**
+
 - Python (pytest, ruff, mypy)
 - Node/TypeScript (jest, vitest, eslint, tsc)
 - Rust (cargo test, clippy)
@@ -274,7 +312,8 @@ Auto-detects project type and runs appropriate checks. Spawns parallel agents fo
 **Components:**
 
 Skills:
-  - **test-detection**
+
+- **test-detection**
 
 ---
 
@@ -287,16 +326,12 @@ Covers 45 dashboard pages including query monitoring, table management, merge op
 **Components:**
 
 Skills:
-  - **clickhouse-monitoring**
+
+- **clickhouse-monitoring**
 
 ---
 
-
-
-
-
 ---
-
 
 ## Manual Installation
 
@@ -319,17 +354,20 @@ Add to `~/.claude/settings.json`:
 
 ## Contributing
 
-```
+```text
 your-plugin/
-├── .claude-plugin/plugin.json   # name, version, description
-├── .codex-plugin/plugin.json    # Codex manifest and interface metadata
-├── agents/                      # .md with YAML frontmatter
-├── commands/                    # slash commands
-├── skills/                      # reusable knowledge
-└── hooks/hooks.json             # lifecycle hooks
+├── .claude-plugin/plugin.json      # name, version, description, logo
+├── .codex-plugin/plugin.json       # Codex manifest, interface, logo
+├── .grok-plugin/plugin.json        # Grok Bot / Grok Build manifest + logo
+├── .grok-build-plugin/plugin.json  # Grok Build interface metadata + logo
+├── assets/logo.svg                 # rendered by every listed harness
+├── agents/                         # .md with YAML frontmatter
+├── commands/                       # slash commands
+├── skills/                         # reusable knowledge
+└── hooks/hooks.json                # lifecycle hooks
 ```
 
-Update `marketplace.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, and both manifest files. Run `bash scripts/validate-plugins.sh` before opening a PR.
+Update `marketplace.json`, `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `.grok-plugin/marketplace.json`, and the harness manifests. Run `bash scripts/validate-plugins.sh` before opening a PR.
 
 ---
 
