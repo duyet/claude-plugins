@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -15,18 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
 
       - name: Extract version from tag
         id: get_version
-        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
 
       - name: Generate release notes
         id: release_notes
         run: |
           # Extract changes for this version from CHANGELOG
           VERSION="${{ steps.get_version.outputs.version }}"
-          echo "## What's Changed\n" > release_notes.md
+          printf '%s\n\n' "## What's Changed" > release_notes.md
 
           if grep -A 50 "## \[$VERSION\]" CHANGELOG.md; then
             sed -n "/## \[$VERSION\]/,/## /p" CHANGELOG.md | sed '$d' | sed '1d' >> release_notes.md
@@ -37,7 +40,8 @@ jobs:
           cat release_notes.md
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
+        # softprops/action-gh-release v3.0.3
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
         with:
           tag_ref: ${{ github.ref }}
           name: Release ${{ steps.get_version.outputs.version }}

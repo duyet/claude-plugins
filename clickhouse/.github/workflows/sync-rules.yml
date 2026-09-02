@@ -1,9 +1,9 @@
 name: Sync Rules from ClickHouse/agent-skills
 
 on:
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch: # Allow manual trigger
   schedule:
-    - cron: '0 0 * * 0'  # Run weekly on Sunday at midnight UTC
+    - cron: "0 0 * * 0" # Run weekly on Sunday at midnight UTC
 
 permissions:
   contents: write
@@ -14,16 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v6
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Checkout ClickHouse/agent-skills
-        uses: actions/checkout@v6
+        # actions/checkout v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: ClickHouse/agent-skills
           path: agent-skills
           ref: main
+          persist-credentials: false
 
       - name: Copy rule files
         run: |
@@ -52,20 +56,21 @@ jobs:
         id: check-changes
         run: |
           if git diff --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create Pull Request
         if: steps.check-changes.outputs.has_changes == 'true'
-        uses: peter-evans/create-pull-request@v8
+        # peter-evans/create-pull-request v8.1.1
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'feat(clickhouse): sync rules from ClickHouse/agent-skills'
+          commit-message: "feat(clickhouse): sync rules from ClickHouse/agent-skills"
           committer: GitHub <noreply@github.com>
           author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
-          title: 'feat(clickhouse): sync rules from ClickHouse/agent-skills'
+          title: "feat(clickhouse): sync rules from ClickHouse/agent-skills"
           body: |
             ## Sync from ClickHouse/agent-skills
 
