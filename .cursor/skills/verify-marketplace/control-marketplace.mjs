@@ -839,7 +839,6 @@ function runProve(parsed) {
       childArgs.push("--json");
     }
     childArgs.push("--repo", repoRoot);
-    const invocation = [process.execPath, SCRIPT_PATH, ...childArgs];
     const result = spawnSync(process.execPath, [SCRIPT_PATH, ...childArgs], {
       encoding: "utf8",
     });
@@ -848,7 +847,7 @@ function runProve(parsed) {
     results.push({
       id: step.id,
       args: childArgs,
-      invocation: invocation.join(" "),
+      invocation: portableInvocation(childArgs, repoRoot),
       ok: stepOk,
       exitCode: result.status,
       stdout: result.stdout,
@@ -861,24 +860,27 @@ function runProve(parsed) {
     feature,
     startedAt,
     finishedAt: new Date().toISOString(),
-    repoRoot,
-    outDir,
+    repoRoot: ".",
+    outDir: path.relative(repoRoot, outDir) || ".",
     steps: results.map((step) => ({
       id: step.id,
       ok: step.ok,
       exitCode: step.exitCode,
-      invocation: step.invocation,
+      invocation: portableInvocation(step.args, repoRoot),
     })),
     hostedUi: false,
-    note: "This pack has no hosted web UI. Proof is catalog/manifest/docs path resolution plus the production validator.",
+    note: "This pack has no hosted web UI. Proof is catalog parse, plugin inventory, and Claude marketplace source resolution.",
   };
   const jsonPath = path.join(outDir, "drive.json");
   const mdPath = path.join(outDir, "drive.md");
   fs.writeFileSync(`${jsonPath}.tmp`, `${JSON.stringify(proof, null, 2)}\n`);
   fs.renameSync(`${jsonPath}.tmp`, jsonPath);
-  fs.writeFileSync(mdPath, renderProofMarkdown(proof, results));
+  fs.writeFileSync(mdPath, renderProofMarkdown(proof, results, repoRoot));
   const transcriptPath = path.join(outDir, "drive.transcript.txt");
-  fs.writeFileSync(transcriptPath, renderProofTranscript(results));
+  fs.writeFileSync(
+    transcriptPath,
+    portableText(renderProofTranscript(results, repoRoot), repoRoot),
+  );
   const payload = {
     ...proof,
     artifacts: {
@@ -949,7 +951,38 @@ function proveSteps(feature) {
   }
 }
 
-function renderProofMarkdown(proof, results) {
+function portableInvocation(childArgs, repoRoot) {
+  const args = [];
+  for (let i = 0; i < childArgs.length; i += 1) {
+    if (childArgs[i] === "--repo") {
+      i += 1;
+      continue;
+    }
+    args.push(childArgs[i]);
+  }
+  return [
+    "node",
+    ".cursor/skills/verify-marketplace/control-marketplace.mjs",
+    ...args,
+  ].join(" ");
+}
+
+function portableText(text, repoRoot) {
+  return text.split(repoRoot).join(".").split(process.execPath).join("node");
+}
+
+function renderProofMarkdown(proof, results, repoRoot) {
+  const infoStep = results.find((step) => step.id === "info");
+  let catalogSummary = "";
+  if (infoStep?.stdout) {
+    try {
+      const info = JSON.parse(portableText(infoStep.stdout, repoRoot));
+      const missing = info.gaps?.missingFromCodex ?? [];
+      catalogSummary = ` Inventory from \`info\`: ${info.counts?.pluginDirs} plugin directories, root/Claude catalogs ${info.counts?.rootMarketplace}/${info.counts?.claudeMarketplace}, Codex ${info.counts?.codexMarketplace}${missing.length ? ` (missing ${missing.join(", ")}; not a Claude-catalog failure)` : ""}.`;
+    } catch {
+      catalogSummary = "";
+    }
+  }
   const lines = [
     `# Proven drive: ${proof.feature}`,
     "",
@@ -957,14 +990,14 @@ function renderProofMarkdown(proof, results) {
     "",
     `- Started: ${proof.startedAt}`,
     `- Finished: ${proof.finishedAt}`,
-    `- Repo: \`${proof.repoRoot}\``,
+    `- Repo: checkout root (paths in this file are repo-relative)`,
     `- Hosted UI: no`,
     "",
     "## What this proved",
     "",
     proof.feature === "marketplace-catalog"
-      ? "The checkout is a marketplace plugin pack. Marketplace JSON parses, plugin directories are listable, and every Claude marketplace `source` resolves to a real folder. There is no web app to click; Claude Code install commands in README match files that exist on disk."
-      : `Drove feature \`${proof.feature}\` through control-marketplace.`,
+      ? `The checkout is a marketplace plugin pack. Marketplace JSON parses, plugin directories are listable, and every Claude marketplace \`source\` resolves to a real folder. There is no web app to click; Claude Code install needles in README match files that exist on disk.${catalogSummary}`
+      : `Drove feature \`${proof.feature}\` through control-marketplace.${catalogSummary}`,
     "",
     "## Steps",
     "",
@@ -976,21 +1009,23 @@ function renderProofMarkdown(proof, results) {
   }
   lines.push("", "## Artifacts", "");
   lines.push("- `drive.json` — machine-readable summary");
-  lines.push("- `drive.transcript.txt` — full stdout/stderr per step");
+  lines.push(
+    "- `drive.md` — what the drive proved (committed). `drive.transcript.txt` is local-only.",
+  );
   lines.push("");
   return `${lines.join("\n")}\n`;
 }
 
-function renderProofTranscript(results) {
+function renderProofTranscript(results, repoRoot) {
   return results
     .map((step) => {
       return [
         `## ${step.id} (exit ${step.exitCode})`,
         `$ ${step.invocation}`,
         "--- stdout ---",
-        step.stdout ?? "",
+        portableText(step.stdout ?? "", repoRoot),
         "--- stderr ---",
-        step.stderr ?? "",
+        portableText(step.stderr ?? "", repoRoot),
         "",
       ].join("\n");
     })

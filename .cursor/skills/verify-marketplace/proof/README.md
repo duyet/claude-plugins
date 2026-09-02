@@ -13,4 +13,5 @@ Expected files after a successful drive:
 
 - `drive.json` — machine-readable summary (`ok`, feature id, step exits)
 - `drive.md` — what the drive proved
-- `drive.transcript.txt` — full stdout/stderr per step
+- `drive.transcript.txt` — local full stdout/stderr (gitignored; it echoes
+  plugin docs and is regenerable via `prove`)

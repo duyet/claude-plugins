@@ -55,5 +55,5 @@ Preconditions:
 - `install-antigravity` without `--apply` must not mkdir the default home
   target. Confirm by listing that directory before and after, or by using a
   missing `--target` and checking `written`.
-- Skills CLI (`npx skills add`) is documented; it is not executed here (network
-  + user agent dirs). Assert the README needle only.
+- Skills CLI (`npx skills add`) is documented; it is not executed here because
+  it needs network access and writes agent dirs. Assert the README needle only.

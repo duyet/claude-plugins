@@ -1,0 +1,37 @@
+{
+  "ok": true,
+  "command": "prove",
+  "feature": "marketplace-catalog",
+  "startedAt": "2026-09-02T18:23:37.757Z",
+  "finishedAt": "2026-09-02T18:23:37.859Z",
+  "repoRoot": ".",
+  "outDir": ".cursor/skills/verify-marketplace/proof",
+  "steps": [
+    {
+      "id": "doctor",
+      "ok": true,
+      "exitCode": 0,
+      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs doctor --json"
+    },
+    {
+      "id": "info",
+      "ok": true,
+      "exitCode": 0,
+      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs info --json"
+    },
+    {
+      "id": "list",
+      "ok": true,
+      "exitCode": 0,
+      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs list --json"
+    },
+    {
+      "id": "check-install-claude",
+      "ok": true,
+      "exitCode": 0,
+      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface claude --json"
+    }
+  ],
+  "hostedUi": false,
+  "note": "This pack has no hosted web UI. Proof is catalog parse, plugin inventory, and Claude marketplace source resolution."
+}
