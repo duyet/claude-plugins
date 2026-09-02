@@ -59,7 +59,7 @@ Always update `plugin.json` version when making changes.
 
 ## Plugin Structure
 
-```
+```text
 plugin-name/
 ├── .claude-plugin/
 │   └── plugin.json          # Manifest (name, version, description, logo)
@@ -109,7 +109,7 @@ Before committing a plugin, scan for leaks:
 
 Use semantic commits with plugin scope:
 
-```
+```text
 feat(plugin-name): add new feature
 fix(plugin-name): fix bug
 docs(plugin-name): update documentation

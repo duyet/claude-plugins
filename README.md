@@ -112,6 +112,7 @@ This repository ships per-harness plugin metadata in place:
 ## Usage Examples
 
 ### Parallel Team Execution
+
 ```bash
 # Delegate to team agents for parallel work
 /duyetbot:spawn Implement the frontend dashboard
@@ -119,6 +120,7 @@ This repository ships per-harness plugin metadata in place:
 ```
 
 ### Smart GitHub Workflow
+
 ```bash
 # Automatically creates feature branch from main
 /gh-pr create "Add user settings page"
@@ -126,6 +128,7 @@ This repository ships per-harness plugin metadata in place:
 ```
 
 ### PR Babysitting with /goal
+
 ```bash
 # Set a persistent goal to babysit a PR — auto-fix CI, address reviews, wait for green
 /goal /github:babysit-pr https://github.com/duyet/clickhouse-monitoring/pull/1355
@@ -138,20 +141,19 @@ This repository ships per-harness plugin metadata in place:
 
 ## Plugins at a Glance
 
-| Plugin | Type | What it does |
-|--------|------|--------------|
-| [👥 team-agents](#👥-team-agents) | Skill | Leader, Senior Engineer, and Junior Engi... |
-| [📝 commit](#📝-commit) | Command | Create a Git commit with semantic commit... |
-| [🎨 frontend-design](#🎨-frontend-design) | Skill | Create distinctive, production-grade fro... |
-| [💬 interview](#💬-interview) | Command | Conduct in-depth requirements interviews... |
-| [📊 statusline](#📊-statusline) | Hook | Configurable status bar showing context ... |
-| [🎼 orchestration](#🎼-orchestration) | Skill | Orchestrator skill for managing parallel... |
-| [🤖 duyetbot](#🤖-duyetbot) | Skill | Pragmatic software development companion... |
-| [🎯 docs-generator](#🎯-docs-generator) | Hook | Automatically generate and maintain plug... |
-| [🐙 github](#🐙-github) | Skill | GitHub operations using gh CLI - PRs, is... |
-| [🔧 fix](#🔧-fix) | Command | Fix issues, tests, and CI failures with ... |
-| [📈 clickhouse-monitoring](#📈-clickhouse-monitoring) | Skill | Specialized knowledge for the ClickHouse Mo... |
-
+| Plugin                                               | Type    | What it does                                   |
+| ---------------------------------------------------- | ------- | ---------------------------------------------- |
+| [👥 team-agents](./team-agents/)                     | Skill   | Leader, Senior Engineer, and Junior Engi...    |
+| [📝 commit](./commit/)                               | Command | Create a Git commit with semantic commit...    |
+| [🎨 frontend-design](./frontend-design/)             | Skill   | Create distinctive, production-grade fro...    |
+| [💬 interview](./interview/)                         | Command | Conduct in-depth requirements interviews...    |
+| [📊 statusline](./statusline/)                       | Hook    | Configurable status bar showing context ...    |
+| [🎼 orchestration](./orchestration/)                 | Skill   | Orchestrator skill for managing parallel...    |
+| [🤖 duyetbot](./duyetbot/)                           | Skill   | Pragmatic software development companion...    |
+| [🎯 docs-generator](./docs-generator/)               | Hook    | Automatically generate and maintain plug...    |
+| [🐙 github](./github/)                               | Skill   | GitHub operations using gh CLI - PRs, is...    |
+| [🔧 fix](./fix/)                                     | Command | Fix issues, tests, and CI failures with ...    |
+| [📈 clickhouse-monitoring](./clickhouse-monitoring/) | Skill   | Specialized knowledge for the ClickHouse Mo... |
 
 ---
 
@@ -164,16 +166,18 @@ This repository ships per-harness plugin metadata in place:
 **Components:**
 
 Agents:
-  - **junior-engineer**
-  - **leader**
-  - **senior-engineer**
+
+- **junior-engineer**
+- **leader**
+- **senior-engineer**
 
 Skills:
-  - **backend-api-patterns**
-  - **quality-gates**
-  - **react-nextjs-patterns**
-  - **task-decomposition**
-  - **typescript-patterns**
+
+- **backend-api-patterns**
+- **quality-gates**
+- **react-nextjs-patterns**
+- **task-decomposition**
+- **typescript-patterns**
 
 ---
 
@@ -182,9 +186,9 @@ Skills:
 **Create a Git commit with semantic commit message format**
 
 ```bash
-  - `/commit:commit`: Create a git commit with semantic commit message format
-  - `/commit:and-push`: Commit and push to remote
-  - `/commit:and-create-pr`: Commit, push, and create a pull request
+- `/commit:commit`: Create a git commit with semantic commit message format
+- `/commit:and-push`: Commit and push to remote
+- `/commit:and-create-pr`: Commit, push, and create a pull request
 ```
 
 ---
@@ -196,7 +200,8 @@ Skills:
 **Components:**
 
 Skills:
-  - **frontend-design**
+
+- **frontend-design**
 
 ---
 
@@ -205,7 +210,7 @@ Skills:
 **Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding**
 
 ```bash
-  - `/interview`: Conduct in-depth requirements interview using Socratic questioning to clarify implementation details
+- `/interview`: Conduct in-depth requirements interview using Socratic questioning to clarify implementation details
 ```
 
 ---
@@ -215,9 +220,9 @@ Skills:
 **Configurable status bar showing context usage, API rate limits (5h/7d), git branch, and active tools. Supports 1/2/3 line layouts with smart hiding of empty values.**
 
 ```bash
-  - `/config`
-  - `/disable`
-  - `/setup`
+- `/config`
+- `/disable`
+- `/setup`
 ```
 
 ---
@@ -229,7 +234,8 @@ Skills:
 **Components:**
 
 Skills:
-  - **orchestration**
+
+- **orchestration**
 
 ---
 
@@ -238,23 +244,25 @@ Skills:
 **Pragmatic software development companion with engineering discipline and transparent execution.**
 
 ```bash
-  - `/duyetbot`: Summon duyetbot - pragmatic software development companion with transparent execution
-  - `/learn`: Learn about @duyet and update knowledge base
-  - `/orchestrate`: Duyetbot orchestrate - coordinate parallel agent workstreams for complex tasks
-  - `/spawn`: Duyetbot spawn - delegate tasks to team agents for parallel execution
-  - `/think`: Duyetbot deep thinking - structured problem analysis with visible reasoning
+- `/duyetbot`: Summon duyetbot - pragmatic software development companion with transparent execution
+- `/learn`: Learn about @duyet and update knowledge base
+- `/orchestrate`: Duyetbot orchestrate - coordinate parallel agent workstreams for complex tasks
+- `/spawn`: Duyetbot spawn - delegate tasks to team agents for parallel execution
+- `/think`: Duyetbot deep thinking - structured problem analysis with visible reasoning
 ```
 
 **Components:**
 
 Agents:
-  - **duyetbot**
+
+- **duyetbot**
 
 Skills:
-  - **duyet-knowledge**
-  - **engineering-discipline**
-  - **team-coordination**
-  - **transparency**
+
+- **duyet-knowledge**
+- **engineering-discipline**
+- **team-coordination**
+- **transparency**
 
 ---
 
@@ -263,7 +271,7 @@ Skills:
 **Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)**
 
 ```bash
-  - `/generate-docs`: Manually trigger documentation generation for all plugins
+- `/generate-docs`: Manually trigger documentation generation for all plugins
 ```
 
 ---
@@ -277,7 +285,8 @@ Automatically detects when you're on main/master and creates feature branches be
 **Components:**
 
 Skills:
-  - **github**
+
+- **github**
 
 ---
 
@@ -288,12 +297,13 @@ Skills:
 Auto-detects project type and runs appropriate checks. Spawns parallel agents for complex multi-file fixes.
 
 ```bash
-  - `/fix:and-push`: Fix issues, commit, and push to remote
-  - `/fix:and-update-pr`: Fix issues and update existing PR
-  - `/fix:and-create-pr`: Fix issues and create new PR
+- `/fix:and-push`: Fix issues, commit, and push to remote
+- `/fix:and-update-pr`: Fix issues and update existing PR
+- `/fix:and-create-pr`: Fix issues and create new PR
 ```
 
 **Supported Projects:**
+
 - Python (pytest, ruff, mypy)
 - Node/TypeScript (jest, vitest, eslint, tsc)
 - Rust (cargo test, clippy)
@@ -302,7 +312,8 @@ Auto-detects project type and runs appropriate checks. Spawns parallel agents fo
 **Components:**
 
 Skills:
-  - **test-detection**
+
+- **test-detection**
 
 ---
 
@@ -315,16 +326,12 @@ Covers 45 dashboard pages including query monitoring, table management, merge op
 **Components:**
 
 Skills:
-  - **clickhouse-monitoring**
+
+- **clickhouse-monitoring**
 
 ---
 
-
-
-
-
 ---
-
 
 ## Manual Installation
 
@@ -347,7 +354,7 @@ Add to `~/.claude/settings.json`:
 
 ## Contributing
 
-```
+```text
 your-plugin/
 ├── .claude-plugin/plugin.json      # name, version, description, logo
 ├── .codex-plugin/plugin.json       # Codex manifest, interface, logo

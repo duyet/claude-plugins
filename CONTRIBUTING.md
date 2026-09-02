@@ -12,7 +12,7 @@ Thanks for your interest in contributing to the Claude, Codex, and Grok Plugins 
 
 ## Plugin Structure
 
-```
+```text
 my-plugin/
 ├── .claude-plugin/
 │   └── plugin.json          # Plugin manifest (name, version, description, logo)
@@ -95,6 +95,7 @@ Copy `assets/logo.svg` from another plugin (or the repo-root `assets/logo.svg`).
 ### 4. Documentation (README.md)
 
 Required sections:
+
 - Description of what the plugin does
 - Installation instructions
 - Usage examples
@@ -104,6 +105,7 @@ Required sections:
 ### 5. Claude Instructions (CLAUDE.md)
 
 Required for skills and agents:
+
 - How Claude should use the plugin
 - When to invoke it
 - Expected inputs and outputs
@@ -162,8 +164,8 @@ Include `logo` on the Claude marketplace entry (`./my-plugin/assets/logo.svg`) a
 
 Add your plugin to the main README.md table:
 
-| Plugin | Type | Description |
-|--------|------|-------------|
+| Plugin                       | Type | Description |
+| ---------------------------- | ---- | ----------- |
 | [🔧 my-plugin](./my-plugin/) | Type | Description |
 
 ## Development Guidelines
@@ -177,6 +179,7 @@ Add your plugin to the main README.md table:
 ### Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - **Patch** (1.0.0 → 1.0.1): Bug fixes, documentation
 - **Minor** (1.0.0 → 1.1.0): New features, non-breaking changes
 - **Major** (1.0.0 → 2.0.0): Breaking changes

@@ -7,12 +7,7 @@
   },
   "license": "MIT",
   "logo": "assets/logo.svg",
-  "keywords": [
-    "agent-loop",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["agent-loop", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/",
   "commands": "./commands/"
 }

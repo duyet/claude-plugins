@@ -6,11 +6,6 @@
     "name": "duyetbot"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "prompt-engineering",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["prompt-engineering", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/"
 }

@@ -7,11 +7,6 @@
     "email": "me@duyet.net"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "frontend-design",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["frontend-design", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/"
 }

@@ -12,12 +12,12 @@ TMP_ERR="${TMPDIR:-/tmp}/plugin-validate-err.$$"
 trap 'rm -f "$TMP_ERR"' EXIT
 
 validate_manifest() {
-  local manifest="$1"
-  local mode="$2"
-  local plugin_dir
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
+	local manifest="$1"
+	local mode="$2"
+	local plugin_dir
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
 
-  python3 - "$manifest" "$plugin_dir" "$mode" <<'PYEOF'
+	python3 - "$manifest" "$plugin_dir" "$mode" <<'PYEOF'
 import json
 import os
 import re
@@ -143,22 +143,22 @@ PYEOF
 }
 
 check() {
-  local label="$1"
-  shift
-  CHECKED=$((CHECKED + 1))
-  if "$@" 2>"$TMP_ERR"; then
-    echo "✅ $label"
-  else
-    echo "❌ $label"
-    while IFS= read -r line; do
-      echo "     $line"
-    done < "$TMP_ERR"
-    FAILED=$((FAILED + 1))
-  fi
+	local label="$1"
+	shift
+	CHECKED=$((CHECKED + 1))
+	if "$@" 2>"$TMP_ERR"; then
+		echo "✅ $label"
+	else
+		echo "❌ $label"
+		while IFS= read -r line; do
+			echo "     $line"
+		done <"$TMP_ERR"
+		FAILED=$((FAILED + 1))
+	fi
 }
 
 validate_cross_manifest() {
-  python3 - "$REPO_ROOT" <<'PYEOF'
+	python3 - "$REPO_ROOT" <<'PYEOF'
 import json
 import os
 import sys
@@ -217,7 +217,7 @@ PYEOF
 }
 
 validate_marketplaces() {
-  python3 - "$REPO_ROOT" <<'PYEOF'
+	python3 - "$REPO_ROOT" <<'PYEOF'
 import json
 import os
 import sys
@@ -355,33 +355,33 @@ echo "Validating plugin manifests..."
 echo ""
 
 while IFS= read -r -d '' manifest; do
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
-  plugin_name="$(basename "$plugin_dir")"
-  check "Claude manifest: $plugin_name" validate_manifest "$manifest" claude
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
+	plugin_name="$(basename "$plugin_dir")"
+	check "Claude manifest: $plugin_name" validate_manifest "$manifest" claude
 done < <(find "$REPO_ROOT" -path "*/.claude-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
 while IFS= read -r -d '' manifest; do
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
-  plugin_name="$(basename "$plugin_dir")"
-  check "Codex manifest: $plugin_name" validate_manifest "$manifest" codex
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
+	plugin_name="$(basename "$plugin_dir")"
+	check "Codex manifest: $plugin_name" validate_manifest "$manifest" codex
 done < <(find "$REPO_ROOT" -path "*/.codex-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
 while IFS= read -r -d '' manifest; do
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
-  plugin_name="$(basename "$plugin_dir")"
-  check "Antigravity manifest: $plugin_name" validate_manifest "$manifest" antigravity
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
+	plugin_name="$(basename "$plugin_dir")"
+	check "Antigravity manifest: $plugin_name" validate_manifest "$manifest" antigravity
 done < <(find "$REPO_ROOT" -path "*/.antigravity-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
 while IFS= read -r -d '' manifest; do
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
-  plugin_name="$(basename "$plugin_dir")"
-  check "Grok manifest: $plugin_name" validate_manifest "$manifest" grok
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
+	plugin_name="$(basename "$plugin_dir")"
+	check "Grok manifest: $plugin_name" validate_manifest "$manifest" grok
 done < <(find "$REPO_ROOT" -path "*/.grok-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
 while IFS= read -r -d '' manifest; do
-  plugin_dir="$(dirname "$(dirname "$manifest")")"
-  plugin_name="$(basename "$plugin_dir")"
-  check "Grok Build manifest: $plugin_name" validate_manifest "$manifest" grok-build
+	plugin_dir="$(dirname "$(dirname "$manifest")")"
+	plugin_name="$(basename "$plugin_dir")"
+	check "Grok Build manifest: $plugin_name" validate_manifest "$manifest" grok-build
 done < <(find "$REPO_ROOT" -path "*/.grok-build-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
 check "Claude/Codex/Grok/Antigravity manifest parity" validate_cross_manifest
@@ -391,5 +391,5 @@ echo ""
 echo "Checked $CHECKED item(s). $FAILED failed."
 
 if [[ $FAILED -gt 0 ]]; then
-  exit 1
+	exit 1
 fi

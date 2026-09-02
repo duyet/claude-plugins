@@ -12,10 +12,7 @@
     "shortDescription": "Pragmatic software development companion with engineering discipline and transparent execution.",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   },

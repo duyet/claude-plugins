@@ -7,11 +7,6 @@
   },
   "license": "MIT",
   "logo": "assets/logo.svg",
-  "keywords": [
-    "unsloth-training",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["unsloth-training", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/"
 }

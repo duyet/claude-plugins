@@ -12,10 +12,7 @@
     "shortDescription": "Initialize and maintain a markdown knowledge base: consolidate, dedupe, prune, and forget notes.",
     "developerName": "duyet",
     "category": "productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "links": {
       "homepage": "https://github.com/duyet/codex-claude-plugins"
     },

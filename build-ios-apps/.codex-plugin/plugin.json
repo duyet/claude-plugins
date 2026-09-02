@@ -12,10 +12,7 @@
     "shortDescription": "Build, profile, debug, and refine iOS apps with SwiftUI and Xcode workflows — App Intents, Simulator debugging, performance profiling, memory leak detection, and on-device AI with Apple Intelligence, Foundation Models, and Core AI.",
     "developerName": "duyet",
     "category": "development",
-    "capabilities": [
-      "Skill",
-      "Agent"
-    ],
+    "capabilities": ["Skill", "Agent"],
     "links": {
       "homepage": "https://github.com/duyet/codex-claude-plugins"
     },

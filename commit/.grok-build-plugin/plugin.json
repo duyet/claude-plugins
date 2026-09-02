@@ -11,10 +11,7 @@
     "shortDescription": "Create a Git commit with semantic commit message format and PR workflow with templates",
     "developerName": "duyet",
     "category": "Git",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   },

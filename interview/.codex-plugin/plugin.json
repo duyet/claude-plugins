@@ -13,10 +13,7 @@
     "shortDescription": "Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   }

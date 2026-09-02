@@ -10,12 +10,7 @@
   "homepage": "https://github.com/duyet/codex-claude-plugins",
   "repository": "https://github.com/duyet/codex-claude-plugins",
   "logo": "assets/logo.svg",
-  "keywords": [
-    "build-macos-apps",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["build-macos-apps", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/",
   "commands": "./commands/",
   "agents": "./agents/"

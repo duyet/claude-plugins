@@ -6,11 +6,6 @@
     "name": "duyet"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "orchestration",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["orchestration", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/"
 }

@@ -6,10 +6,5 @@
     "name": "Gemini CLI"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "good-html",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ]
+  "keywords": ["good-html", "grok", "grok-build", "grok-bot"]
 }

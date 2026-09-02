@@ -10,9 +10,7 @@
     "shortDescription": "High-density interactive HTML artifacts.",
     "developerName": "Gemini CLI",
     "category": "Development",
-    "capabilities": [
-      "Skill"
-    ],
+    "capabilities": ["Skill"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   }

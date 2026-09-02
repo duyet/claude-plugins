@@ -6,12 +6,7 @@
     "name": "duyet"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "fix",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["fix", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/",
   "commands": "./commands/"
 }

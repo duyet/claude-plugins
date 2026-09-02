@@ -11,10 +11,7 @@
     "shortDescription": "Fix issues, tests, and CI failures with intelligent problem detection and resolution",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   }

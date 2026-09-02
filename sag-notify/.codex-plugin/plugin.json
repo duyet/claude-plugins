@@ -12,10 +12,7 @@
     "shortDescription": "Spoken voice notifications via sag (ElevenLabs TTS). Claude speaks a short alert before asking you something and a one-line summary when work finishes.",
     "developerName": "duyet",
     "category": "UI",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   }

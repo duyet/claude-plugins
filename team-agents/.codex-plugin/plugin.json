@@ -11,11 +11,7 @@
     "shortDescription": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel.",
     "developerName": "duyet",
     "category": "Agents",
-    "capabilities": [
-      "Skill",
-      "Command",
-      "Agent"
-    ],
+    "capabilities": ["Skill", "Command", "Agent"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   }

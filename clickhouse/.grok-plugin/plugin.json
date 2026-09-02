@@ -6,11 +6,6 @@
     "name": "duyetbot"
   },
   "logo": "assets/logo.svg",
-  "keywords": [
-    "clickhouse",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["clickhouse", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/"
 }

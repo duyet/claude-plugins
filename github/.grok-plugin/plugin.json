@@ -7,12 +7,7 @@
   },
   "license": "MIT",
   "logo": "assets/logo.svg",
-  "keywords": [
-    "github",
-    "grok",
-    "grok-build",
-    "grok-bot"
-  ],
+  "keywords": ["github", "grok", "grok-build", "grok-bot"],
   "skills": "./skills/",
   "commands": "./commands/"
 }

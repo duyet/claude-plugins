@@ -12,10 +12,7 @@
     "shortDescription": "Review changed code for reuse, quality, and efficiency, then simplify issues found",
     "developerName": "duyet",
     "category": "Productivity",
-    "capabilities": [
-      "Skill",
-      "Command"
-    ],
+    "capabilities": ["Skill", "Command"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   },

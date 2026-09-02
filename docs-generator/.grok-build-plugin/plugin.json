@@ -13,11 +13,7 @@
     "shortDescription": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md)",
     "developerName": "duyet",
     "category": "Docs",
-    "capabilities": [
-      "Skill",
-      "Command",
-      "Hook"
-    ],
+    "capabilities": ["Skill", "Command", "Hook"],
     "logo": "./assets/logo.svg",
     "composerIcon": "./assets/logo.svg"
   },

@@ -15,9 +15,7 @@
         "path": "./team-agents"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "team-agents"
-      ],
+      "keywords": ["team-agents"],
       "logo": "assets/logo.svg",
       "version": "1.9.1",
       "author": {
@@ -33,9 +31,7 @@
         "path": "./commit"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "commit"
-      ],
+      "keywords": ["commit"],
       "logo": "assets/logo.svg",
       "version": "1.3.2",
       "author": {
@@ -51,9 +47,7 @@
         "path": "./frontend-design"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "frontend-design"
-      ],
+      "keywords": ["frontend-design"],
       "logo": "assets/logo.svg",
       "version": "1.4.0",
       "author": {
@@ -70,9 +64,7 @@
         "path": "./interview"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "interview"
-      ],
+      "keywords": ["interview"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -89,9 +81,7 @@
         "path": "./statusline"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "statusline"
-      ],
+      "keywords": ["statusline"],
       "logo": "assets/logo.svg",
       "version": "1.9.0",
       "author": {
@@ -107,9 +97,7 @@
         "path": "./orchestration"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "orchestration"
-      ],
+      "keywords": ["orchestration"],
       "logo": "assets/logo.svg",
       "version": "1.1.0",
       "author": {
@@ -125,9 +113,7 @@
         "path": "./duyetbot"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "duyetbot"
-      ],
+      "keywords": ["duyetbot"],
       "logo": "assets/logo.svg",
       "version": "1.8.1",
       "author": {
@@ -143,9 +129,7 @@
         "path": "./docs-generator"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "docs-generator"
-      ],
+      "keywords": ["docs-generator"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -161,9 +145,7 @@
         "path": "./github"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "github"
-      ],
+      "keywords": ["github"],
       "logo": "assets/logo.svg",
       "version": "1.4.2",
       "author": {
@@ -179,9 +161,7 @@
         "path": "./fix"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "fix"
-      ],
+      "keywords": ["fix"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -197,9 +177,7 @@
         "path": "./simplify"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "simplify"
-      ],
+      "keywords": ["simplify"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -215,9 +193,7 @@
         "path": "./clickhouse"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "clickhouse"
-      ],
+      "keywords": ["clickhouse"],
       "logo": "assets/logo.svg",
       "version": "1.4.1",
       "author": {
@@ -233,9 +209,7 @@
         "path": "./prompt-engineering"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "prompt-engineering"
-      ],
+      "keywords": ["prompt-engineering"],
       "logo": "assets/logo.svg",
       "version": "1.1.1",
       "author": {
@@ -251,9 +225,7 @@
         "path": "./clickhouse-monitoring"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "clickhouse-monitoring"
-      ],
+      "keywords": ["clickhouse-monitoring"],
       "logo": "assets/logo.svg",
       "version": "1.1.1",
       "author": {
@@ -269,9 +241,7 @@
         "path": "./unsloth-training"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "unsloth-training"
-      ],
+      "keywords": ["unsloth-training"],
       "logo": "assets/logo.svg",
       "version": "1.0.2",
       "author": {
@@ -287,9 +257,7 @@
         "path": "./good-html"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "good-html"
-      ],
+      "keywords": ["good-html"],
       "logo": "assets/logo.svg",
       "version": "1.0.0",
       "author": {
@@ -305,9 +273,7 @@
         "path": "./anyrouter"
       },
       "homepage": "https://anyrouter.dev",
-      "keywords": [
-        "anyrouter"
-      ],
+      "keywords": ["anyrouter"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -324,9 +290,7 @@
         "path": "./sag-notify"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "sag-notify"
-      ],
+      "keywords": ["sag-notify"],
       "logo": "assets/logo.svg",
       "version": "2.1.2",
       "author": {
@@ -342,9 +306,7 @@
         "path": "./build-macos-apps"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "build-macos-apps"
-      ],
+      "keywords": ["build-macos-apps"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -361,9 +323,7 @@
         "path": "./build-ios-apps"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "build-ios-apps"
-      ],
+      "keywords": ["build-ios-apps"],
       "logo": "assets/logo.svg",
       "version": "1.0.1",
       "author": {
@@ -380,9 +340,7 @@
         "path": "./agent-loop"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "agent-loop"
-      ],
+      "keywords": ["agent-loop"],
       "logo": "assets/logo.svg",
       "version": "0.4.0",
       "author": {
@@ -398,9 +356,7 @@
         "path": "./kb"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "kb"
-      ],
+      "keywords": ["kb"],
       "logo": "assets/logo.svg",
       "version": "1.1.0",
       "author": {
@@ -417,9 +373,7 @@
         "path": "./okf"
       },
       "homepage": "https://github.com/duyet/codex-claude-plugins",
-      "keywords": [
-        "okf"
-      ],
+      "keywords": ["okf"],
       "logo": "assets/logo.svg",
       "version": "1.1.0",
       "author": {
@@ -436,9 +390,7 @@
         "path": "./command-code"
       },
       "homepage": "https://github.com/duyet/claude-plugins",
-      "keywords": [
-        "command-code"
-      ],
+      "keywords": ["command-code"],
       "logo": "assets/logo.svg",
       "version": "1.0.0",
       "author": {
