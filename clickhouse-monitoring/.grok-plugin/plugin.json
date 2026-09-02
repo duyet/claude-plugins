@@ -1,0 +1,16 @@
+{
+  "name": "clickhouse-monitoring",
+  "version": "1.1.1",
+  "description": "Agent Skill for the ClickHouse Monitor dashboard - a real-time monitoring and observability tool for ClickHouse clusters. Covers 45 dashboard pages, query performance analysis, table management, and API integration.",
+  "author": {
+    "name": "duyet"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "clickhouse-monitoring",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ],
+  "skills": "./skills/"
+}

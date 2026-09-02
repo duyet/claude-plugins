@@ -1,0 +1,20 @@
+{
+  "name": "duyetbot",
+  "version": "1.8.1",
+  "description": "Pragmatic software development companion with engineering discipline and transparent execution.",
+  "author": {
+    "name": "duyet"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "duyetbot",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}

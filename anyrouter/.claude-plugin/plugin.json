@@ -8,5 +8,6 @@
   },
   "homepage": "https://anyrouter.dev",
   "repository": "https://github.com/duyet/codex-claude-plugins",
-  "license": "MIT"
+  "license": "MIT",
+  "logo": "./assets/logo.svg"
 }

@@ -1,0 +1,32 @@
+{
+  "name": "anyrouter",
+  "version": "1.0.1",
+  "description": "Wire AnyRouter into Claude Code, Codex, Cursor, and other coding agents. Universal OpenAI-compatible router for 150+ models, with migration recipes from Anthropic, OpenAI, and OpenRouter, plus a remote MCP server for key and credit management.",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "mcp": "./.mcp.json",
+  "interface": {
+    "displayName": "AnyRouter",
+    "shortDescription": "Universal OpenAI-compatible LLM router (150+ models). Migrate from Anthropic / OpenAI / OpenRouter; manage keys via MCP.",
+    "developerName": "duyet",
+    "category": "AI",
+    "capabilities": [
+      "Skill",
+      "Command",
+      "Agent",
+      "MCP"
+    ],
+    "links": {
+      "homepage": "https://anyrouter.dev",
+      "docs": "https://anyrouter.dev/docs",
+      "mcp": "https://anyrouter.dev/docs/mcp"
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

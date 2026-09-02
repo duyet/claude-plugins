@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Validate Claude and Codex plugin manifests plus marketplace files.
-# Exits 1 if any plugin or marketplace fails validation.
+# Validate Claude, Codex, Antigravity, Grok, and Grok Build plugin
+# manifests plus marketplace files. Exits 1 if any plugin or marketplace
+# fails validation.
 
 set -euo pipefail
 
@@ -68,7 +69,28 @@ if isinstance(skills, list):
             elif not os.path.isfile(os.path.join(plugin_dir, path_value)):
                 errors.append(f"skills[{i}]: path '{path_value}' does not exist")
 
-if mode in ("codex", "antigravity"):
+INTERFACE_MODES = ("codex", "antigravity", "grok-build")
+PATH_MODES = ("codex", "antigravity", "grok", "grok-build")
+
+def resolve_asset(plugin_dir, value):
+    if not isinstance(value, str) or not value.strip():
+        return None
+    if value.startswith(("http://", "https://")):
+        return value
+    return os.path.normpath(os.path.join(plugin_dir, value))
+
+def require_local_logo(label, value):
+    if not isinstance(value, str) or not value.strip():
+        errors.append(f"{label} must be a non-empty string")
+        return
+    if value.startswith(("http://", "https://")):
+        errors.append(f"{label} must be a repo-local path so it renders after install, got URL")
+        return
+    target = resolve_asset(plugin_dir, value)
+    if not os.path.isfile(target):
+        errors.append(f"{label} path does not exist: {value}")
+
+if mode in PATH_MODES:
     for field in ("skills", "hooks", "mcpServers", "apps", "commands", "agents"):
         value = data.get(field)
         if value is None:
@@ -80,7 +102,7 @@ if mode in ("codex", "antigravity"):
         if not os.path.exists(target):
             errors.append(f"'{field}' path does not exist: {value}")
 
-if mode in ("codex", "antigravity"):
+if mode in INTERFACE_MODES:
     interface = data.get("interface")
     if interface is None:
         errors.append("missing required field: 'interface'")
@@ -94,6 +116,8 @@ if mode in ("codex", "antigravity"):
         if capabilities is not None:
             if not isinstance(capabilities, list) or not all(isinstance(item, str) and item.strip() for item in capabilities):
                 errors.append("'interface.capabilities' must be an array of non-empty strings")
+        require_local_logo("interface.logo", interface.get("logo"))
+        require_local_logo("interface.composerIcon", interface.get("composerIcon"))
 
     mode_obj = data.get(mode)
     if mode_obj is not None:
@@ -105,6 +129,11 @@ if mode in ("codex", "antigravity"):
                 if val is not None:
                     if not isinstance(val, list) or not all(isinstance(item, str) and item.strip() for item in val):
                         errors.append(f"'{mode}.{field}' must be an array of non-empty strings")
+
+if mode in ("claude", "grok"):
+    require_local_logo("logo", data.get("logo"))
+elif mode == "grok-build":
+    require_local_logo("logo", data.get("logo"))
 
 if errors:
     for error in errors:
@@ -142,36 +171,43 @@ plugin_dirs = sorted(
     if (
         os.path.isfile(os.path.join(repo_root, name, ".claude-plugin", "plugin.json"))
         or os.path.isfile(os.path.join(repo_root, name, ".codex-plugin", "plugin.json"))
+        or os.path.isfile(os.path.join(repo_root, name, ".grok-plugin", "plugin.json"))
+        or os.path.isfile(os.path.join(repo_root, name, ".grok-build-plugin", "plugin.json"))
     )
 )
 
+def compare(label, other):
+    for field in ("name", "version", "description"):
+        if claude.get(field) != other.get(field):
+            errors.append(f"{plugin}: {field} differs between Claude and {label} manifests")
+    if claude.get("author", {}).get("name") != other.get("author", {}).get("name"):
+        errors.append(f"{plugin}: author.name differs between Claude and {label} manifests")
+
 for plugin in plugin_dirs:
     claude_path = os.path.join(repo_root, plugin, ".claude-plugin", "plugin.json")
-    codex_path = os.path.join(repo_root, plugin, ".codex-plugin", "plugin.json")
     if not os.path.isfile(claude_path):
         errors.append(f"{plugin}: missing .claude-plugin/plugin.json")
         continue
     with open(claude_path) as f:
         claude = json.load(f)
 
-    if os.path.isfile(codex_path):
-        with open(codex_path) as f:
-            codex = json.load(f)
-        for field in ("name", "version", "description"):
-            if claude.get(field) != codex.get(field):
-                errors.append(f"{plugin}: {field} differs between Claude and Codex manifests")
-        if claude.get("author", {}).get("name") != codex.get("author", {}).get("name"):
-            errors.append(f"{plugin}: author.name differs between Claude and Codex manifests")
+    required_harnesses = (
+        (".codex-plugin/plugin.json", "Codex"),
+        (".grok-plugin/plugin.json", "Grok"),
+        (".grok-build-plugin/plugin.json", "Grok Build"),
+    )
+    for relpath, label in required_harnesses:
+        path = os.path.join(repo_root, plugin, relpath)
+        if not os.path.isfile(path):
+            errors.append(f"{plugin}: missing {relpath}")
+            continue
+        with open(path) as f:
+            compare(label, json.load(f))
 
     antigravity_path = os.path.join(repo_root, plugin, ".antigravity-plugin", "plugin.json")
     if os.path.isfile(antigravity_path):
         with open(antigravity_path) as f:
-            antigravity = json.load(f)
-        for field in ("name", "version", "description"):
-            if claude.get(field) != antigravity.get(field):
-                errors.append(f"{plugin}: {field} differs between Claude and Antigravity manifests")
-        if claude.get("author", {}).get("name") != antigravity.get("author", {}).get("name"):
-            errors.append(f"{plugin}: author.name differs between Claude and Antigravity manifests")
+            compare("Antigravity", json.load(f))
 
 if errors:
     for error in errors:
@@ -219,6 +255,10 @@ for plugin in root_marketplace.get("plugins", []):
         value = plugin.get(field)
         require(isinstance(value, str) and value.strip(), f"marketplace.json {name}: missing {field}")
     require(plugin.get("id") == f"{name}@{root_marketplace.get('name')}", f"marketplace.json {name}: id does not match marketplace name")
+    logo = plugin.get("logo")
+    require(isinstance(logo, str) and logo.strip(), f"marketplace.json {name}: missing logo")
+    if isinstance(logo, str) and not logo.startswith(("http://", "https://")):
+        require(os.path.isfile(os.path.normpath(os.path.join(repo_root, logo))), f"marketplace.json {name}: logo path does not exist")
 
 claude_marketplace = load_json(".claude-plugin/marketplace.json")
 if claude_marketplace is None:
@@ -231,6 +271,10 @@ for plugin in claude_marketplace.get("plugins", []):
     require(isinstance(source, str) and source.startswith("./"), f".claude-plugin/marketplace.json {name}: source must be relative string")
     if isinstance(source, str):
         require(os.path.isdir(os.path.join(repo_root, source)), f".claude-plugin/marketplace.json {name}: source path does not exist")
+    logo = plugin.get("logo")
+    require(isinstance(logo, str) and logo.strip(), f".claude-plugin/marketplace.json {name}: missing logo")
+    if isinstance(logo, str) and not logo.startswith(("http://", "https://")):
+        require(os.path.isfile(os.path.normpath(os.path.join(repo_root, logo))), f".claude-plugin/marketplace.json {name}: logo path does not exist")
 
 codex_marketplace = load_json(".agents/plugins/marketplace.json")
 if codex_marketplace is None:
@@ -256,6 +300,49 @@ for plugin in codex_marketplace.get("plugins", []):
         require(policy.get("authentication") in {"ON_INSTALL", "ON_USE"}, f".agents/plugins/marketplace.json {name}: invalid policy.authentication")
     category = plugin.get("category")
     require(isinstance(category, str) and category.strip(), f".agents/plugins/marketplace.json {name}: missing category")
+    iface = plugin.get("interface")
+    require(isinstance(iface, dict), f".agents/plugins/marketplace.json {name}: missing interface")
+    if isinstance(iface, dict):
+        for field in ("logo", "composerIcon"):
+            value = iface.get(field)
+            require(isinstance(value, str) and value.strip(), f".agents/plugins/marketplace.json {name}: missing interface.{field}")
+            if isinstance(value, str) and not value.startswith(("http://", "https://")):
+                require(os.path.isfile(os.path.normpath(os.path.join(repo_root, value))), f".agents/plugins/marketplace.json {name}: interface.{field} path does not exist")
+
+codex_iface = codex_marketplace.get("interface", {})
+require(isinstance(codex_iface.get("logo"), str) and codex_iface["logo"].strip(), ".agents/plugins/marketplace.json missing interface.logo")
+if isinstance(codex_iface.get("logo"), str) and not codex_iface["logo"].startswith(("http://", "https://")):
+    require(os.path.isfile(os.path.normpath(os.path.join(repo_root, codex_iface["logo"]))), ".agents/plugins/marketplace.json interface.logo path does not exist")
+
+grok_marketplace = load_json(".grok-plugin/marketplace.json")
+if grok_marketplace is None:
+    grok_marketplace = {"plugins": []}
+grok_names = [plugin.get("name") for plugin in grok_marketplace.get("plugins", [])]
+require(len(grok_names) == len(set(grok_names)), ".grok-plugin/marketplace.json contains duplicate plugin names")
+require(set(grok_names) == plugin_set, ".grok-plugin/marketplace.json plugin names must match plugin directories")
+require(isinstance(grok_marketplace.get("owner", {}).get("name"), str), ".grok-plugin/marketplace.json missing owner.name")
+for plugin in grok_marketplace.get("plugins", []):
+    name = plugin.get("name")
+    source = plugin.get("source")
+    require(isinstance(plugin.get("description"), str) and plugin["description"].strip(), f".grok-plugin/marketplace.json {name}: missing description")
+    require(isinstance(plugin.get("category"), str) and plugin["category"].strip(), f".grok-plugin/marketplace.json {name}: missing category")
+    require(isinstance(plugin.get("logo"), str) and plugin["logo"].strip(), f".grok-plugin/marketplace.json {name}: missing logo")
+    path_value = None
+    if isinstance(source, str) and source.startswith("./"):
+        path_value = source
+    elif isinstance(source, dict):
+        path_value = source.get("path")
+        require(
+            source.get("type") == "local" or source.get("source") == "local",
+            f".grok-plugin/marketplace.json {name}: source must be local",
+        )
+    require(isinstance(path_value, str) and path_value.startswith("./"), f".grok-plugin/marketplace.json {name}: source path must be relative string")
+    if isinstance(path_value, str):
+        plugin_root = os.path.join(repo_root, path_value)
+        require(os.path.isdir(plugin_root), f".grok-plugin/marketplace.json {name}: source path does not exist")
+        logo = plugin.get("logo")
+        if isinstance(logo, str) and not logo.startswith(("http://", "https://")):
+            require(os.path.isfile(os.path.normpath(os.path.join(plugin_root, logo))), f".grok-plugin/marketplace.json {name}: logo path does not exist")
 
 if errors:
     for error in errors:
@@ -285,7 +372,19 @@ while IFS= read -r -d '' manifest; do
   check "Antigravity manifest: $plugin_name" validate_manifest "$manifest" antigravity
 done < <(find "$REPO_ROOT" -path "*/.antigravity-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
 
-check "Claude/Codex/Antigravity manifest parity" validate_cross_manifest
+while IFS= read -r -d '' manifest; do
+  plugin_dir="$(dirname "$(dirname "$manifest")")"
+  plugin_name="$(basename "$plugin_dir")"
+  check "Grok manifest: $plugin_name" validate_manifest "$manifest" grok
+done < <(find "$REPO_ROOT" -path "*/.grok-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
+
+while IFS= read -r -d '' manifest; do
+  plugin_dir="$(dirname "$(dirname "$manifest")")"
+  plugin_name="$(basename "$plugin_dir")"
+  check "Grok Build manifest: $plugin_name" validate_manifest "$manifest" grok-build
+done < <(find "$REPO_ROOT" -path "*/.grok-build-plugin/plugin.json" -not -path "*/node_modules/*" -print0 | sort -z)
+
+check "Claude/Codex/Grok/Antigravity manifest parity" validate_cross_manifest
 check "Marketplace files" validate_marketplaces
 
 echo ""

@@ -1,0 +1,24 @@
+{
+  "name": "interview",
+  "version": "1.0.1",
+  "description": "Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding",
+  "author": {
+    "name": "duyet",
+    "email": "me@duyet.net"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "interface": {
+    "displayName": "Interview",
+    "shortDescription": "Conduct in-depth requirements interviews using Socratic questioning to clarify implementation details before coding",
+    "developerName": "duyet",
+    "category": "Productivity",
+    "capabilities": [
+      "Skill",
+      "Command"
+    ],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

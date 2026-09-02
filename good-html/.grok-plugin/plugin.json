@@ -1,0 +1,15 @@
+{
+  "name": "good-html",
+  "version": "1.0.0",
+  "description": "Generate high-density, interactive, self-contained HTML artifacts based on Thariq Shihipar's patterns. Optimized for engineering tasks, PR reviews, and research reports.",
+  "author": {
+    "name": "Gemini CLI"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "good-html",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ]
+}

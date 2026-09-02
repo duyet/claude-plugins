@@ -14,11 +14,18 @@
     "shortDescription": "Universal OpenAI-compatible LLM router (150+ models). Migrate from Anthropic / OpenAI / OpenRouter; manage keys via MCP.",
     "developerName": "duyet",
     "category": "AI",
-    "capabilities": ["Skill", "Command", "Agent", "MCP"],
+    "capabilities": [
+      "Skill",
+      "Command",
+      "Agent",
+      "MCP"
+    ],
     "links": {
       "homepage": "https://anyrouter.dev",
       "docs": "https://anyrouter.dev/docs",
       "mcp": "https://anyrouter.dev/docs/mcp"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

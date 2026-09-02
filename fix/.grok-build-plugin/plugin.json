@@ -1,0 +1,22 @@
+{
+  "name": "fix",
+  "version": "1.0.1",
+  "description": "Fix issues, tests, and CI failures with intelligent problem detection and resolution",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Fix",
+    "shortDescription": "Fix issues, tests, and CI failures with intelligent problem detection and resolution",
+    "developerName": "duyet",
+    "category": "Productivity",
+    "capabilities": [
+      "Skill",
+      "Command"
+    ],
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "anyrouter",
+  "version": "1.0.1",
+  "description": "Wire AnyRouter into Claude Code, Codex, Cursor, and other coding agents. Universal OpenAI-compatible router for 150+ models, with migration recipes from Anthropic, OpenAI, and OpenRouter, plus a remote MCP server for key and credit management.",
+  "author": {
+    "name": "duyet",
+    "url": "https://github.com/duyet"
+  },
+  "license": "MIT",
+  "homepage": "https://anyrouter.dev",
+  "repository": "https://github.com/duyet/codex-claude-plugins",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "anyrouter",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "mcpServers": "./.mcp.json"
+}

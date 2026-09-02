@@ -1,0 +1,28 @@
+{
+  "name": "build-macos-apps",
+  "version": "1.0.1",
+  "description": "Build, debug, instrument, and implement macOS apps with SwiftUI and AppKit guidance, codesigning, packaging, and telemetry workflows.",
+  "author": {
+    "name": "duyet"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "interface": {
+    "displayName": "Build macOS Apps",
+    "shortDescription": "Build, debug, instrument, and implement macOS apps with SwiftUI and AppKit guidance",
+    "developerName": "duyet",
+    "category": "development",
+    "capabilities": [
+      "Skill",
+      "Command",
+      "Agent"
+    ],
+    "links": {
+      "homepage": "https://github.com/duyet/codex-claude-plugins"
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
+  },
+  "logo": "assets/logo.svg"
+}

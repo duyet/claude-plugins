@@ -1,0 +1,16 @@
+{
+  "name": "orchestration",
+  "version": "1.1.0",
+  "description": "Orchestrator skill for managing parallel agent workstreams. Transform complex requests into coordinated multi-agent execution with elegant result synthesis.",
+  "author": {
+    "name": "duyet"
+  },
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "orchestration",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ],
+  "skills": "./skills/"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "github",
+  "version": "1.4.2",
+  "description": "GitHub operations using gh CLI - PRs, workflows, issues, repositories, batch operations, PR babysitting with AI review bot integration, and smart branch detection",
+  "author": {
+    "name": "duyetbot"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "keywords": [
+    "github",
+    "grok",
+    "grok-build",
+    "grok-bot"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

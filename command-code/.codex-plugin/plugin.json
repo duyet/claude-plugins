@@ -13,9 +13,15 @@
     "shortDescription": "Drive & orchestrate the Command Code CLI (`cmd`) as a headless sub-agent.",
     "developerName": "duyet",
     "category": "Developer Tools",
-    "capabilities": ["Skill", "Command", "Agent"],
+    "capabilities": [
+      "Skill",
+      "Command",
+      "Agent"
+    ],
     "links": {
       "homepage": "https://github.com/duyet/claude-plugins"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

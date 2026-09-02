@@ -11,9 +11,13 @@
     "shortDescription": "Author, validate, render, and refactor knowledge into OKF v0.1 bundles (markdown + YAML frontmatter).",
     "developerName": "duyet",
     "category": "productivity",
-    "capabilities": ["Skill"],
+    "capabilities": [
+      "Skill"
+    ],
     "links": {
       "homepage": "https://github.com/duyet/codex-claude-plugins"
-    }
+    },
+    "logo": "./assets/logo.svg",
+    "composerIcon": "./assets/logo.svg"
   }
 }

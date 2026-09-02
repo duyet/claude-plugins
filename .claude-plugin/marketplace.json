@@ -7,122 +7,146 @@
     {
       "name": "team-agents",
       "source": "./team-agents",
-      "description": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel."
+      "description": "Leader and Senior Engineer agents for coordinated parallel task execution. Leader breaks down complex tasks and delegates to multiple senior engineers working in parallel.",
+      "logo": "./team-agents/assets/logo.svg"
     },
     {
       "name": "commit",
       "source": "./commit",
-      "description": "Create a Git commit with semantic commit message format"
+      "description": "Create a Git commit with semantic commit message format",
+      "logo": "./commit/assets/logo.svg"
     },
     {
       "name": "frontend-design",
       "source": "./frontend-design",
-      "description": "Create distinctive, production-grade frontend interfaces with shadcn/ui and Recharts. Avoids AI slop aesthetics with bold design choices and React best practices."
+      "description": "Create distinctive, production-grade frontend interfaces with shadcn/ui and Recharts. Avoids AI slop aesthetics with bold design choices and React best practices.",
+      "logo": "./frontend-design/assets/logo.svg"
     },
     {
       "name": "interview",
       "source": "./interview",
-      "description": "Conduct in-depth requirements interviews using Socratic questioning. Clarifies implementation details, edge cases, and tradeoffs before coding begins."
+      "description": "Conduct in-depth requirements interviews using Socratic questioning. Clarifies implementation details, edge cases, and tradeoffs before coding begins.",
+      "logo": "./interview/assets/logo.svg"
     },
     {
       "name": "statusline",
       "source": "./statusline",
-      "description": "Real-time visibility into Claude Code sessions showing context usage, active tools, and task progress. Inspired by claude-hud."
+      "description": "Real-time visibility into Claude Code sessions showing context usage, active tools, and task progress. Inspired by claude-hud.",
+      "logo": "./statusline/assets/logo.svg"
     },
     {
       "name": "orchestration",
       "source": "./orchestration",
-      "description": "Orchestrate complex work through parallel agent coordination. Decompose requests into task graphs, spawn background workers, and synthesize results elegantly."
+      "description": "Orchestrate complex work through parallel agent coordination. Decompose requests into task graphs, spawn background workers, and synthesize results elegantly.",
+      "logo": "./orchestration/assets/logo.svg"
     },
     {
       "name": "duyetbot",
       "source": "./duyetbot",
-      "description": "Pragmatic software development companion with engineering discipline and transparent execution. Shows reasoning via execution chain, works in iterative loops."
+      "description": "Pragmatic software development companion with engineering discipline and transparent execution. Shows reasoning via execution chain, works in iterative loops.",
+      "logo": "./duyetbot/assets/logo.svg"
     },
     {
       "name": "docs-generator",
       "source": "./docs-generator",
-      "description": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md) from plugin metadata"
+      "description": "Automatically generate and maintain plugin documentation (README.md, CLAUDE.md) from plugin metadata",
+      "logo": "./docs-generator/assets/logo.svg"
     },
     {
       "name": "github",
       "source": "./github",
-      "description": "GitHub operations using gh CLI - PRs, workflows, issues, repositories, and smart branch detection for implementation workflows"
+      "description": "GitHub operations using gh CLI - PRs, workflows, issues, repositories, and smart branch detection for implementation workflows",
+      "logo": "./github/assets/logo.svg"
     },
     {
       "name": "fix",
       "source": "./fix",
-      "description": "Fix issues, tests, and CI failures with intelligent problem detection and resolution. Supports Python, Node/TS, Rust, and Go projects."
+      "description": "Fix issues, tests, and CI failures with intelligent problem detection and resolution. Supports Python, Node/TS, Rust, and Go projects.",
+      "logo": "./fix/assets/logo.svg"
     },
     {
       "name": "simplify",
       "source": "./simplify",
-      "description": "Review changed code for reuse, quality, and efficiency, then simplify issues found."
+      "description": "Review changed code for reuse, quality, and efficiency, then simplify issues found.",
+      "logo": "./simplify/assets/logo.svg"
     },
     {
       "name": "prompt-engineering",
       "source": "./prompt-engineering",
-      "description": "Prompt engineering skills for Grok, Claude, and Gemini LLMs with model-specific guidance, universal techniques (zero-shot, few-shot, CoT, ReAct, prompt chaining, Tree of Thoughts), and comprehensive documentation."
+      "description": "Prompt engineering skills for Grok, Claude, and Gemini LLMs with model-specific guidance, universal techniques (zero-shot, few-shot, CoT, ReAct, prompt chaining, Tree of Thoughts), and comprehensive documentation.",
+      "logo": "./prompt-engineering/assets/logo.svg"
     },
     {
       "name": "clickhouse",
       "source": "./clickhouse",
-      "description": "Comprehensive ClickHouse knowledge from Altinity KB + official docs. Covers schema design, MergeTree engines, query optimization, cluster management, backups, monitoring, and integrations."
+      "description": "Comprehensive ClickHouse knowledge from Altinity KB + official docs. Covers schema design, MergeTree engines, query optimization, cluster management, backups, monitoring, and integrations.",
+      "logo": "./clickhouse/assets/logo.svg"
     },
     {
       "name": "clickhouse-monitoring",
       "source": "./clickhouse-monitoring",
-      "description": "Agent Skill for the ClickHouse Monitor dashboard - a real-time monitoring and observability tool. Covers 45 dashboard pages including query monitoring, table management, merge operations, system metrics, security logs, and API integration."
+      "description": "Agent Skill for the ClickHouse Monitor dashboard - a real-time monitoring and observability tool. Covers 45 dashboard pages including query monitoring, table management, merge operations, system metrics, security logs, and API integration.",
+      "logo": "./clickhouse-monitoring/assets/logo.svg"
     },
     {
       "name": "good-html",
       "source": "./good-html",
-      "description": "Generate or review high-density, interactive, self-contained HTML artifacts based on Thariq Shihipar's 'Unreasonable Effectiveness of HTML' patterns."
+      "description": "Generate or review high-density, interactive, self-contained HTML artifacts based on Thariq Shihipar's 'Unreasonable Effectiveness of HTML' patterns.",
+      "logo": "./good-html/assets/logo.svg"
     },
     {
       "name": "anyrouter",
       "source": "./anyrouter",
-      "description": "Wire AnyRouter into coding agents. Universal OpenAI-compatible LLM gateway for 150+ models, migration recipes from Anthropic/OpenAI/OpenRouter, and a remote MCP server for keys and credits."
+      "description": "Wire AnyRouter into coding agents. Universal OpenAI-compatible LLM gateway for 150+ models, migration recipes from Anthropic/OpenAI/OpenRouter, and a remote MCP server for keys and credits.",
+      "logo": "./anyrouter/assets/logo.svg"
     },
     {
       "name": "sag-notify",
       "source": "./sag-notify",
-      "description": "Spoken voice notifications via sag (ElevenLabs TTS). Skill-driven: Claude calls sag directly to speak a short alert just before it asks you something and a one-line summary when work finishes, naming the project. Configurable voice and language."
+      "description": "Spoken voice notifications via sag (ElevenLabs TTS). Skill-driven: Claude calls sag directly to speak a short alert just before it asks you something and a one-line summary when work finishes, naming the project. Configurable voice and language.",
+      "logo": "./sag-notify/assets/logo.svg"
     },
     {
       "name": "build-macos-apps",
       "source": "./build-macos-apps",
-      "description": "Build, debug, instrument, and implement macOS apps with SwiftUI and AppKit guidance, codesigning, packaging, and telemetry workflows."
+      "description": "Build, debug, instrument, and implement macOS apps with SwiftUI and AppKit guidance, codesigning, packaging, and telemetry workflows.",
+      "logo": "./build-macos-apps/assets/logo.svg"
     },
     {
       "name": "build-ios-apps",
       "source": "./build-ios-apps",
-      "description": "Build, profile, debug, and refine iOS apps with SwiftUI and Xcode workflows — App Intents, Simulator debugging, performance profiling, memory leak detection, and on-device AI with Apple Intelligence, Foundation Models, and Core AI."
+      "description": "Build, profile, debug, and refine iOS apps with SwiftUI and Xcode workflows — App Intents, Simulator debugging, performance profiling, memory leak detection, and on-device AI with Apple Intelligence, Foundation Models, and Core AI.",
+      "logo": "./build-ios-apps/assets/logo.svg"
     },
     {
       "name": "agent-loop",
       "source": "./agent-loop",
-      "description": "Continuous agent loop for overnight/day repo maintenance. Triage, autoreview, browser automation, and parallel agent work. Wake every 5 min, dispatch to threads, land autonomously."
+      "description": "Continuous agent loop for overnight/day repo maintenance. Triage, autoreview, browser automation, and parallel agent work. Wake every 5 min, dispatch to threads, land autonomously.",
+      "logo": "./agent-loop/assets/logo.svg"
     },
     {
       "name": "kb",
       "source": "./kb",
-      "description": "Knowledge base maintenance skills. Initialize a shared-brain kb, then consolidate, dedupe, prune, refresh, and forget notes in a markdown KB."
+      "description": "Knowledge base maintenance skills. Initialize a shared-brain kb, then consolidate, dedupe, prune, refresh, and forget notes in a markdown KB.",
+      "logo": "./kb/assets/logo.svg"
     },
     {
       "name": "okf",
       "source": "./okf",
-      "description": "Open Knowledge Format (OKF) tooling. Author, initialize, validate, render, and refactor knowledge into vendor-neutral OKF v0.1 bundles: markdown files with YAML frontmatter."
+      "description": "Open Knowledge Format (OKF) tooling. Author, initialize, validate, render, and refactor knowledge into vendor-neutral OKF v0.1 bundles: markdown files with YAML frontmatter.",
+      "logo": "./okf/assets/logo.svg"
     },
     {
       "name": "unsloth-training",
       "source": "./unsloth-training",
-      "description": "Fine-tune LLMs with Unsloth using GRPO or SFT. Includes dataset preparation, synthetic data generation, environment flags, MLX (Apple Silicon), FP8, vision models, mobile export, GGUF."
+      "description": "Fine-tune LLMs with Unsloth using GRPO or SFT. Includes dataset preparation, synthetic data generation, environment flags, MLX (Apple Silicon), FP8, vision models, mobile export, GGUF.",
+      "logo": "./unsloth-training/assets/logo.svg"
     },
     {
       "name": "command-code",
       "source": "./command-code",
-      "description": "Drive the Command Code CLI (`cmd`) and orchestrate it as a headless sub-agent. Fan out `cmd -p --yolo --max-turns 100000` workers across isolated git worktrees to implement issues and tasks in parallel, each committed to its own branch for review."
+      "description": "Drive the Command Code CLI (`cmd`) and orchestrate it as a headless sub-agent. Fan out `cmd -p --yolo --max-turns 100000` workers across isolated git worktrees to implement issues and tasks in parallel, each committed to its own branch for review.",
+      "logo": "./command-code/assets/logo.svg"
     }
   ]
 }

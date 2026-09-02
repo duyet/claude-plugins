@@ -8,5 +8,6 @@
   },
   "homepage": "https://github.com/duyet/claude-plugins",
   "repository": "https://github.com/duyet/codex-claude-plugins",
-  "license": "MIT"
+  "license": "MIT",
+  "logo": "./assets/logo.svg"
 }
