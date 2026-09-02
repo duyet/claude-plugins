@@ -14,12 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout ClickHouse/agent-skills
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ClickHouse/agent-skills
           path: agent-skills

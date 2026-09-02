@@ -23,7 +23,7 @@ jobs:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@2.0.0
@@ -35,7 +35,7 @@ jobs:
     name: Syntax Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Check bash syntax
         run: |
@@ -62,7 +62,7 @@ jobs:
       matrix:
         bash-version: ["4.4", "5.0", "5.1", "5.2"]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Test with bash version
         env:
@@ -91,7 +91,7 @@ jobs:
     name: Unit Tests (bats)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup bats
         uses: bats-core/bats-action@4.0.0
