@@ -2,7 +2,8 @@
 
 Behavior-level inventory of **duyet/codex-claude-plugins**. Agents use this map
 to decide what to drive and what evidence counts. This checkout is a plugin
-marketplace pack (Claude Code + Codex). It is not a hosted web app.
+marketplace pack (Claude Code, Codex, Grok Build, Grok Bot). It is not a hosted
+web app.
 
 ## Baseline preconditions
 
@@ -12,9 +13,9 @@ marketplace pack (Claude Code + Codex). It is not a hosted web app.
 - `python3` is on `PATH` (needed by `scripts/validate-plugins.sh`).
 - Read-only commands are safe to run concurrently.
 - Do not `install-antigravity --apply` against `$HOME` during verification.
-- Grok Build / Grok Bot have no in-tree catalog. Drive
-  [grok-build-and-bot.md](./grok-build-and-bot.md) as an expected skip, not a
-  failure.
+- Grok Build and Grok Bot are real slots. Drive
+  [grok-build-and-bot.md](./grok-build-and-bot.md). A skip from
+  `check-install --surface grok` is a failed drive.
 
 ## Driving conventions
 
@@ -22,28 +23,31 @@ marketplace pack (Claude Code + Codex). It is not a hosted web app.
 - Treat commands in feature files as literal.
 - Use `--json` when asserting fields.
 - `validate` wraps the production script; do not reimplement it ad hoc.
-- Report unreachable paths (Claude Code / Codex CLIs not installed here) as
-  skipped with the closest on-disk proof that remains.
+- Report unreachable paths (Claude Code / Codex / Grok CLIs not installed here)
+  as skipped with the closest on-disk proof that remains.
 
 ## Proof and skip reporting
 
 - Capture the command, exit code, and resulting catalog/docs state.
 - A marketplace `source` that does not exist on disk is a failed install path,
   even if JSON parses.
+- A Grok marketplace `logo` that does not exist under the plugin source is a
+  failed install path.
 - Missing plugin `README.md` is a docs warning unless `--strict`.
 - Do not call a Codex gap verified via the Claude catalog.
+- Do not call a Grok gap verified via the Claude or Codex catalog.
 
 ## Full sweep
 
 Walk this list top to bottom for a broad regression. Finish with
-`grok-build-and-bot.md` (skip until a surface exists).
+`grok-build-and-bot.md` as a real slot, not a skip.
 
 ## Catalog & manifests
 
-- [marketplace-catalog](./marketplace-catalog.md): root, Claude, and Codex
-  marketplace JSON, plugin directory set, ids.
+- [marketplace-catalog](./marketplace-catalog.md): root, Claude, Codex, and
+  Grok marketplace JSON, plugin directory set, ids.
 - [plugin-manifests](./plugin-manifests.md): per-plugin Claude / Codex /
-  Antigravity `plugin.json` and parity.
+  Antigravity / Grok Bot / Grok Build `plugin.json` and parity.
 
 ## Install
 
@@ -51,6 +55,8 @@ Walk this list top to bottom for a broad regression. Finish with
   `/plugin install`, settings.json, Skills CLI.
 - [codex-install](./codex-install.md): local Codex marketplace import from
   `.agents/plugins/marketplace.json`.
+- [grok-build-and-bot](./grok-build-and-bot.md): Grok marketplace add/install,
+  `.grok-plugin/` + `.grok-build-plugin/` manifests, local `assets/logo.svg`.
 
 ## Docs & harness
 
@@ -58,11 +64,6 @@ Walk this list top to bottom for a broad regression. Finish with
   install and structure docs; plugin READMEs.
 - [validation-harness](./validation-harness.md): `scripts/validate-plugins.sh`
   and CI.
-
-## Later surfaces
-
-- [grok-build-and-bot](./grok-build-and-bot.md): placeholder for Grok Build /
-  Grok Bot. No driver yet.
 
 ## Entry contract
 

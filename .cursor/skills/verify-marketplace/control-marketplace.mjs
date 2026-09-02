@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-/**
- * Drive the duyet/codex-claude-plugins marketplace pack.
- * There is no hosted web UI; the user-facing product is plugin catalogs,
- * manifests, and documented install paths for Claude Code and Codex.
- */
 
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -21,6 +16,7 @@ const MARKETPLACE_FILES = {
   root: "marketplace.json",
   claude: path.join(".claude-plugin", "marketplace.json"),
   codex: path.join(".agents", "plugins", "marketplace.json"),
+  grok: path.join(".grok-plugin", "marketplace.json"),
 };
 
 const CLAUDE_INSTALL_NEEDLES = [
@@ -59,6 +55,34 @@ const CODEX_INSTALL_NEEDLES = [
   },
 ];
 
+const GROK_INSTALL_NEEDLES = [
+  {
+    id: "readme-grok-marketplace-add",
+    file: "README.md",
+    needle: "grok plugin marketplace add duyet/codex-claude-plugins",
+  },
+  {
+    id: "readme-grok-plugin-install",
+    file: "README.md",
+    needle: "grok plugin install ",
+  },
+  {
+    id: "readme-grok-marketplace-file",
+    file: "README.md",
+    needle: ".grok-plugin/marketplace.json",
+  },
+  {
+    id: "readme-grok-logo",
+    file: "README.md",
+    needle: "assets/logo.svg",
+  },
+  {
+    id: "contributing-grok-marketplace",
+    file: "CONTRIBUTING.md",
+    needle: ".grok-plugin/marketplace.json",
+  },
+];
+
 const DOCS_NEEDLES = [
   {
     id: "contributing-validate",
@@ -79,6 +103,21 @@ const DOCS_NEEDLES = [
     id: "claude-md-codex-manifest",
     file: "CLAUDE.md",
     needle: ".codex-plugin/plugin.json",
+  },
+  {
+    id: "claude-md-grok-manifest",
+    file: "CLAUDE.md",
+    needle: ".grok-plugin/plugin.json",
+  },
+  {
+    id: "claude-md-grok-build-manifest",
+    file: "CLAUDE.md",
+    needle: ".grok-build-plugin/plugin.json",
+  },
+  {
+    id: "claude-md-grok-marketplace",
+    file: "CLAUDE.md",
+    needle: ".grok-plugin/marketplace.json",
   },
 ];
 
@@ -103,7 +142,7 @@ function main(argv) {
     writeOutput(parsed, {
       ok: true,
       command: "version",
-      version: "1.0.0",
+      version: "1.1.0",
       skill: "verify-marketplace",
     });
     return OK_EXIT;
@@ -197,7 +236,10 @@ function parseArgs(argv) {
       "force",
       "missingReadme",
       "missingCodex",
+      "missingGrok",
       "hasAntigravity",
+      "hasGrok",
+      "hasGrokBuild",
     ]);
     if (booleanFlags.has(key)) {
       flags[key] = true;
@@ -297,7 +339,19 @@ function pluginDirectories(repoRoot) {
     .filter((name) => {
       const claude = path.join(repoRoot, name, ".claude-plugin", "plugin.json");
       const codex = path.join(repoRoot, name, ".codex-plugin", "plugin.json");
-      return fs.existsSync(claude) || fs.existsSync(codex);
+      const grok = path.join(repoRoot, name, ".grok-plugin", "plugin.json");
+      const grokBuild = path.join(
+        repoRoot,
+        name,
+        ".grok-build-plugin",
+        "plugin.json",
+      );
+      return (
+        fs.existsSync(claude) ||
+        fs.existsSync(codex) ||
+        fs.existsSync(grok) ||
+        fs.existsSync(grokBuild)
+      );
     })
     .sort();
 }
@@ -307,27 +361,47 @@ function pluginRecord(repoRoot, name) {
   const claudePath = path.join(dir, ".claude-plugin", "plugin.json");
   const codexPath = path.join(dir, ".codex-plugin", "plugin.json");
   const antigravityPath = path.join(dir, ".antigravity-plugin", "plugin.json");
+  const grokPath = path.join(dir, ".grok-plugin", "plugin.json");
+  const grokBuildPath = path.join(dir, ".grok-build-plugin", "plugin.json");
   const claude = fs.existsSync(claudePath) ? loadJson(claudePath) : null;
   const codex = fs.existsSync(codexPath) ? loadJson(codexPath) : null;
   const antigravity = fs.existsSync(antigravityPath)
     ? loadJson(antigravityPath)
+    : null;
+  const grok = fs.existsSync(grokPath) ? loadJson(grokPath) : null;
+  const grokBuild = fs.existsSync(grokBuildPath)
+    ? loadJson(grokBuildPath)
     : null;
   const readme = fs.existsSync(path.join(dir, "README.md"));
   const claudeMd = fs.existsSync(path.join(dir, "CLAUDE.md"));
   return {
     name,
     dir,
-    version: claude?.version ?? codex?.version ?? null,
-    description: claude?.description ?? codex?.description ?? null,
+    version:
+      claude?.version ??
+      codex?.version ??
+      grok?.version ??
+      grokBuild?.version ??
+      null,
+    description:
+      claude?.description ??
+      codex?.description ??
+      grok?.description ??
+      grokBuild?.description ??
+      null,
     claude: Boolean(claude),
     codex: Boolean(codex),
     antigravity: Boolean(antigravity),
+    grok: Boolean(grok),
+    grokBuild: Boolean(grokBuild),
     readme,
     claudeMd,
     manifests: {
       claude: claude ? rel(repoRoot, claudePath) : null,
       codex: codex ? rel(repoRoot, codexPath) : null,
       antigravity: antigravity ? rel(repoRoot, antigravityPath) : null,
+      grok: grok ? rel(repoRoot, grokPath) : null,
+      grokBuild: grokBuild ? rel(repoRoot, grokBuildPath) : null,
     },
   };
 }
@@ -335,6 +409,54 @@ function pluginRecord(repoRoot, name) {
 function marketplaceNames(data) {
   const plugins = Array.isArray(data?.plugins) ? data.plugins : [];
   return plugins.map((plugin) => plugin?.name).filter(Boolean);
+}
+
+function grokSource(plugin) {
+  const source = plugin?.source;
+  if (typeof source === "string" && source.startsWith("./")) {
+    return { ok: true, path: source };
+  }
+  if (source && typeof source === "object") {
+    const pathValue = source.path;
+    const local = source.type === "local" || source.source === "local";
+    return {
+      ok:
+        local &&
+        typeof pathValue === "string" &&
+        pathValue.startsWith("./"),
+      path: typeof pathValue === "string" ? pathValue : null,
+    };
+  }
+  return { ok: false, path: null };
+}
+
+function grokLogoCheck(repoRoot, plugin) {
+  const name = plugin?.name ?? "unknown";
+  const logo = plugin?.logo;
+  const source = grokSource(plugin);
+  if (typeof logo !== "string" || !logo.trim()) {
+    return {
+      ok: false,
+      detail: `${name}: Grok marketplace logo missing`,
+    };
+  }
+  if (logo.startsWith("http://") || logo.startsWith("https://")) {
+    return { ok: true, detail: `${name} remote logo ${logo}` };
+  }
+  if (!source.path) {
+    return {
+      ok: false,
+      detail: `${name}: Grok logo ${JSON.stringify(logo)} has no source path`,
+    };
+  }
+  const filePath = path.normalize(path.join(repoRoot, source.path, logo));
+  const exists = fs.existsSync(filePath) && fs.statSync(filePath).isFile();
+  return {
+    ok: exists,
+    detail: exists
+      ? `${name} logo ${rel(repoRoot, filePath)}`
+      : `${name}: Grok logo missing: ${JSON.stringify(logo)}`,
+  };
 }
 
 function rel(repoRoot, filePath) {
@@ -410,7 +532,7 @@ function runDoctor(parsed) {
   checks.push({
     id: "plugin-dirs",
     ok: plugins.length > 0,
-    detail: `${plugins.length} plugin directories with Claude or Codex manifests`,
+    detail: `${plugins.length} plugin directories with Claude, Codex, or Grok manifests`,
   });
   const skillCli = path.join(SKILL_DIR, "control-marketplace.mjs");
   checks.push({
@@ -439,7 +561,11 @@ function runInfo(parsed) {
     pluginRecord(repoRoot, name),
   );
   const payload = {
-    ok: marketplaces.root.ok && marketplaces.claude.ok && marketplaces.codex.ok,
+    ok:
+      marketplaces.root.ok &&
+      marketplaces.claude.ok &&
+      marketplaces.codex.ok &&
+      marketplaces.grok.ok,
     command: "info",
     repoRoot,
     marketplaceName: marketplaces.root.value?.name ?? null,
@@ -448,6 +574,9 @@ function runInfo(parsed) {
       rootMarketplace: marketplaces.root.names.length,
       claudeMarketplace: marketplaces.claude.names.length,
       codexMarketplace: marketplaces.codex.names.length,
+      grokMarketplace: marketplaces.grok.names.length,
+      grok: plugins.filter((plugin) => plugin.grok).length,
+      grokBuild: plugins.filter((plugin) => plugin.grokBuild).length,
       antigravity: plugins.filter((plugin) => plugin.antigravity).length,
       missingReadme: plugins.filter((plugin) => !plugin.readme).length,
     },
@@ -455,8 +584,9 @@ function runInfo(parsed) {
       claudeCode: true,
       codex: true,
       antigravity: plugins.some((plugin) => plugin.antigravity),
-      grokBuild: false,
-      grokBot: false,
+      grokBuild:
+        marketplaces.grok.ok && plugins.some((plugin) => plugin.grokBuild),
+      grokBot: marketplaces.grok.ok && plugins.some((plugin) => plugin.grok),
     },
     gaps: {
       missingFromCodex: sortedDiff(
@@ -465,6 +595,14 @@ function runInfo(parsed) {
       ),
       extraInCodex: sortedDiff(
         marketplaces.codex.names,
+        plugins.map((plugin) => plugin.name),
+      ),
+      missingFromGrok: sortedDiff(
+        plugins.map((plugin) => plugin.name),
+        marketplaces.grok.names,
+      ),
+      extraInGrok: sortedDiff(
+        marketplaces.grok.names,
         plugins.map((plugin) => plugin.name),
       ),
     },
@@ -485,8 +623,17 @@ function runList(parsed) {
   if (parsed.flags.missingCodex) {
     plugins = plugins.filter((plugin) => !plugin.codex);
   }
+  if (parsed.flags.missingGrok) {
+    plugins = plugins.filter((plugin) => !plugin.grok || !plugin.grokBuild);
+  }
   if (parsed.flags.hasAntigravity) {
     plugins = plugins.filter((plugin) => plugin.antigravity);
+  }
+  if (parsed.flags.hasGrok) {
+    plugins = plugins.filter((plugin) => plugin.grok);
+  }
+  if (parsed.flags.hasGrokBuild) {
+    plugins = plugins.filter((plugin) => plugin.grokBuild);
   }
   const payload = {
     ok: true,
@@ -572,6 +719,7 @@ function runCheckDocs(parsed) {
   for (const spec of [
     ...CLAUDE_INSTALL_NEEDLES,
     ...CODEX_INSTALL_NEEDLES,
+    ...GROK_INSTALL_NEEDLES,
     ...DOCS_NEEDLES,
   ]) {
     const found = fileContains(repoRoot, spec.file, spec.needle);
@@ -719,31 +867,76 @@ function runCheckInstall(parsed) {
   }
 
   if (want("grok")) {
-    const grokMarkers = [
-      ".grok-plugin/marketplace.json",
-      ".grok/plugins/marketplace.json",
-      "grok-marketplace.json",
-    ];
-    const found = grokMarkers.filter((relative) =>
-      fs.existsSync(path.join(repoRoot, relative)),
-    );
     checks.push({
-      id: "grok-build",
-      ok: true,
-      severity: "skip",
-      detail:
-        found.length === 0
-          ? "no Grok Build marketplace file in-tree; do not invent a driver"
-          : `unexpected Grok markers: ${found.join(", ")}`,
-      available: found.length > 0,
+      id: "grok-marketplace-parses",
+      ok: marketplaces.grok.ok,
+      detail: marketplaces.grok.ok
+        ? MARKETPLACE_FILES.grok
+        : marketplaces.grok.error,
     });
+    const records = plugins.map((name) => pluginRecord(repoRoot, name));
+    const missingGrokBot = records
+      .filter((plugin) => !plugin.grok)
+      .map((plugin) => plugin.name);
+    const missingGrokBuild = records
+      .filter((plugin) => !plugin.grokBuild)
+      .map((plugin) => plugin.name);
     checks.push({
       id: "grok-bot",
-      ok: true,
-      severity: "skip",
-      detail: "no Grok Bot pack surface in-tree; leave room in the feature map",
-      available: false,
+      ok: marketplaces.grok.ok && missingGrokBot.length === 0,
+      available: marketplaces.grok.ok,
+      detail:
+        marketplaces.grok.ok && missingGrokBot.length === 0
+          ? `${MARKETPLACE_FILES.grok} and .grok-plugin/plugin.json on every plugin`
+          : `Grok Bot missing: marketplaceOk=${marketplaces.grok.ok} missingManifests=${JSON.stringify(missingGrokBot)}`,
     });
+    checks.push({
+      id: "grok-build",
+      ok: missingGrokBuild.length === 0,
+      available: missingGrokBuild.length === 0,
+      detail:
+        missingGrokBuild.length === 0
+          ? ".grok-build-plugin/plugin.json on every plugin"
+          : `missing Grok Build manifests: ${JSON.stringify(missingGrokBuild)}`,
+    });
+    const missingFromGrok = sortedDiff(plugins, marketplaces.grok.names);
+    const extraInGrok = sortedDiff(marketplaces.grok.names, plugins);
+    checks.push({
+      id: "grok-marketplace-names",
+      ok: missingFromGrok.length === 0 && extraInGrok.length === 0,
+      detail:
+        missingFromGrok.length === 0 && extraInGrok.length === 0
+          ? "Grok marketplace names match plugin directories"
+          : `missingFromGrok=${JSON.stringify(missingFromGrok)} extraInGrok=${JSON.stringify(extraInGrok)}`,
+      missingFromGrok,
+      extraInGrok,
+    });
+    const grokPlugins = marketplaces.grok.value?.plugins ?? [];
+    for (const plugin of grokPlugins) {
+      const source = grokSource(plugin);
+      const absSource =
+        source.path && source.path.startsWith("./")
+          ? path.join(repoRoot, source.path)
+          : null;
+      const sourceOk = source.ok && Boolean(absSource) && fs.existsSync(absSource);
+      checks.push({
+        id: `grok-source-${plugin?.name ?? "unknown"}`,
+        ok: sourceOk,
+        detail: sourceOk
+          ? `${plugin.name} source ${source.path}`
+          : `${plugin?.name}: Grok source missing or invalid: ${JSON.stringify(plugin?.source)}`,
+      });
+      const logo = grokLogoCheck(repoRoot, plugin);
+      checks.push({
+        id: `grok-logo-${plugin?.name ?? "unknown"}`,
+        ok: logo.ok,
+        detail: logo.detail,
+      });
+    }
+    for (const spec of GROK_INSTALL_NEEDLES) {
+      const found = fileContains(repoRoot, spec.file, spec.needle);
+      checks.push({ id: spec.id, ok: found.ok, detail: found.detail });
+    }
   }
 
   return finishChecks(parsed, "check-install", checks, {
@@ -854,6 +1047,18 @@ function runProve(parsed) {
       stderr: result.stderr,
     });
   }
+  let skipFailure = null;
+  if (feature === "grok-build-and-bot") {
+    const grokStep = results.find((step) => step.id === "check-install-grok");
+    const skipIds = grokSkipCheckIds(grokStep, repoRoot);
+    if (skipIds === null || skipIds.length > 0) {
+      ok = false;
+      skipFailure = skipIds ?? ["unparseable-check-install-grok"];
+      if (grokStep) {
+        grokStep.ok = false;
+      }
+    }
+  }
   const proof = {
     ok,
     command: "prove",
@@ -869,7 +1074,8 @@ function runProve(parsed) {
       invocation: portableInvocation(step.args, repoRoot),
     })),
     hostedUi: false,
-    note: "This pack has no hosted web UI. Proof is catalog parse, plugin inventory, and Claude marketplace source resolution.",
+    note: proofNote(feature),
+    ...(skipFailure ? { skipFailure } : {}),
   };
   const jsonPath = path.join(outDir, "drive.json");
   const mdPath = path.join(outDir, "drive.md");
@@ -939,6 +1145,8 @@ function proveSteps(feature) {
     case "grok-build-and-bot":
       return [
         { id: "doctor", args: ["doctor", "--json"] },
+        { id: "info", args: ["info", "--json"] },
+        { id: "list", args: ["list", "--json"] },
         {
           id: "check-install-grok",
           args: ["check-install", "--surface", "grok", "--json"],
@@ -948,6 +1156,40 @@ function proveSteps(feature) {
       throw new Error(
         `Unknown feature ${feature}. See references/features/README.md.`,
       );
+  }
+}
+
+function proofNote(feature) {
+  if (feature === "grok-build-and-bot") {
+    return "This pack has no hosted web UI. Proof is Grok marketplace parse, per-plugin Grok Bot and Grok Build manifests, local source paths, and marketplace logo files.";
+  }
+  return "This pack has no hosted web UI. Proof is catalog parse, plugin inventory, and Claude marketplace source resolution.";
+}
+
+function proofWhatProved(proof, catalogSummary) {
+  if (proof.feature === "marketplace-catalog") {
+    return `The checkout is a marketplace plugin pack. Marketplace JSON parses, plugin directories are listable, and every Claude marketplace \`source\` resolves to a real folder. There is no web app to click; Claude Code install needles in README match files that exist on disk.${catalogSummary}`;
+  }
+  if (proof.feature === "grok-build-and-bot") {
+    return `The checkout ships Grok Bot and Grok Build. \`.grok-plugin/marketplace.json\` parses, every plugin directory has \`.grok-plugin/plugin.json\` and \`.grok-build-plugin/plugin.json\`, marketplace sources resolve, and each marketplace logo path exists on disk. \`check-install --surface grok\` does not report skip.${catalogSummary}`;
+  }
+  return `Drove feature \`${proof.feature}\` through control-marketplace.${catalogSummary}`;
+}
+
+function grokSkipCheckIds(step, repoRoot) {
+  if (!step?.stdout) {
+    return null;
+  }
+  try {
+    const payload = JSON.parse(portableText(step.stdout, repoRoot));
+    if (!Array.isArray(payload.checks)) {
+      return null;
+    }
+    return payload.checks
+      .filter((check) => check.severity === "skip")
+      .map((check) => check.id);
+  } catch {
+    return null;
   }
 }
 
@@ -978,7 +1220,7 @@ function renderProofMarkdown(proof, results, repoRoot) {
     try {
       const info = JSON.parse(portableText(infoStep.stdout, repoRoot));
       const missing = info.gaps?.missingFromCodex ?? [];
-      catalogSummary = ` Inventory from \`info\`: ${info.counts?.pluginDirs} plugin directories, root/Claude catalogs ${info.counts?.rootMarketplace}/${info.counts?.claudeMarketplace}, Codex ${info.counts?.codexMarketplace}${missing.length ? ` (missing ${missing.join(", ")}; not a Claude-catalog failure)` : ""}.`;
+      catalogSummary = ` Inventory from \`info\`: ${info.counts?.pluginDirs} plugin directories, root/Claude catalogs ${info.counts?.rootMarketplace}/${info.counts?.claudeMarketplace}, Codex ${info.counts?.codexMarketplace}, Grok ${info.counts?.grokMarketplace}${missing.length ? ` (missing ${missing.join(", ")}; not a Claude-catalog failure)` : ""}.`;
     } catch {
       catalogSummary = "";
     }
@@ -995,9 +1237,7 @@ function renderProofMarkdown(proof, results, repoRoot) {
     "",
     "## What this proved",
     "",
-    proof.feature === "marketplace-catalog"
-      ? `The checkout is a marketplace plugin pack. Marketplace JSON parses, plugin directories are listable, and every Claude marketplace \`source\` resolves to a real folder. There is no web app to click; Claude Code install needles in README match files that exist on disk.${catalogSummary}`
-      : `Drove feature \`${proof.feature}\` through control-marketplace.${catalogSummary}`,
+    proofWhatProved(proof, catalogSummary),
     "",
     "## Steps",
     "",
@@ -1012,7 +1252,6 @@ function renderProofMarkdown(proof, results, repoRoot) {
   lines.push(
     "- `drive.md` — what the drive proved (committed). `drive.transcript.txt` is local-only.",
   );
-  lines.push("");
   return `${lines.join("\n")}\n`;
 }
 
@@ -1104,9 +1343,8 @@ USAGE
   node .cursor/skills/verify-marketplace/control-marketplace.mjs <command> [flags]
 
 This repo is a plugin marketplace, not a hosted web app. The lever validates
-marketplace JSON, plugin manifests, and documented Claude Code / Codex install
-paths. Grok Build and Grok Bot have no in-tree surface yet; check-install
---surface grok reports that skip instead of inventing a driver.
+marketplace JSON, plugin manifests, and documented Claude Code, Codex, Grok
+Build, and Grok Bot install paths.
 
 GLOBAL FLAGS
   --json              Machine-readable stdout (also --format json)
@@ -1159,20 +1397,21 @@ USAGE
 Reports python3, node, validate-plugins.sh, marketplace JSON parse, plugin
 directory count, and that this lever plus the feature map are present.
 
-Does not fail on Codex catalog drift; that is validate / check-install --surface codex.`,
+Does not fail on Codex or Grok catalog name drift; that is validate /
+check-install --surface codex|grok.`,
     info: `info — pack identity
 
 USAGE
   control-marketplace.mjs info [--json] [--repo <path>]
 
 Prints marketplace name, plugin counts per catalog, Antigravity count,
-Grok surface flags (currently false), and Codex name gaps.`,
+Grok Bot / Grok Build surface flags, and Codex or Grok name gaps.`,
     list: `list — plugin inventory
 
 USAGE
-  control-marketplace.mjs list [--json] [--missing-readme] [--missing-codex] [--has-antigravity]
+  control-marketplace.mjs list [--json] [--missing-readme] [--missing-codex] [--missing-grok] [--has-antigravity] [--has-grok] [--has-grok-build]
 
-Each row includes claude/codex/antigravity booleans, README/CLAUDE.md, and version.`,
+Each row includes claude/codex/antigravity/grok/grokBuild booleans, README/CLAUDE.md, and version.`,
     inspect: `inspect — one plugin
 
 USAGE
@@ -1201,7 +1440,7 @@ USAGE
 claude   Claude marketplace sources exist; root ids are name@marketplace
 codex    Codex marketplace names match plugin dirs; local sources exist
 antigravity  Lists .antigravity-plugin packs and the install script
-grok     Expected skip until a Grok Build / Grok Bot catalog exists`,
+grok     Grok marketplace names, local sources, per-plugin logos, and Grok Bot / Grok Build manifests. Skip is a failure.`,
     "install-antigravity": `install-antigravity — symlink Antigravity plugins
 
 USAGE
@@ -1292,6 +1531,8 @@ function renderText(payload) {
         plugin.claude ? "claude" : null,
         plugin.codex ? "codex" : null,
         plugin.antigravity ? "antigravity" : null,
+        plugin.grok ? "grok" : null,
+        plugin.grokBuild ? "grok-build" : null,
         plugin.readme ? "readme" : "NO-README",
       ]
         .filter(Boolean)
@@ -1309,7 +1550,7 @@ function renderText(payload) {
     lines.push(`marketplace: ${payload.marketplaceName}`);
     lines.push(`pluginDirs: ${payload.counts.pluginDirs}`);
     lines.push(
-      `catalogs: root=${payload.counts.rootMarketplace} claude=${payload.counts.claudeMarketplace} codex=${payload.counts.codexMarketplace}`,
+      `catalogs: root=${payload.counts.rootMarketplace} claude=${payload.counts.claudeMarketplace} codex=${payload.counts.codexMarketplace} grok=${payload.counts.grokMarketplace}`,
     );
     lines.push(
       `surfaces: claudeCode=${payload.surfaces.claudeCode} codex=${payload.surfaces.codex} antigravity=${payload.surfaces.antigravity} grokBuild=${payload.surfaces.grokBuild} grokBot=${payload.surfaces.grokBot}`,
@@ -1317,6 +1558,11 @@ function renderText(payload) {
     if (payload.gaps?.missingFromCodex?.length) {
       lines.push(
         `codex gap: missing ${payload.gaps.missingFromCodex.join(", ")}`,
+      );
+    }
+    if (payload.gaps?.missingFromGrok?.length) {
+      lines.push(
+        `grok gap: missing ${payload.gaps.missingFromGrok.join(", ")}`,
       );
     }
   }

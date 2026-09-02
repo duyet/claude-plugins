@@ -7,7 +7,14 @@ Generate (or refresh) a drive with:
 
 ```bash
 node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature marketplace-catalog --json
+node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature grok-build-and-bot --json
+node .cursor/skills/verify-marketplace/control-marketplace.mjs prove --feature codex-install --json
 ```
+
+`prove` writes one drive at a time into this directory. Claude and Codex
+recipes stay in `proveSteps`. The Grok drive is the required proof after the
+Grok marketplace shipped. Skip from `check-install --surface grok` fails the
+Grok drive.
 
 Expected files after a successful drive:
 

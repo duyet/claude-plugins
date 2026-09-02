@@ -1,26 +1,30 @@
 # Marketplace catalog
 
-The pack is three marketplace JSON files plus one directory per plugin. A user
+The pack is four marketplace JSON files plus one directory per plugin. A user
 cannot install a plugin that is missing from the catalog they use, or whose
 `source` path does not exist.
 
 ## Sub-features
 
 - `catalog-parse` loads `marketplace.json`, `.claude-plugin/marketplace.json`,
-  and `.agents/plugins/marketplace.json` as JSON.
-- `catalog-list` lists plugin directories that ship a Claude or Codex manifest.
+  `.agents/plugins/marketplace.json`, and `.grok-plugin/marketplace.json` as
+  JSON.
+- `catalog-list` lists plugin directories that ship a Claude, Codex, or Grok
+  manifest.
 - `catalog-claude-sources` resolves every Claude marketplace `source` to a
   directory.
 - `catalog-root-ids` checks root marketplace `id` values are
   `<name>@<marketplace.name>`.
 - `catalog-codex-names` checks Codex marketplace names match plugin
   directories.
+- `catalog-grok-names` checks Grok marketplace names match plugin directories.
 
 ## How to get to it (user POV)
 
 - Open `marketplace.json` at the repo root (skills.sh / catalog metadata).
 - Open `.claude-plugin/marketplace.json` (Claude Code marketplace add).
 - Open `.agents/plugins/marketplace.json` (Codex local marketplace).
+- Open `.grok-plugin/marketplace.json` (Grok Build and Grok Bot).
 - List first-level plugin folders that contain `.claude-plugin/plugin.json`.
 
 ## Driving it with control-marketplace
@@ -34,8 +38,9 @@ Preconditions:
 - **Parse catalogs.** Run
   `node .cursor/skills/verify-marketplace/control-marketplace.mjs info --json`.
   `ok` is true, `marketplaceName` is `duyet-claude-plugins`, and
-  `counts.pluginDirs` equals `counts.rootMarketplace` and
-  `counts.claudeMarketplace`.
+  `counts.pluginDirs` equals `counts.rootMarketplace`,
+  `counts.claudeMarketplace`, and `counts.grokMarketplace`.
+  `surfaces.grokBuild` and `surfaces.grokBot` are true.
 - **List plugins.** Run
   `node .cursor/skills/verify-marketplace/control-marketplace.mjs list --json`.
   `plugins` is a non-empty array; each item has `name` and `claude: true`.
@@ -58,5 +63,8 @@ Preconditions:
   schemas. Do not assert `source` on the root file.
 - `info` can be `ok` while Codex still lags plugin directories. Use
   `gaps.missingFromCodex`.
-- Doctor does not fail on Codex drift. `validate` does.
+- Doctor does not fail on Codex or Grok name drift. `validate` does.
+- Grok install resolvability lives in
+  [grok-build-and-bot.md](./grok-build-and-bot.md). This feature only asserts
+  that the Grok catalog parses and the name set matches.
 - There is no web catalog to click. GitHub's repo page is not this feature.

@@ -1,22 +1,22 @@
-# Proven drive: marketplace-catalog
+# Proven drive: grok-build-and-bot
 
 Result: **pass**
 
-- Started: 2026-09-02T18:23:37.757Z
-- Finished: 2026-09-02T18:23:37.859Z
+- Started: 2026-09-02T18:59:00.819Z
+- Finished: 2026-09-02T18:59:00.931Z
 - Repo: checkout root (paths in this file are repo-relative)
 - Hosted UI: no
 
 ## What this proved
 
-The checkout is a marketplace plugin pack. Marketplace JSON parses, plugin directories are listable, and every Claude marketplace `source` resolves to a real folder. There is no web app to click; Claude Code install needles in README match files that exist on disk. Inventory from `info`: 24 plugin directories, root/Claude catalogs 24/24, Codex 23 (missing command-code; not a Claude-catalog failure).
+The checkout ships Grok Bot and Grok Build. `.grok-plugin/marketplace.json` parses, every plugin directory has `.grok-plugin/plugin.json` and `.grok-build-plugin/plugin.json`, marketplace sources resolve, and each marketplace logo path exists on disk. `check-install --surface grok` does not report skip. Inventory from `info`: 24 plugin directories, root/Claude catalogs 24/24, Codex 24, Grok 24.
 
 ## Steps
 
 - `doctor`: pass (exit 0) — `node .cursor/skills/verify-marketplace/control-marketplace.mjs doctor --json`
 - `info`: pass (exit 0) — `node .cursor/skills/verify-marketplace/control-marketplace.mjs info --json`
 - `list`: pass (exit 0) — `node .cursor/skills/verify-marketplace/control-marketplace.mjs list --json`
-- `check-install-claude`: pass (exit 0) — `node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface claude --json`
+- `check-install-grok`: pass (exit 0) — `node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface grok --json`
 
 ## Artifacts
 

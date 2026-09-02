@@ -1,9 +1,9 @@
 {
   "ok": true,
   "command": "prove",
-  "feature": "marketplace-catalog",
-  "startedAt": "2026-09-02T18:23:37.757Z",
-  "finishedAt": "2026-09-02T18:23:37.859Z",
+  "feature": "grok-build-and-bot",
+  "startedAt": "2026-09-02T18:59:00.819Z",
+  "finishedAt": "2026-09-02T18:59:00.931Z",
   "repoRoot": ".",
   "outDir": ".cursor/skills/verify-marketplace/proof",
   "steps": [
@@ -26,12 +26,12 @@
       "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs list --json"
     },
     {
-      "id": "check-install-claude",
+      "id": "check-install-grok",
       "ok": true,
       "exitCode": 0,
-      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface claude --json"
+      "invocation": "node .cursor/skills/verify-marketplace/control-marketplace.mjs check-install --surface grok --json"
     }
   ],
   "hostedUi": false,
-  "note": "This pack has no hosted web UI. Proof is catalog parse, plugin inventory, and Claude marketplace source resolution."
+  "note": "This pack has no hosted web UI. Proof is Grok marketplace parse, per-plugin Grok Bot and Grok Build manifests, local source paths, and marketplace logo files."
 }
