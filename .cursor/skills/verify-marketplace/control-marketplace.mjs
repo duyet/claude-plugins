@@ -1252,7 +1252,6 @@ function renderProofMarkdown(proof, results, repoRoot) {
   lines.push(
     "- `drive.md` — what the drive proved (committed). `drive.transcript.txt` is local-only.",
   );
-  lines.push("");
   return `${lines.join("\n")}\n`;
 }
 
